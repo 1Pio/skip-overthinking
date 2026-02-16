@@ -10,18 +10,18 @@ See: `.planning/PROJECT.md` (updated 2026-02-16)
 ## Current Position
 
 Phase: 2 of 5 (Typed Criteria Modeling)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-16 - Completed 02-01 typed criteria domain foundations plan.
+Last activity: 2026-02-16 - Completed 02-02 criteria authoring UX with safe delete workflows plan.
 
-Progress: [###-------] 25%
+Progress: [#####-----] 50%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 7
+- Total plans completed: 8
 - Average duration: 2 min
-- Total execution time: 0.3 hours
+- Total execution time: 0.4 hours
 
 **By Phase:**
 
@@ -41,6 +41,7 @@ Progress: [###-------] 25%
 | Phase 01 P03 | 0 min | 2 tasks | 4 files |
 | Phase 01 P07 | 4 min | 2 tasks | 7 files |
 | Phase 02 P01 | 4 min | 2 tasks | 9 files |
+| Phase 02 P02 | 4 min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -72,6 +73,9 @@ Recent decisions affecting current work:
 - [Phase 02]: Modeled criteria as a two-variant discriminated union to prevent schema drift and phase scope creep.
 - [Phase 02]: Stored criteria transitions in reducer-owned action payloads with dense order normalization for deterministic state.
 - [Phase 02]: Backed criteria completion checks with criteriaGateSchema.safeParse to share one guard contract across UI and routes.
+- [Phase 02]: Keep criteria rows compact by default with an explicit rich-row toggle so scanning stays fast.
+- [Phase 02]: Use reducer-owned multi-delete undo payloads to restore exact deleted criteria sets with normalized ordering.
+- [Phase 02]: Route both single and multi-delete through one confirmation modal path with names preview before delete.
 
 ### Pending Todos
 
@@ -85,6 +89,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-16 19:28
-Stopped at: Completed 02-01-PLAN.md
+Last session: 2026-02-16 19:42
+Stopped at: Completed 02-02-PLAN.md
 Resume file: None
