@@ -59,7 +59,7 @@ Each task was committed atomically:
 1. **Task 1: Build sectioned template picker with confirm/customize before criterion creation** - `8333cc4` (feat)
 2. **Task 2: Build dedicated criterion editor panel with type config and positivity rewrite hints** - `73a3010` (feat)
 
-**Plan metadata:** pending
+**Plan metadata:** `4755aaa`
 
 ## Files Created/Modified
 
