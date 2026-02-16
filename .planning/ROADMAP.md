@@ -28,12 +28,15 @@ This roadmap delivers a complete decision-making flow from first setup to explai
   3. User can return to completed wizard steps and keep previously entered decision data intact.
   4. User can add/edit/delete/reorder options with optional metadata and is blocked from ratings/results until at least two options exist.
   5. User can run local development and build workflows with Bun commands and produce a deployable static build.
-**Plans**: 4 plans
+**Plans**: 7 plans
 Plans:
-- [ ] 01-01-PLAN.md - Bootstrap Bun/Vite/TypeScript app and GitHub Pages deployment workflow.
-- [ ] 01-02-PLAN.md - Add route-per-step wizard shell with centralized draft state and guard hooks.
+- [ ] 01-01-PLAN.md - Bootstrap Bun/Vite/TypeScript app baseline and local command surface.
+- [ ] 01-02-PLAN.md - Build centralized draft-state persistence and decision prerequisite helpers.
 - [ ] 01-03-PLAN.md - Implement validated decision setup step with required-title gating and persisted revisit.
-- [ ] 01-04-PLAN.md - Implement option CRUD/reorder with minimum-two guard for criteria, ratings, and results.
+- [ ] 01-04-PLAN.md - Implement option-domain state/actions/schema/reorder foundations.
+- [ ] 01-05-PLAN.md - Add GitHub Pages runtime/base-path wiring and Actions deployment workflow.
+- [ ] 01-06-PLAN.md - Wire route-per-step wizard shell with decision prerequisite route guards.
+- [ ] 01-07-PLAN.md - Implement options UI integration and minimum-two guards for criteria/ratings/results.
 
 ### Phase 2: Typed Criteria Modeling
 **Goal**: Users can define comparable decision criteria using typed inputs and explicit desirability semantics before entering ratings.
@@ -89,7 +92,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation, Setup, and Options | 0/4 | Not started | - |
+| 1. Foundation, Setup, and Options | 0/7 | Not started | - |
 | 2. Typed Criteria Modeling | 0/TBD | Not started | - |
 | 3. Ratings, Weights, and Coverage Integrity | 0/TBD | Not started | - |
 | 4. Results and Explainability | 0/TBD | Not started | - |
