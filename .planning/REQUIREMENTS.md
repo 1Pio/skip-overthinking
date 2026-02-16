@@ -112,59 +112,59 @@ Which phases cover which requirements. Updated during roadmap creation.
 
 | Requirement | Phase | Status |
 |-------------|-------|--------|
-| DEC-01 | Phase TBD | Pending |
-| DEC-02 | Phase TBD | Pending |
-| DEC-03 | Phase TBD | Pending |
-| DEC-04 | Phase TBD | Pending |
-| OPT-01 | Phase TBD | Pending |
-| OPT-02 | Phase TBD | Pending |
-| OPT-03 | Phase TBD | Pending |
-| OPT-04 | Phase TBD | Pending |
-| CRT-01 | Phase TBD | Pending |
-| CRT-02 | Phase TBD | Pending |
-| CRT-03 | Phase TBD | Pending |
-| CRT-04 | Phase TBD | Pending |
-| CRT-05 | Phase TBD | Pending |
-| CRT-06 | Phase TBD | Pending |
-| CRT-07 | Phase TBD | Pending |
-| RAT-01 | Phase TBD | Pending |
-| RAT-02 | Phase TBD | Pending |
-| RAT-03 | Phase TBD | Pending |
-| RAT-04 | Phase TBD | Pending |
-| RAT-05 | Phase TBD | Pending |
-| RAT-06 | Phase TBD | Pending |
-| RAT-07 | Phase TBD | Pending |
-| RAT-08 | Phase TBD | Pending |
-| WGT-01 | Phase TBD | Pending |
-| WGT-02 | Phase TBD | Pending |
-| WGT-03 | Phase TBD | Pending |
-| WGT-04 | Phase TBD | Pending |
-| WGT-05 | Phase TBD | Pending |
-| RES-01 | Phase TBD | Pending |
-| RES-02 | Phase TBD | Pending |
-| RES-03 | Phase TBD | Pending |
-| RES-04 | Phase TBD | Pending |
-| RES-05 | Phase TBD | Pending |
-| RES-06 | Phase TBD | Pending |
-| RES-07 | Phase TBD | Pending |
-| RES-08 | Phase TBD | Pending |
-| RES-09 | Phase TBD | Pending |
-| RES-10 | Phase TBD | Pending |
-| RES-11 | Phase TBD | Pending |
-| SYN-01 | Phase TBD | Pending |
-| SYN-02 | Phase TBD | Pending |
-| SYN-03 | Phase TBD | Pending |
-| SYN-04 | Phase TBD | Pending |
-| DEP-01 | Phase TBD | Pending |
-| DEP-02 | Phase TBD | Pending |
-| DEP-03 | Phase TBD | Pending |
-| DEP-04 | Phase TBD | Pending |
+| DEC-01 | Phase 1 | Pending |
+| DEC-02 | Phase 1 | Pending |
+| DEC-03 | Phase 1 | Pending |
+| DEC-04 | Phase 1 | Pending |
+| OPT-01 | Phase 1 | Pending |
+| OPT-02 | Phase 1 | Pending |
+| OPT-03 | Phase 1 | Pending |
+| OPT-04 | Phase 1 | Pending |
+| CRT-01 | Phase 2 | Pending |
+| CRT-02 | Phase 2 | Pending |
+| CRT-03 | Phase 2 | Pending |
+| CRT-04 | Phase 2 | Pending |
+| CRT-05 | Phase 2 | Pending |
+| CRT-06 | Phase 2 | Pending |
+| CRT-07 | Phase 2 | Pending |
+| RAT-01 | Phase 3 | Pending |
+| RAT-02 | Phase 3 | Pending |
+| RAT-03 | Phase 3 | Pending |
+| RAT-04 | Phase 3 | Pending |
+| RAT-05 | Phase 3 | Pending |
+| RAT-06 | Phase 3 | Pending |
+| RAT-07 | Phase 3 | Pending |
+| RAT-08 | Phase 3 | Pending |
+| WGT-01 | Phase 3 | Pending |
+| WGT-02 | Phase 3 | Pending |
+| WGT-03 | Phase 3 | Pending |
+| WGT-04 | Phase 3 | Pending |
+| WGT-05 | Phase 3 | Pending |
+| RES-01 | Phase 4 | Pending |
+| RES-02 | Phase 4 | Pending |
+| RES-03 | Phase 4 | Pending |
+| RES-04 | Phase 4 | Pending |
+| RES-05 | Phase 4 | Pending |
+| RES-06 | Phase 4 | Pending |
+| RES-07 | Phase 4 | Pending |
+| RES-08 | Phase 4 | Pending |
+| RES-09 | Phase 4 | Pending |
+| RES-10 | Phase 4 | Pending |
+| RES-11 | Phase 4 | Pending |
+| SYN-01 | Phase 5 | Pending |
+| SYN-02 | Phase 5 | Pending |
+| SYN-03 | Phase 5 | Pending |
+| SYN-04 | Phase 5 | Pending |
+| DEP-01 | Phase 1 | Pending |
+| DEP-02 | Phase 1 | Pending |
+| DEP-03 | Phase 1 | Pending |
+| DEP-04 | Phase 1 | Pending |
 
 **Coverage:**
-- v1 requirements: 48 total
-- Mapped to phases: 0
-- Unmapped: 48 ⚠️
+- v1 requirements: 47 total
+- Mapped to phases: 47
+- Unmapped: 0
 
 ---
 *Requirements defined: 2026-02-16*
-*Last updated: 2026-02-16 after initial definition*
+*Last updated: 2026-02-16 after roadmap creation*
