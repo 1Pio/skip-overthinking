@@ -18,7 +18,7 @@ Help people make better decisions quickly by converting subjective tradeoffs int
 
 - [ ] Users can complete a step-gated decision wizard from setup through live results without losing context.
 - [ ] All scoring and visualization stays on a consistent desirability scale of 1-20 where higher is always better.
-- [ ] Users can create typed criteria (rating, numeric, boolean, enum) and see transparent raw-to-derived desirability conversion.
+- [ ] Users can create typed criteria (rating_1_20, numeric_measured) and see transparent raw-to-derived desirability conversion.
 - [ ] Results provide explainable WSM rankings with WPM as a strict check, plus coverage-aware missing-data warnings.
 - [ ] Users can persist and resume decisions via optional auth + sync, or local-only storage when unauthenticated.
 

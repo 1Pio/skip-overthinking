@@ -25,22 +25,22 @@ Requirements for initial release. Each maps to roadmap phases.
 
 - [ ] **CRT-01**: User can add, edit, delete, and reorder criteria with required title and optional description.
 - [ ] **CRT-02**: User can create criteria from a template picker with sections for recommended criteria and measured criteria.
-- [ ] **CRT-03**: User can choose criterion type: `rating_1_20`, `numeric`, `boolean`, or `enum`.
+- [ ] **CRT-03**: User can choose criterion type: `rating_1_20` or `numeric_measured`.
 - [ ] **CRT-04**: User sees guidance to phrase negative concepts positively so scores stay in desirability language.
-- [ ] **CRT-05**: User can configure measured numeric criteria with unit selection and raw direction (higher-better or lower-better).
-- [ ] **CRT-06**: User can configure enum criteria with explicit desirability mapping values.
-- [ ] **CRT-07**: User can configure boolean criteria with explicit yes/no desirability mapping defaults.
+- [ ] **CRT-05**: User can configure measured numeric criteria with optional unit display and required raw direction (`higher raw is better` or `lower raw is better`).
+- [ ] **CRT-06**: User sees measured-criteria guidance copy explaining that real raw values are converted to 1-20 desirability while preserving the chosen raw direction.
+- [ ] **CRT-07**: User does not encounter per-criterion invert toggles; semantics are handled via positive criterion wording or measured conversion direction.
 
 ### Ratings Matrix
 
 - [ ] **RAT-01**: User can edit an option-by-criterion ratings matrix where unset cells remain blank by default.
 - [ ] **RAT-02**: User can enter direct desirability values from 1-20 for `rating_1_20` criteria.
 - [ ] **RAT-03**: User can enter raw numeric values for measured criteria and see derived desirability in 1-20.
-- [ ] **RAT-04**: User can enter boolean and enum values that map to 1-20 desirability.
+- [ ] **RAT-04**: User can switch `rating_1_20` input mode at decision level between numeric and 7-level labels using fixed mappings (Terrible=1.0, Very Poor=4.2, Poor=7.3, OK=10.5, Good=13.7, Very Good=16.8, Excellent=20.0).
 - [ ] **RAT-05**: User can never enter or view desirability value 0 anywhere in the product.
 - [ ] **RAT-06**: User can see that equal numeric raw values map to neutral derived desirability of 10.5.
 - [ ] **RAT-07**: User can view both raw and derived values for measured criteria to preserve transparency.
-- [ ] **RAT-08**: User can trigger an explicit "Fill missing with Neutral (10)" action; blanks are never silently imputed.
+- [ ] **RAT-08**: User can trigger an explicit "Fill missing with Neutral (10)" action; blanks are never silently imputed, and rating mode switching remains non-destructive via dual persistence with nearest-value ghost previews.
 
 ### Weights and Coverage
 

@@ -11,8 +11,8 @@ This roadmap delivers a complete decision-making flow from first setup to explai
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
 - [x] **Phase 1: Foundation, Setup, and Options** - Deliver runnable app foundation, step-gated decision setup, and option management. (Completed 2026-02-16)
-- [ ] **Phase 2: Typed Criteria Modeling** - Deliver criteria authoring with templates and explicit desirability mappings.
-- [ ] **Phase 3: Ratings, Weights, and Coverage Integrity** - Deliver matrix input, conversion to 1-20 desirability, and missing-data safeguards.
+- [ ] **Phase 2: Typed Criteria Modeling** - Deliver criteria authoring with templates, desirability-first wording guidance, and numeric measured direction configuration.
+- [ ] **Phase 3: Ratings, Weights, and Coverage Integrity** - Deliver matrix input with reversible rating_1_20 input modes, 1-20 desirability conversion integrity, and missing-data safeguards.
 - [ ] **Phase 4: Results and Explainability** - Deliver rankings, strict-check validation, and adaptive decision visuals.
 - [ ] **Phase 5: Persistence, Auth, and Sync Security** - Deliver local persistence plus authenticated ownership-enforced sync.
 
@@ -39,27 +39,28 @@ Plans:
 - [x] 01-07-PLAN.md - Implement options UI integration and minimum-two guards for criteria/ratings/results.
 
 ### Phase 2: Typed Criteria Modeling
-**Goal**: Users can define comparable decision criteria using typed inputs and explicit desirability semantics before entering ratings.
+**Goal**: Users can define comparable decision criteria using `rating_1_20` and `numeric_measured` inputs with explicit desirability semantics before entering ratings.
 **Depends on**: Phase 1
 **Requirements**: CRT-01, CRT-02, CRT-03, CRT-04, CRT-05, CRT-06, CRT-07
 **Success Criteria** (what must be TRUE):
   1. User can add/edit/delete/reorder criteria with required title and optional description.
   2. User can create criteria from a template picker that clearly separates recommended and measured criteria.
-  3. User can choose criterion type (`rating_1_20`, `numeric`, `boolean`, `enum`) and complete type-specific configuration.
-  4. User can configure numeric unit and direction, enum desirability mapping, and boolean yes/no desirability mapping explicitly.
-  5. User sees guidance to phrase negative concepts positively so all scoring stays in desirability language.
+  3. User can choose criterion type (`rating_1_20`, `numeric_measured`) and complete type-specific configuration.
+  4. User can configure numeric measured criteria with optional unit and required raw direction (`lower raw is better` or `higher raw is better`) while preserving the 1-20 desirability invariant.
+  5. User sees guidance to phrase negative concepts positively so all scoring stays in desirability language, and does not encounter per-criterion invert toggles.
 **Plans**: TBD
 
 ### Phase 3: Ratings, Weights, and Coverage Integrity
-**Goal**: Users can fill the option-by-criterion matrix on a strict 1-20 desirability scale, assign complete weights, and understand missing-data impact.
+**Goal**: Users can fill the option-by-criterion matrix on a strict 1-20 desirability scale, switch `rating_1_20` input modes non-destructively, assign complete weights, and understand missing-data impact.
 **Depends on**: Phase 2
 **Requirements**: RAT-01, RAT-02, RAT-03, RAT-04, RAT-05, RAT-06, RAT-07, RAT-08, WGT-01, WGT-02, WGT-03, WGT-04, WGT-05
 **Success Criteria** (what must be TRUE):
   1. User can edit the ratings matrix and leave cells blank by default, with no silent imputation.
-  2. User can enter rating, numeric raw, boolean, and enum inputs and always see derived desirability constrained to 1-20 (never 0).
+  2. User can enter rating_1_20 criteria in either numeric mode or 7-level label mode, and enter numeric measured raw values, with all scoring constrained to 1-20 desirability (never 0).
   3. User can view both raw and derived values for measured criteria, including neutral 10.5 derivation when numeric raw values are equal.
   4. User can explicitly apply "Fill missing with Neutral (10)" as a deliberate action rather than automatic behavior.
-  5. User can assign integer weights to all criteria, is blocked from results until complete, and sees weighted coverage plus low-coverage warnings.
+  5. User can switch rating_1_20 input mode non-destructively (dual persistence with nearest-value ghosting and reversible edits) while keeping user intent across mode toggles.
+  6. User can assign integer weights to all criteria, is blocked from results until complete, and sees weighted coverage plus low-coverage warnings.
 **Plans**: TBD
 
 ### Phase 4: Results and Explainability
