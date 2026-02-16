@@ -48,12 +48,13 @@ Plans:
   3. User can choose criterion type (`rating_1_20`, `numeric_measured`) and complete type-specific configuration.
   4. User can configure numeric measured criteria with optional unit and required raw direction (`lower raw is better` or `higher raw is better`) while preserving the 1-20 desirability invariant.
   5. User sees guidance to phrase negative concepts positively so all scoring stays in desirability language, and does not encounter per-criterion invert toggles.
-**Plans**: 4 plans
+**Plans**: 5 plans
 Plans:
 - [ ] 02-01-PLAN.md - Establish typed criteria schema/actions/templates and reducer-integrated criteria state.
 - [ ] 02-02-PLAN.md - Build criteria list authoring UX with compact/rich views, reorder, and safe delete workflows.
 - [ ] 02-03-PLAN.md - Implement sectioned template picker plus dedicated typed editor with positivity rewrite guidance.
 - [ ] 02-04-PLAN.md - Integrate criteria route flow and enforce criteria prerequisites for ratings/results.
+- [ ] 02-05-PLAN.md - Close UAT reorder regression so Move up/down controls update criteria order reliably.
 
 ### Phase 3: Ratings, Weights, and Coverage Integrity
 **Goal**: Users can fill the option-by-criterion matrix on a strict 1-20 desirability scale, switch `rating_1_20` input modes non-destructively, assign complete weights, and understand missing-data impact.
