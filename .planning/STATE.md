@@ -10,16 +10,16 @@ See: `.planning/PROJECT.md` (updated 2026-02-16)
 ## Current Position
 
 Phase: 1 of 5 (Foundation, Setup, and Options)
-Plan: 6 of 7 in current phase
+Plan: 7 of 7 in current phase
 Status: In progress
-Last activity: 2026-02-16 - Completed 01-04 Option domain state/actions/schema/reorder foundations.
+Last activity: 2026-02-16 - Completed 01-06 Wizard route shell and decision prerequisite guards.
 
-Progress: [######----] 57%
+Progress: [#######---] 71%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 4
+- Total plans completed: 5
 - Average duration: 2 min
 - Total execution time: 0.2 hours
 
@@ -27,16 +27,17 @@ Progress: [######----] 57%
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 | 4 | 10 min | 2 min |
+| 1 | 5 | 11 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (1 min), 01-05 (1 min), 01-04 (3 min)
+- Last 5 plans: 01-01 (5 min), 01-02 (1 min), 01-05 (1 min), 01-04 (3 min), 01-06 (1 min)
 - Trend: Stable
 
 *Updated after each plan completion*
 | Phase 01 P02 | 1 min | 2 tasks | 5 files |
 | Phase 01 P05 | 1 min | 2 tasks | 6 files |
 | Phase 01 P04 | 3 min | 2 tasks | 10 files |
+| Phase 01 P06 | 1 min | 2 tasks | 9 files |
 
 ## Accumulated Context
 
@@ -58,6 +59,8 @@ Recent decisions affecting current work:
 - [Phase 01]: Option step readiness delegates to optionsGateSchema.safeParse so UI and route checks share one Zod source of truth.
 - [Phase 01]: Option actions emit full normalized option arrays, letting draft.reducer stay immutable and deterministic with no any/type assertions.
 - [Phase 01]: Button-based reorder directions (up/down/top/bottom) are encoded in option action creators as the phase-1 baseline.
+- [Phase 01]: Compose DraftProvider outside RouterProvider in src/app/App.tsx so all route elements can access draft state and guards without duplicate wrappers.
+- [Phase 01]: Use a single RequireDecisionSetup outlet wrapper in router.tsx to enforce deep-link-safe decision prerequisites for options and all downstream routes.
 
 ### Pending Todos
 
@@ -71,6 +74,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-16 14:06
-Stopped at: Completed 01-04-PLAN.md
+Last session: 2026-02-16 14:12
+Stopped at: Completed 01-06-PLAN.md
 Resume file: None
