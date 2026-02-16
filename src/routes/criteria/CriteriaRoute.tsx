@@ -1,9 +1,11 @@
-import { Link, Navigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 
+import { CriteriaStep } from "../../features/criteria/components/CriteriaStep";
 import { useDraft } from "../../features/decision/state/DraftProvider";
 import { hasMinimumOptions } from "../../features/options/state/optionPrereq";
 
 export const CriteriaRoute = () => {
+  const navigate = useNavigate();
   const {
     draft: { options },
   } = useDraft();
@@ -21,13 +23,11 @@ export const CriteriaRoute = () => {
   return (
     <section aria-labelledby="criteria-heading">
       <h2 id="criteria-heading">Criteria</h2>
-      <p>Placeholder for criteria authoring and desirability configuration.</p>
+      <p>Define criteria before entering ratings.</p>
       <p>
         Back to <Link to="/setup/options">Options</Link>
       </p>
-      <p>
-        Next: <Link to="/ratings">Ratings</Link>
-      </p>
+      <CriteriaStep onContinue={() => navigate("/ratings")} />
     </section>
   );
 };
