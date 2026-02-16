@@ -55,6 +55,10 @@ The target stack is a React + Vite + TypeScript SPA with Tailwind and Base UI-st
 | Use WSM as default and WPM only as strict results check | Keeps core experience simple while surfacing robustness concerns | -- Pending |
 | Store raw and derived values for measured criteria | Enables transparency, explainability, and editing without recomputation ambiguity | -- Pending |
 | Use Convex sync only for authenticated users; keep anonymous local-only | Reduces security risk and access-control complexity in v1 | -- Pending |
+| Use Convex Auth as the only auth provider with optional login flow (`Continue without login` + `Sign in`) compatible with GitHub Pages SPA | Keeps auth UX simple while preserving anonymous local-first usage and static hosting compatibility | Locked |
+| Standardize charts on MUI X Charts (MIT) with radar for multi-criteria, radial/gauge fallback for 2 criteria, and bars for 1 criterion; avoid custom SVG charting | Reduces visualization implementation risk while preserving adaptive chart behavior | Locked |
+| Define weighted coverage messaging thresholds at `<70%` (warning) and `<50%` (strong warning) with humane wording and explicit `Fill missing with Neutral (10)` CTA | Makes data-completeness risk understandable and action-oriented without silent imputation | Locked |
+| Use Base UI (`@base-ui/react`) primitives with shadcn-like styling and enforce `no Radix` via CI/lockfile checks | Preserves desired visual style while keeping dependency policy explicit and enforceable | Locked |
 
 ---
-*Last updated: 2026-02-16 after initialization*
+*Last updated: 2026-02-16 with cross-phase implementation decisions*
