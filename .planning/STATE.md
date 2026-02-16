@@ -10,16 +10,16 @@ See: `.planning/PROJECT.md` (updated 2026-02-16)
 ## Current Position
 
 Phase: 2 of 5 (Typed Criteria Modeling)
-Plan: 2 of 4 in current phase
+Plan: 3 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-16 - Completed 02-02 criteria authoring UX with safe delete workflows plan.
+Last activity: 2026-02-16 - Completed 02-03 template picker and dedicated typed editor plan.
 
-Progress: [#####-----] 50%
+Progress: [#######---] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 8
+- Total plans completed: 9
 - Average duration: 2 min
 - Total execution time: 0.4 hours
 
@@ -42,6 +42,7 @@ Progress: [#####-----] 50%
 | Phase 01 P07 | 4 min | 2 tasks | 7 files |
 | Phase 02 P01 | 4 min | 2 tasks | 9 files |
 | Phase 02 P02 | 4 min | 2 tasks | 6 files |
+| Phase 02 P03 | 2 min | 2 tasks | 6 files |
 
 ## Accumulated Context
 
@@ -76,6 +77,9 @@ Recent decisions affecting current work:
 - [Phase 02]: Keep criteria rows compact by default with an explicit rich-row toggle so scanning stays fast.
 - [Phase 02]: Use reducer-owned multi-delete undo payloads to restore exact deleted criteria sets with normalized ordering.
 - [Phase 02]: Route both single and multi-delete through one confirmation modal path with names preview before delete.
+- [Phase 02]: Treat templates as typed draft inputs routed through canonical criterion actions to avoid schema drift between entry paths.
+- [Phase 02]: Use one dedicated criterion editor panel for both create and edit flows so typed configuration and semantics remain consistent.
+- [Phase 02]: Keep positivity guidance assistive with one-click rewrites and no per-criterion invert control.
 
 ### Pending Todos
 
@@ -89,6 +93,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-16 19:42
-Stopped at: Completed 02-02-PLAN.md
+Last session: 2026-02-16 19:49
+Stopped at: Completed 02-03-PLAN.md
 Resume file: None
