@@ -11,26 +11,26 @@ See: `.planning/PROJECT.md` (updated 2026-02-16)
 
 Phase: 1 of 5 (Foundation, Setup, and Options)
 Plan: 7 of 7 in current phase
-Status: In progress
-Last activity: 2026-02-16 - Completed 01-03 Decision setup validation and step gating.
+Status: Complete
+Last activity: 2026-02-16 - Completed 01-07 Options UI integration and minimum-option route guards.
 
-Progress: [#########-] 86%
+Progress: [##########] 100%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 6
+- Total plans completed: 7
 - Average duration: 2 min
-- Total execution time: 0.2 hours
+- Total execution time: 0.3 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 | 6 | 11 min | 2 min |
+| 1 | 7 | 15 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-02 (1 min), 01-05 (1 min), 01-04 (3 min), 01-06 (1 min), 01-03 (0 min)
+- Last 5 plans: 01-05 (1 min), 01-04 (3 min), 01-06 (1 min), 01-03 (0 min), 01-07 (4 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -39,6 +39,7 @@ Progress: [#########-] 86%
 | Phase 01 P04 | 3 min | 2 tasks | 10 files |
 | Phase 01 P06 | 1 min | 2 tasks | 9 files |
 | Phase 01 P03 | 0 min | 2 tasks | 4 files |
+| Phase 01 P07 | 4 min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -64,6 +65,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Use a single RequireDecisionSetup outlet wrapper in router.tsx to enforce deep-link-safe decision prerequisites for options and all downstream routes.
 - [Phase 01]: Use decisionSetupSchema.safeParse as the single completion contract for both form submission and route guards.
 - [Phase 01]: Dispatch decisionUpdated on setup field changes so revisits always hydrate from reducer-backed persisted state.
+- [Phase 01]: Render option CRUD and reorder interactions directly from DraftProvider state with no component-local shadow list.
+- [Phase 01]: Use hasMinimumOptions (Zod-backed) for both options-step continue gating and protected route access checks.
+- [Phase 01]: Redirect blocked deep links to /setup/options with explicit recovery copy so users know how to unblock progress.
 
 ### Pending Todos
 
@@ -77,6 +81,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-16 14:18
-Stopped at: Completed 01-03-PLAN.md
+Last session: 2026-02-16 16:21
+Stopped at: Completed 01-07-PLAN.md
 Resume file: None
