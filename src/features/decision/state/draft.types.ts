@@ -1,10 +1,4 @@
-export type DraftOption = {
-  id: string;
-  title: string;
-  description: string;
-  icon: string;
-  order: number;
-};
+import type { DraftOption } from "../../options/state/option.types";
 
 export type DecisionDetails = {
   title: string;

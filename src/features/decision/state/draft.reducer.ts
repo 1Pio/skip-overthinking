@@ -3,6 +3,7 @@ import {
   type DecisionDraft,
   type DecisionDetails,
 } from "./draft.types";
+import type { OptionAction } from "../../options/state/option.actions";
 
 export type DraftAction =
   | {
@@ -15,7 +16,8 @@ export type DraftAction =
     }
   | {
       type: "draftReset";
-    };
+    }
+  | OptionAction;
 
 export const draftReducer = (
   state: DecisionDraft,
@@ -36,6 +38,15 @@ export const draftReducer = (
     }
     case "draftReset": {
       return createDefaultDecisionDraft();
+    }
+    case "optionAdded":
+    case "optionEdited":
+    case "optionDeleted":
+    case "optionReordered": {
+      return {
+        ...state,
+        options: action.payload.options,
+      };
     }
   }
 };
