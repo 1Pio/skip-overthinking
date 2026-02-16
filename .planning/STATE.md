@@ -10,32 +10,33 @@ See: `.planning/PROJECT.md` (updated 2026-02-16)
 ## Current Position
 
 Phase: 1 of 5 (Foundation, Setup, and Options)
-Plan: 5 of 7 in current phase
+Plan: 6 of 7 in current phase
 Status: In progress
-Last activity: 2026-02-16 - Completed 01-05 GitHub Pages runtime and deployment wiring.
+Last activity: 2026-02-16 - Completed 01-04 Option domain state/actions/schema/reorder foundations.
 
-Progress: [####------] 43%
+Progress: [######----] 57%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 3
+- Total plans completed: 4
 - Average duration: 2 min
-- Total execution time: 0.1 hours
+- Total execution time: 0.2 hours
 
 **By Phase:**
 
 | Phase | Plans | Total | Avg/Plan |
 |-------|-------|-------|----------|
-| 1 | 3 | 7 min | 2 min |
+| 1 | 4 | 10 min | 2 min |
 
 **Recent Trend:**
-- Last 5 plans: 01-01 (5 min), 01-02 (1 min), 01-05 (1 min)
+- Last 5 plans: 01-01 (5 min), 01-02 (1 min), 01-05 (1 min), 01-04 (3 min)
 - Trend: Stable
 
 *Updated after each plan completion*
 | Phase 01 P02 | 1 min | 2 tasks | 5 files |
 | Phase 01 P05 | 1 min | 2 tasks | 6 files |
+| Phase 01 P04 | 3 min | 2 tasks | 10 files |
 
 ## Accumulated Context
 
@@ -54,6 +55,9 @@ Recent decisions affecting current work:
 - [Phase 01]: Lock runtime routing to HashRouter in main entrypoint for GitHub Pages deep-link safety.
 - [Phase 01]: Set Vite base to /skip-overthinking/ so built assets resolve on project Pages URLs.
 - [Phase 01]: Use official Pages Actions workflow (configure-pages/upload-pages-artifact/deploy-pages) instead of branch-push deployment.
+- [Phase 01]: Option step readiness delegates to optionsGateSchema.safeParse so UI and route checks share one Zod source of truth.
+- [Phase 01]: Option actions emit full normalized option arrays, letting draft.reducer stay immutable and deterministic with no any/type assertions.
+- [Phase 01]: Button-based reorder directions (up/down/top/bottom) are encoded in option action creators as the phase-1 baseline.
 
 ### Pending Todos
 
@@ -67,6 +71,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-16 14:00
-Stopped at: Completed 01-05-PLAN.md
+Last session: 2026-02-16 14:06
+Stopped at: Completed 01-04-PLAN.md
 Resume file: None
