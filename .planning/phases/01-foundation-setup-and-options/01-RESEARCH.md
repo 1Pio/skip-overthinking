@@ -8,14 +8,21 @@
 ## User Constraints (from CONTEXT.md)
 
 ### Locked Decisions
-No phase CONTEXT.md exists yet for this phase.
-Locked user decisions: none.
+Research was authored before `01-CONTEXT.md` existed.
+
+Post-research locked decisions now in effect:
+- Use `HashRouter` in Phase 1.
+- Use button-based option reordering (up/down/top/bottom) in Phase 1; no drag-and-drop.
+- Use Zod for all step-gate validation.
+- Use localStorage draft persistence for logged-out users in Phase 1.
+- Use icon string inputs with inline preview in Phase 1.
 
 ### Claude's Discretion
-No phase CONTEXT.md exists yet for this phase.
+RHF usage remains discretionary by per-step complexity.
 
 ### Deferred Ideas (OUT OF SCOPE)
-Deferred ideas: none specific to phase context.
+- Drag-and-drop sorting in Phase 1.
+- Full icon picker UI in Phase 1.
 </user_constraints>
 
 ## Summary
@@ -46,7 +53,7 @@ For deployment/runtime, treat GitHub Pages constraints as first-class: use hash 
 | tailwindcss + @tailwindcss/vite | 4.1.18 | Utility styling and fast iteration | Apply app styling while staying aligned with project style direction |
 | zod | 4.3.6 | Step schema validation | Enforce DEC-01/DEC-03 and option validity gates predictably |
 | react-hook-form | 7.71.1 | Form state and submission ergonomics | Use for step forms when field-level ergonomics matter |
-| @dnd-kit/core + @dnd-kit/sortable | 6.3.x + 10.0.0 | Option drag reorder | Implement OPT-03 without custom DnD complexity |
+| @dnd-kit/core + @dnd-kit/sortable | 6.3.x + 10.0.0 | Optional future drag reorder enhancement | Consider after baseline button reordering is shipped |
 
 ### Alternatives Considered
 | Instead of | Could Use | Tradeoff |
@@ -57,8 +64,10 @@ For deployment/runtime, treat GitHub Pages constraints as first-class: use hash 
 
 **Installation:**
 ```bash
-bun add react react-dom react-router @base-ui/react zod react-hook-form @dnd-kit/core @dnd-kit/sortable
+bun add react react-dom react-router @base-ui/react zod react-hook-form
 bun add -d vite typescript tailwindcss @tailwindcss/vite
+# Optional later enhancement (not phase-1 baseline):
+# bun add @dnd-kit/core @dnd-kit/sortable
 ```
 
 ## Architecture Patterns
@@ -142,7 +151,7 @@ function normalizeOrder(options: Option[]): Option[] {
 | Problem | Don't Build | Use Instead | Why |
 |---------|-------------|-------------|-----|
 | URL routing | Custom hash parsing/router | `react-router` HashRouter/createHashRouter | Handles nested routes, transitions, and history semantics reliably |
-| Drag-and-drop sorting | Pointer/touch/keyboard DnD from scratch | `@dnd-kit/core` + `@dnd-kit/sortable` | Accessibility + sensors + collision handling are non-trivial |
+| Option reordering baseline (Phase 1) | Custom DnD implementation | Explicit move controls (up/down/top/bottom) | Lower complexity and robust accessibility baseline |
 | Schema validation | Ad hoc `if` chains per step | Zod schemas (optionally via RHF resolver) | Centralized, testable gate rules and better error surfaces |
 | Pages deployment flow | Custom deploy script with manual artifact handling | Official `actions/configure-pages`, `upload-pages-artifact`, `deploy-pages` | Correct permissions/artifact contract already solved |
 
@@ -255,15 +264,8 @@ bun run lint
 
 ## Open Questions
 
-1. **Should Phase 1 include only in-memory draft persistence or local draft persistence across refresh?**
-   - What we know: Requirement mandates back-navigation persistence and no context loss inside the wizard.
-   - What's unclear: Whether refresh/session persistence is in Phase 1 scope versus later persistence phase.
-   - Recommendation: Plan Phase 1 with in-memory canonical draft + optional `localStorage` adapter behind interface; make persistence depth explicit in plan acceptance criteria.
-
-2. **What icon input mode is expected in Phase 1 (free text, picker, or enum)?**
-   - What we know: DEC-02 and OPT-02 require optional icon support.
-   - What's unclear: UX and data-shape constraints for icon values.
-   - Recommendation: Use a simple string field with validation and defer rich picker UX unless explicitly required.
+1. **Resolved after planning:** Phase 1 requires localStorage draft persistence for logged-out users.
+2. **Resolved after planning:** Phase 1 icon input is a simple string with inline preview; full picker deferred.
 
 ## Sources
 

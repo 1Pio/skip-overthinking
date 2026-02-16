@@ -219,11 +219,11 @@ Toggles/expanders:
 
 ---
 
-## Export and import
+## Export and import (deferred to later phase)
 
-Provide manual **Export JSON** and **Import JSON** regardless of login status.
+Do not include export/import in the initial core execution scope. Keep this as a later-phase enhancement (aligned with deferred portability requirements).
 
-Export must include:
+When implemented later, export should include:
 
 * decision metadata
 * options
@@ -233,7 +233,7 @@ Export must include:
 * scoring settings (WSM default, WPM check preferences)
 * schema version
 
-Import should:
+When implemented later, import should:
 
 * validate schema version
 * default to “import as new decision” to avoid conflicts
