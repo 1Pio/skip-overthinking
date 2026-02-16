@@ -10,7 +10,7 @@ This roadmap delivers a complete decision-making flow from first setup to explai
 - Integer phases (1, 2, 3): Planned milestone work
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
-- [ ] **Phase 1: Foundation, Setup, and Options** - Deliver runnable app foundation, step-gated decision setup, and option management.
+- [x] **Phase 1: Foundation, Setup, and Options** - Deliver runnable app foundation, step-gated decision setup, and option management. (Completed 2026-02-16)
 - [ ] **Phase 2: Typed Criteria Modeling** - Deliver criteria authoring with templates and explicit desirability mappings.
 - [ ] **Phase 3: Ratings, Weights, and Coverage Integrity** - Deliver matrix input, conversion to 1-20 desirability, and missing-data safeguards.
 - [ ] **Phase 4: Results and Explainability** - Deliver rankings, strict-check validation, and adaptive decision visuals.
@@ -30,13 +30,13 @@ This roadmap delivers a complete decision-making flow from first setup to explai
   5. User can run local development and build workflows with Bun commands and produce a deployable static build.
 **Plans**: 7 plans
 Plans:
-- [ ] 01-01-PLAN.md - Bootstrap Bun/Vite/TypeScript app baseline and local command surface.
-- [ ] 01-02-PLAN.md - Build centralized draft-state persistence and decision prerequisite helpers.
-- [ ] 01-03-PLAN.md - Implement validated decision setup step with required-title gating and persisted revisit.
-- [ ] 01-04-PLAN.md - Implement option-domain state/actions/schema/reorder foundations.
-- [ ] 01-05-PLAN.md - Add GitHub Pages runtime/base-path wiring and Actions deployment workflow.
-- [ ] 01-06-PLAN.md - Wire route-per-step wizard shell with decision prerequisite route guards.
-- [ ] 01-07-PLAN.md - Implement options UI integration and minimum-two guards for criteria/ratings/results.
+- [x] 01-01-PLAN.md - Bootstrap Bun/Vite/TypeScript app baseline and local command surface.
+- [x] 01-02-PLAN.md - Build centralized draft-state persistence and decision prerequisite helpers.
+- [x] 01-03-PLAN.md - Implement validated decision setup step with required-title gating and persisted revisit.
+- [x] 01-04-PLAN.md - Implement option-domain state/actions/schema/reorder foundations.
+- [x] 01-05-PLAN.md - Add GitHub Pages runtime/base-path wiring and Actions deployment workflow.
+- [x] 01-06-PLAN.md - Wire route-per-step wizard shell with decision prerequisite route guards.
+- [x] 01-07-PLAN.md - Implement options UI integration and minimum-two guards for criteria/ratings/results.
 
 ### Phase 2: Typed Criteria Modeling
 **Goal**: Users can define comparable decision criteria using typed inputs and explicit desirability semantics before entering ratings.
@@ -92,7 +92,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
-| 1. Foundation, Setup, and Options | 0/7 | Not started | - |
+| 1. Foundation, Setup, and Options | 7/7 | Complete | 2026-02-16 |
 | 2. Typed Criteria Modeling | 0/TBD | Not started | - |
 | 3. Ratings, Weights, and Coverage Integrity | 0/TBD | Not started | - |
 | 4. Results and Explainability | 0/TBD | Not started | - |
