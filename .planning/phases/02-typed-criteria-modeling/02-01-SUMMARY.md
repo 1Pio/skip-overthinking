@@ -61,7 +61,7 @@ Each task was committed atomically:
 1. **Task 1: Define canonical criteria schema, gate, and template defaults** - `42c093c` (feat)
 2. **Task 2: Add criteria action creators and integrate criteria into draft reducer state** - `47ead65` (feat)
 
-**Plan metadata:** pending
+**Plan metadata:** `4b8c478`
 
 ## Files Created/Modified
 
