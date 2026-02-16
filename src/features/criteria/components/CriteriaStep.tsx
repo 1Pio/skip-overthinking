@@ -1,4 +1,4 @@
-import { type FormEvent, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
 import { useDraft } from "../../decision/state/DraftProvider";
 import {
@@ -14,13 +14,9 @@ import {
   hasMinimumCriteria,
   isCriteriaStepComplete,
 } from "../state/criterionPrereq";
-import type {
-  CriterionDraftInput,
-  DraftCriterion,
-  DraftCriterionRawDirection,
-  DraftCriterionType,
-} from "../state/criterion.types";
+import type { CriterionDraftInput, DraftCriterion } from "../state/criterion.types";
 import { CriteriaDeleteModal } from "./CriteriaDeleteModal";
+import { CriterionEditorPanel } from "./CriterionEditorPanel";
 import { CriteriaList } from "./CriteriaList";
 import { TemplatePicker } from "./TemplatePicker";
 import { CriteriaUndoToast } from "./CriteriaUndoToast";
@@ -29,59 +25,51 @@ type CriteriaStepProps = {
   onContinue: () => void;
 };
 
-type CriteriaFormState = {
-  title: string;
-  description: string;
-  type: DraftCriterionType;
-  rawDirection: DraftCriterionRawDirection;
-  unit: string;
+type DeleteRequest = {
+  criterionIds: string[];
 };
+
+type EditorState =
+  | {
+      mode: "create";
+      criterionId: null;
+      input: CriterionDraftInput;
+    }
+  | {
+      mode: "edit";
+      criterionId: string;
+      input: CriterionDraftInput;
+    }
+  | null;
 
 const minimumCriteriaMessage = "Add at least 1 criterion to continue.";
 
-const createDefaultFormState = (): CriteriaFormState => ({
+const createDefaultCriterionInput = (): CriterionDraftInput => ({
+  type: "rating_1_20",
   title: "",
   description: "",
-  type: "rating_1_20",
-  rawDirection: "higher_raw_better",
-  unit: "",
 });
 
-const createFormStateFromCriterion = (criterion: DraftCriterion): CriteriaFormState => ({
-  title: criterion.title,
-  description: criterion.description ?? "",
-  type: criterion.type,
-  rawDirection:
-    criterion.type === "numeric_measured"
-      ? criterion.rawDirection
-      : "higher_raw_better",
-  unit: criterion.type === "numeric_measured" ? criterion.unit ?? "" : "",
-});
-
-const toDraftInput = (form: CriteriaFormState): CriterionDraftInput => {
-  if (form.type === "numeric_measured") {
+const createDraftInputFromCriterion = (criterion: DraftCriterion): CriterionDraftInput => {
+  if (criterion.type === "numeric_measured") {
     return {
       type: "numeric_measured",
-      title: form.title,
-      description: form.description,
-      rawDirection: form.rawDirection,
-      unit: form.unit,
+      title: criterion.title,
+      description: criterion.description ?? "",
+      rawDirection: criterion.rawDirection,
+      unit: criterion.unit ?? "",
     };
   }
 
   return {
     type: "rating_1_20",
-    title: form.title,
-    description: form.description,
+    title: criterion.title,
+    description: criterion.description ?? "",
   };
 };
 
 const selectionMessage = (count: number): string =>
   count === 1 ? "1 criterion selected" : `${count} criteria selected`;
-
-type DeleteRequest = {
-  criterionIds: string[];
-};
 
 export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
   const {
@@ -89,14 +77,9 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
     dispatch,
   } = useDraft();
   const [viewMode, setViewMode] = useState<"compact" | "rich">("compact");
-  const [newCriterionForm, setNewCriterionForm] = useState<CriteriaFormState>(
-    createDefaultFormState,
-  );
-  const [editingCriterionId, setEditingCriterionId] = useState<string | null>(null);
-  const [editingCriterionForm, setEditingCriterionForm] =
-    useState<CriteriaFormState>(createDefaultFormState);
   const [deleteRequest, setDeleteRequest] = useState<DeleteRequest | null>(null);
   const [showUndoToast, setShowUndoToast] = useState(false);
+  const [editorState, setEditorState] = useState<EditorState>(null);
 
   const orderedCriteria = useMemo(
     () => [...criteria].sort((left, right) => left.order - right.order),
@@ -105,14 +88,16 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
   const canContinue = hasMinimumCriteria(criteria) && isCriteriaStepComplete(criteria);
   const selectedCriterionIds = criteriaSelection.selectedCriterionIds;
 
-  const handleCreateCriterion = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    dispatch(criterionAdded(criteria, toDraftInput(newCriterionForm)));
-    setNewCriterionForm(createDefaultFormState());
+  const closeEditor = () => {
+    setEditorState(null);
   };
 
-  const handleTemplateCreateCriterion = (input: CriterionDraftInput) => {
-    dispatch(criterionAdded(criteria, input));
+  const handleOpenCreateEditor = () => {
+    setEditorState({
+      mode: "create",
+      criterionId: null,
+      input: createDefaultCriterionInput(),
+    });
   };
 
   const handleStartEdit = (criterionId: string) => {
@@ -121,26 +106,30 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
       return;
     }
 
-    setEditingCriterionId(criterionId);
-    setEditingCriterionForm(createFormStateFromCriterion(criterion));
+    setEditorState({
+      mode: "edit",
+      criterionId,
+      input: createDraftInputFromCriterion(criterion),
+    });
   };
 
-  const handleSaveEdit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-
-    if (!editingCriterionId) {
-      return;
+  const handleEditorSubmit = (input: CriterionDraftInput) => {
+    if (editorState?.mode === "edit") {
+      dispatch(
+        criterionEdited(criteria, {
+          id: editorState.criterionId,
+          ...input,
+        }),
+      );
+    } else {
+      dispatch(criterionAdded(criteria, input));
     }
 
-    const input = toDraftInput(editingCriterionForm);
+    closeEditor();
+  };
 
-    dispatch(
-      criterionEdited(criteria, {
-        id: editingCriterionId,
-        ...input,
-      }),
-    );
-    setEditingCriterionId(null);
+  const handleTemplateCreateCriterion = (input: CriterionDraftInput) => {
+    dispatch(criterionAdded(criteria, input));
   };
 
   const handleToggleSelectionMode = () => {
@@ -185,8 +174,12 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
     dispatch(criterionMultiDeleted(criteria, deleteRequest.criterionIds));
     setDeleteRequest(null);
     setShowUndoToast(true);
-    if (editingCriterionId && deleteRequest.criterionIds.includes(editingCriterionId)) {
-      setEditingCriterionId(null);
+
+    if (
+      editorState?.mode === "edit" &&
+      deleteRequest.criterionIds.includes(editorState.criterionId)
+    ) {
+      closeEditor();
     }
   };
 
@@ -247,182 +240,11 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
 
       <TemplatePicker onTemplateConfirmed={handleTemplateCreateCriterion} />
 
-      <form onSubmit={handleCreateCriterion}>
-        <fieldset>
-          <legend>Add criterion</legend>
-          <label>
-            Title
-            <input
-              name="new-criterion-title"
-              value={newCriterionForm.title}
-              onChange={(event) =>
-                setNewCriterionForm((current) => ({
-                  ...current,
-                  title: event.target.value,
-                }))
-              }
-              required
-            />
-          </label>
-          <label>
-            Description
-            <textarea
-              name="new-criterion-description"
-              value={newCriterionForm.description}
-              onChange={(event) =>
-                setNewCriterionForm((current) => ({
-                  ...current,
-                  description: event.target.value,
-                }))
-              }
-            />
-          </label>
-          <label>
-            Type
-            <select
-              name="new-criterion-type"
-              value={newCriterionForm.type}
-              onChange={(event) => {
-                const nextType = event.target.value as DraftCriterionType;
-                setNewCriterionForm((current) => ({
-                  ...current,
-                  type: nextType,
-                }));
-              }}
-            >
-              <option value="rating_1_20">Rating 1-20</option>
-              <option value="numeric_measured">Numeric measured</option>
-            </select>
-          </label>
-
-          {newCriterionForm.type === "numeric_measured" ? (
-            <>
-              <label>
-                Raw direction
-                <select
-                  name="new-criterion-raw-direction"
-                  value={newCriterionForm.rawDirection}
-                  onChange={(event) =>
-                    setNewCriterionForm((current) => ({
-                      ...current,
-                      rawDirection: event.target.value as DraftCriterionRawDirection,
-                    }))
-                  }
-                >
-                  <option value="higher_raw_better">Higher raw is better</option>
-                  <option value="lower_raw_better">Lower raw is better</option>
-                </select>
-              </label>
-              <label>
-                Unit (optional)
-                <input
-                  name="new-criterion-unit"
-                  value={newCriterionForm.unit}
-                  onChange={(event) =>
-                    setNewCriterionForm((current) => ({
-                      ...current,
-                      unit: event.target.value,
-                    }))
-                  }
-                />
-              </label>
-            </>
-          ) : null}
-
-          <button type="submit">Add criterion</button>
-        </fieldset>
-      </form>
-
-      {editingCriterionId ? (
-        <form onSubmit={handleSaveEdit}>
-          <fieldset>
-            <legend>Edit criterion</legend>
-            <label>
-              Title
-              <input
-                name="edit-criterion-title"
-                value={editingCriterionForm.title}
-                onChange={(event) =>
-                  setEditingCriterionForm((current) => ({
-                    ...current,
-                    title: event.target.value,
-                  }))
-                }
-                required
-              />
-            </label>
-            <label>
-              Description
-              <textarea
-                name="edit-criterion-description"
-                value={editingCriterionForm.description}
-                onChange={(event) =>
-                  setEditingCriterionForm((current) => ({
-                    ...current,
-                    description: event.target.value,
-                  }))
-                }
-              />
-            </label>
-            <label>
-              Type
-              <select
-                name="edit-criterion-type"
-                value={editingCriterionForm.type}
-                onChange={(event) => {
-                  const nextType = event.target.value as DraftCriterionType;
-                  setEditingCriterionForm((current) => ({
-                    ...current,
-                    type: nextType,
-                  }));
-                }}
-              >
-                <option value="rating_1_20">Rating 1-20</option>
-                <option value="numeric_measured">Numeric measured</option>
-              </select>
-            </label>
-
-            {editingCriterionForm.type === "numeric_measured" ? (
-              <>
-                <label>
-                  Raw direction
-                  <select
-                    name="edit-criterion-raw-direction"
-                    value={editingCriterionForm.rawDirection}
-                    onChange={(event) =>
-                      setEditingCriterionForm((current) => ({
-                        ...current,
-                        rawDirection: event.target.value as DraftCriterionRawDirection,
-                      }))
-                    }
-                  >
-                    <option value="higher_raw_better">Higher raw is better</option>
-                    <option value="lower_raw_better">Lower raw is better</option>
-                  </select>
-                </label>
-                <label>
-                  Unit (optional)
-                  <input
-                    name="edit-criterion-unit"
-                    value={editingCriterionForm.unit}
-                    onChange={(event) =>
-                      setEditingCriterionForm((current) => ({
-                        ...current,
-                        unit: event.target.value,
-                      }))
-                    }
-                  />
-                </label>
-              </>
-            ) : null}
-
-            <button type="submit">Save criterion</button>
-            <button type="button" onClick={() => setEditingCriterionId(null)}>
-              Cancel
-            </button>
-          </fieldset>
-        </form>
-      ) : null}
+      <div>
+        <button type="button" onClick={handleOpenCreateEditor}>
+          Add criterion
+        </button>
+      </div>
 
       {orderedCriteria.length > 0 ? (
         <CriteriaList
@@ -440,6 +262,14 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
       ) : (
         <p>No criteria yet.</p>
       )}
+
+      <CriterionEditorPanel
+        isOpen={editorState !== null}
+        mode={editorState?.mode ?? "create"}
+        initialInput={editorState?.input ?? createDefaultCriterionInput()}
+        onCancel={closeEditor}
+        onSubmit={handleEditorSubmit}
+      />
 
       {deleteRequest ? (
         <CriteriaDeleteModal
