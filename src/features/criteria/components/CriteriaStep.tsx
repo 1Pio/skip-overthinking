@@ -1,10 +1,11 @@
-import { useMemo, useState } from "react";
+import { type FormEvent, useMemo, useState } from "react";
 
 import { useDraft } from "../../decision/state/DraftProvider";
 import {
   criterionAdded,
-  criterionDeleted,
   criterionEdited,
+  criterionMultiDeleted,
+  criterionMultiDeleteUndone,
   criterionReordered,
   criterionSelectionModeCleared,
   criterionSelectionModeEntered,
@@ -19,7 +20,9 @@ import type {
   DraftCriterionRawDirection,
   DraftCriterionType,
 } from "../state/criterion.types";
+import { CriteriaDeleteModal } from "./CriteriaDeleteModal";
 import { CriteriaList } from "./CriteriaList";
+import { CriteriaUndoToast } from "./CriteriaUndoToast";
 
 type CriteriaStepProps = {
   onContinue: () => void;
@@ -75,9 +78,13 @@ const toDraftInput = (form: CriteriaFormState): CriterionDraftInput => {
 const selectionMessage = (count: number): string =>
   count === 1 ? "1 criterion selected" : `${count} criteria selected`;
 
+type DeleteRequest = {
+  criterionIds: string[];
+};
+
 export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
   const {
-    draft: { criteria, criteriaSelection },
+    draft: { criteria, criteriaSelection, criteriaMultiDeleteUndo },
     dispatch,
   } = useDraft();
   const [viewMode, setViewMode] = useState<"compact" | "rich">("compact");
@@ -87,6 +94,8 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
   const [editingCriterionId, setEditingCriterionId] = useState<string | null>(null);
   const [editingCriterionForm, setEditingCriterionForm] =
     useState<CriteriaFormState>(createDefaultFormState);
+  const [deleteRequest, setDeleteRequest] = useState<DeleteRequest | null>(null);
+  const [showUndoToast, setShowUndoToast] = useState(false);
 
   const orderedCriteria = useMemo(
     () => [...criteria].sort((left, right) => left.order - right.order),
@@ -95,7 +104,7 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
   const canContinue = hasMinimumCriteria(criteria) && isCriteriaStepComplete(criteria);
   const selectedCriterionIds = criteriaSelection.selectedCriterionIds;
 
-  const handleCreateCriterion = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleCreateCriterion = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     dispatch(criterionAdded(criteria, toDraftInput(newCriterionForm)));
     setNewCriterionForm(createDefaultFormState());
@@ -111,7 +120,7 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
     setEditingCriterionForm(createFormStateFromCriterion(criterion));
   };
 
-  const handleSaveEdit = (event: React.FormEvent<HTMLFormElement>) => {
+  const handleSaveEdit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     if (!editingCriterionId) {
@@ -151,11 +160,38 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
     dispatch(criterionSelectionModeEntered(orderedCriteria.map((criterion) => criterion.id)));
   };
 
-  const handleDelete = (criterionId: string) => {
-    dispatch(criterionDeleted(criteria, criterionId));
-    if (editingCriterionId === criterionId) {
+  const handleOpenDeleteModal = (criterionId: string) => {
+    setDeleteRequest({ criterionIds: [criterionId] });
+  };
+
+  const handleOpenBulkDeleteModal = () => {
+    if (selectedCriterionIds.length === 0) {
+      return;
+    }
+
+    setDeleteRequest({ criterionIds: selectedCriterionIds });
+  };
+
+  const handleConfirmDelete = () => {
+    if (!deleteRequest || deleteRequest.criterionIds.length === 0) {
+      return;
+    }
+
+    dispatch(criterionMultiDeleted(criteria, deleteRequest.criterionIds));
+    setDeleteRequest(null);
+    setShowUndoToast(true);
+    if (editingCriterionId && deleteRequest.criterionIds.includes(editingCriterionId)) {
       setEditingCriterionId(null);
     }
+  };
+
+  const handleUndoDelete = () => {
+    if (!criteriaMultiDeleteUndo) {
+      return;
+    }
+
+    dispatch(criterionMultiDeleteUndone(criteria, criteriaMultiDeleteUndo));
+    setShowUndoToast(false);
   };
 
   return (
@@ -191,6 +227,13 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
           <>
             <button type="button" onClick={handleSelectAll} disabled={orderedCriteria.length === 0}>
               Select all
+            </button>
+            <button
+              type="button"
+              onClick={handleOpenBulkDeleteModal}
+              disabled={selectedCriterionIds.length === 0}
+            >
+              Delete selected
             </button>
             <p>{selectionMessage(selectedCriterionIds.length)}</p>
           </>
@@ -382,7 +425,7 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
           selectedCriterionIds={selectedCriterionIds}
           onToggleSelected={handleToggleSelected}
           onEdit={handleStartEdit}
-          onDelete={handleDelete}
+          onDelete={handleOpenDeleteModal}
           onMove={(criterionId, direction) =>
             dispatch(criterionReordered(criteria, { id: criterionId, direction }))
           }
@@ -390,6 +433,23 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
       ) : (
         <p>No criteria yet.</p>
       )}
+
+      {deleteRequest ? (
+        <CriteriaDeleteModal
+          criteria={orderedCriteria}
+          targetCriterionIds={deleteRequest.criterionIds}
+          onCancel={() => setDeleteRequest(null)}
+          onConfirm={handleConfirmDelete}
+        />
+      ) : null}
+
+      {showUndoToast && criteriaMultiDeleteUndo ? (
+        <CriteriaUndoToast
+          deletedCount={criteriaMultiDeleteUndo.deletedCriteria.length}
+          onUndo={handleUndoDelete}
+          onDismiss={() => setShowUndoToast(false)}
+        />
+      ) : null}
 
       <button
         type="button"
