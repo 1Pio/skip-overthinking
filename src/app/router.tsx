@@ -1,5 +1,7 @@
 import { Link, Navigate, Outlet, createHashRouter } from 'react-router';
 
+import { isDecisionStepComplete } from '../features/decision/state/decisionPrereq';
+import { useDraft } from '../features/decision/state/DraftProvider';
 import { CriteriaRoute } from '../routes/criteria/CriteriaRoute';
 import { RatingsRoute } from '../routes/ratings/RatingsRoute';
 import { ResultsRoute } from '../routes/results/ResultsRoute';
@@ -37,6 +39,16 @@ const WizardLayout = () => {
   );
 };
 
+const RequireDecisionSetup = () => {
+  const { draft } = useDraft();
+
+  if (!isDecisionStepComplete(draft)) {
+    return <Navigate replace to="/setup/decision" />;
+  }
+
+  return <Outlet />;
+};
+
 export const appRouter = createHashRouter([
   {
     path: '/',
@@ -51,20 +63,25 @@ export const appRouter = createHashRouter([
         element: <DecisionSetupRoute />,
       },
       {
-        path: '/setup/options',
-        element: <OptionsRoute />,
-      },
-      {
-        path: '/criteria',
-        element: <CriteriaRoute />,
-      },
-      {
-        path: '/ratings',
-        element: <RatingsRoute />,
-      },
-      {
-        path: '/results',
-        element: <ResultsRoute />,
+        element: <RequireDecisionSetup />,
+        children: [
+          {
+            path: '/setup/options',
+            element: <OptionsRoute />,
+          },
+          {
+            path: '/criteria',
+            element: <CriteriaRoute />,
+          },
+          {
+            path: '/ratings',
+            element: <RatingsRoute />,
+          },
+          {
+            path: '/results',
+            element: <ResultsRoute />,
+          },
+        ],
       },
       {
         path: '*',
