@@ -23,6 +23,7 @@ import { CriteriaUndoToast } from "./CriteriaUndoToast";
 
 type CriteriaStepProps = {
   onContinue: () => void;
+  guardMessage?: string;
 };
 
 type DeleteRequest = {
@@ -71,7 +72,7 @@ const createDraftInputFromCriterion = (criterion: DraftCriterion): CriterionDraf
 const selectionMessage = (count: number): string =>
   count === 1 ? "1 criterion selected" : `${count} criteria selected`;
 
-export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
+export const CriteriaStep = ({ onContinue, guardMessage }: CriteriaStepProps) => {
   const {
     draft: { criteria, criteriaSelection, criteriaMultiDeleteUndo },
     dispatch,
@@ -199,6 +200,12 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
         Keep criteria phrased as desirability outcomes so higher always means better in the
         final ranking.
       </p>
+      <p>
+        Numeric measured criteria convert raw values into 1-20 desirability so ratings stay
+        consistent and higher is always better.
+      </p>
+
+      {guardMessage ? <p role="alert">{guardMessage}</p> : null}
 
       <div aria-label="Criteria display mode">
         <button

@@ -1,11 +1,21 @@
-import { Link, Navigate, useNavigate } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 
 import { CriteriaStep } from "../../features/criteria/components/CriteriaStep";
 import { useDraft } from "../../features/decision/state/DraftProvider";
 import { hasMinimumOptions } from "../../features/options/state/optionPrereq";
 
+type CriteriaRouteLocationState = {
+  guardMessage?: string;
+};
+
 export const CriteriaRoute = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const locationState = location.state as CriteriaRouteLocationState | null;
+  const guardMessage =
+    typeof locationState?.guardMessage === "string"
+      ? locationState.guardMessage
+      : undefined;
   const {
     draft: { options },
   } = useDraft();
@@ -25,9 +35,9 @@ export const CriteriaRoute = () => {
       <h2 id="criteria-heading">Criteria</h2>
       <p>Define criteria before entering ratings.</p>
       <p>
-        Back to <Link to="/setup/options">Options</Link>
+        <Link to="/setup/options">Back to options</Link>
       </p>
-      <CriteriaStep onContinue={() => navigate("/ratings")} />
+      <CriteriaStep guardMessage={guardMessage} onContinue={() => navigate("/ratings")} />
     </section>
   );
 };
