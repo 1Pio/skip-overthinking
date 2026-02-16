@@ -48,7 +48,12 @@ Plans:
   3. User can choose criterion type (`rating_1_20`, `numeric_measured`) and complete type-specific configuration.
   4. User can configure numeric measured criteria with optional unit and required raw direction (`lower raw is better` or `higher raw is better`) while preserving the 1-20 desirability invariant.
   5. User sees guidance to phrase negative concepts positively so all scoring stays in desirability language, and does not encounter per-criterion invert toggles.
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 02-01-PLAN.md - Establish typed criteria schema/actions/templates and reducer-integrated criteria state.
+- [ ] 02-02-PLAN.md - Build criteria list authoring UX with compact/rich views, reorder, and safe delete workflows.
+- [ ] 02-03-PLAN.md - Implement sectioned template picker plus dedicated typed editor with positivity rewrite guidance.
+- [ ] 02-04-PLAN.md - Integrate criteria route flow and enforce criteria prerequisites for ratings/results.
 
 ### Phase 3: Ratings, Weights, and Coverage Integrity
 **Goal**: Users can fill the option-by-criterion matrix on a strict 1-20 desirability scale, switch `rating_1_20` input modes non-destructively, assign complete weights, and understand missing-data impact.
@@ -94,7 +99,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation, Setup, and Options | 7/7 | Complete | 2026-02-16 |
-| 2. Typed Criteria Modeling | 0/TBD | Not started | - |
+| 2. Typed Criteria Modeling | 0/4 | Not started | - |
 | 3. Ratings, Weights, and Coverage Integrity | 0/TBD | Not started | - |
 | 4. Results and Explainability | 0/TBD | Not started | - |
 | 5. Persistence, Auth, and Sync Security | 0/TBD | Not started | - |
