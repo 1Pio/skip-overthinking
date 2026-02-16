@@ -60,7 +60,7 @@ Each task was committed atomically:
 1. **Task 1: Build validated decision setup schema and form UI** - `565cad6` (feat)
 2. **Task 2: Wire decision step submission to draft state and forward gate** - `59d18ce` (feat)
 
-**Plan metadata:** pending
+**Plan metadata:** `8ce80f7` (docs)
 
 ## Files Created/Modified
 
