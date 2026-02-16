@@ -14,6 +14,13 @@ export type CriterionTemplate = {
   createDraft: () => CriterionDraftInput;
 };
 
+export type CriterionTemplateSection = {
+  id: CriterionTemplateGroup;
+  heading: string;
+  description: string;
+  templates: CriterionTemplate[];
+};
+
 const createRecommendedTemplate = (
   id: string,
   label: string,
@@ -119,4 +126,19 @@ export const measuredCriterionTemplates: CriterionTemplate[] = [
 export const criterionTemplates: CriterionTemplate[] = [
   ...recommendedCriterionTemplates,
   ...measuredCriterionTemplates,
+];
+
+export const criterionTemplateSections: CriterionTemplateSection[] = [
+  {
+    id: "recommended",
+    heading: "Recommended",
+    description: "Quick desirability criteria that work for most decisions.",
+    templates: recommendedCriterionTemplates,
+  },
+  {
+    id: "measured",
+    heading: "Measured",
+    description: "Raw-value criteria converted into the same 1-20 desirability scale.",
+    templates: measuredCriterionTemplates,
+  },
 ];

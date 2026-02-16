@@ -22,6 +22,7 @@ import type {
 } from "../state/criterion.types";
 import { CriteriaDeleteModal } from "./CriteriaDeleteModal";
 import { CriteriaList } from "./CriteriaList";
+import { TemplatePicker } from "./TemplatePicker";
 import { CriteriaUndoToast } from "./CriteriaUndoToast";
 
 type CriteriaStepProps = {
@@ -108,6 +109,10 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
     event.preventDefault();
     dispatch(criterionAdded(criteria, toDraftInput(newCriterionForm)));
     setNewCriterionForm(createDefaultFormState());
+  };
+
+  const handleTemplateCreateCriterion = (input: CriterionDraftInput) => {
+    dispatch(criterionAdded(criteria, input));
   };
 
   const handleStartEdit = (criterionId: string) => {
@@ -239,6 +244,8 @@ export const CriteriaStep = ({ onContinue }: CriteriaStepProps) => {
           </>
         ) : null}
       </div>
+
+      <TemplatePicker onTemplateConfirmed={handleTemplateCreateCriterion} />
 
       <form onSubmit={handleCreateCriterion}>
         <fieldset>
