@@ -1,18 +1,59 @@
 import { createDefaultDecisionDraft, type DecisionDraft } from "./draft.types";
+import { criteriaSchema } from "../../criteria/criteria.schema";
+import type { CriterionMultiDeleteUndoPayload } from "../../criteria/state/criterion.types";
 
 const DRAFT_STORAGE_KEY = "skip-overthinking:decision-draft:v1";
 
 const isObject = (value: unknown): value is Record<string, unknown> =>
   typeof value === "object" && value !== null;
 
+const isStringArray = (value: unknown): value is string[] =>
+  Array.isArray(value) && value.every((entry) => typeof entry === "string");
+
+const isCriteriaSelection = (value: unknown): boolean => {
+  if (!isObject(value)) {
+    return false;
+  }
+
+  return (
+    typeof value.isSelecting === "boolean" &&
+    isStringArray(value.selectedCriterionIds)
+  );
+};
+
+const isCriteriaUndoPayload = (
+  value: unknown,
+): value is CriterionMultiDeleteUndoPayload => {
+  if (!isObject(value)) {
+    return false;
+  }
+
+  return (
+    criteriaSchema.safeParse(value.deletedCriteria).success &&
+    isStringArray(value.deletedCriterionIds)
+  );
+};
+
 const isDecisionDraft = (value: unknown): value is DecisionDraft => {
   if (!isObject(value)) {
     return false;
   }
 
-  const { decision, options } = value;
+  const { decision, options, criteria, criteriaSelection, criteriaMultiDeleteUndo } = value;
 
-  if (!isObject(decision) || !Array.isArray(options)) {
+  if (
+    !isObject(decision) ||
+    !Array.isArray(options) ||
+    !criteriaSchema.safeParse(criteria).success ||
+    !isCriteriaSelection(criteriaSelection)
+  ) {
+    return false;
+  }
+
+  if (
+    criteriaMultiDeleteUndo !== null &&
+    !isCriteriaUndoPayload(criteriaMultiDeleteUndo)
+  ) {
     return false;
   }
 

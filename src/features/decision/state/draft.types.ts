@@ -1,4 +1,9 @@
 import type { DraftOption } from "../../options/state/option.types";
+import type {
+  CriterionMultiDeleteUndoPayload,
+  CriterionSelectionState,
+  DraftCriterion,
+} from "../../criteria/state/criterion.types";
 
 export type DecisionDetails = {
   title: string;
@@ -9,6 +14,9 @@ export type DecisionDetails = {
 export type DecisionDraft = {
   decision: DecisionDetails;
   options: DraftOption[];
+  criteria: DraftCriterion[];
+  criteriaSelection: CriterionSelectionState;
+  criteriaMultiDeleteUndo: CriterionMultiDeleteUndoPayload | null;
 };
 
 export const createDefaultDecisionDraft = (): DecisionDraft => ({
@@ -18,4 +26,10 @@ export const createDefaultDecisionDraft = (): DecisionDraft => ({
     icon: "",
   },
   options: [],
+  criteria: [],
+  criteriaSelection: {
+    isSelecting: false,
+    selectedCriterionIds: [],
+  },
+  criteriaMultiDeleteUndo: null,
 });
