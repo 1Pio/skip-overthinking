@@ -1,11 +1,12 @@
 import { Link, Navigate } from "react-router";
 
 import { useDraft } from "../../features/decision/state/DraftProvider";
+import { hasMinimumCriteria } from "../../features/criteria/state/criterionPrereq";
 import { hasMinimumOptions } from "../../features/options/state/optionPrereq";
 
 export const ResultsRoute = () => {
   const {
-    draft: { options },
+    draft: { options, criteria },
   } = useDraft();
 
   if (!hasMinimumOptions(options)) {
@@ -14,6 +15,19 @@ export const ResultsRoute = () => {
         replace
         to="/setup/options"
         state={{ guardMessage: "Add at least 2 options to continue." }}
+      />
+    );
+  }
+
+  if (!hasMinimumCriteria(criteria)) {
+    return (
+      <Navigate
+        replace
+        to="/criteria"
+        state={{
+          guardMessage:
+            "Add at least 1 criterion and finish its type setup before viewing results.",
+        }}
       />
     );
   }
