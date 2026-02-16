@@ -51,6 +51,14 @@ Define criteria before ratings: users can create, edit, reorder, and template-se
 - Exact compact-vs-rich toggle placement in the criteria list.
 - Final wording polish for helper copy while preserving locked semantics.
 
+### Execution guardrails
+- Keep one canonical criteria contract: templates, editor flows, reducer actions, and route guards must all use the same criteria schema/types with no parallel data shapes.
+- Treat `numeric_measured` semantics as mandatory: require raw direction before save, allow optional unit, keep only `rating_1_20` and `numeric_measured`, and do not add invert toggles.
+- Keep list behavior deterministic: preserve stable criterion IDs and normalize to dense ordering after reorder/delete/undo so state remains predictable.
+- Use a single gating source: continue controls and guards for `/ratings` and `/results` must both delegate to the same criteria prerequisite helper.
+- Prevent Phase 3 scope leakage: do not introduce decision-level rating mode switching, seven-level mapping tables, dual persistence, nearest-label conversion, or ghost preview behavior.
+- Keep positivity guidance assistive: non-blocking suggestions with one-click rewrites, and helper copy that clearly states raw values are converted to 1-20 desirability where higher is better.
+
 </decisions>
 
 <specifics>
