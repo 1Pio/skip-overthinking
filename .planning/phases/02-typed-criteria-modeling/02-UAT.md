@@ -1,9 +1,9 @@
 ---
-status: complete
+status: diagnosed
 phase: 02-typed-criteria-modeling
 source: 02-01-SUMMARY.md, 02-02-SUMMARY.md, 02-03-SUMMARY.md, 02-04-SUMMARY.md
 started: 2026-02-16T20:05:45.046Z
-updated: 2026-02-16T20:24:45.296Z
+updated: 2026-02-16T20:27:50.268Z
 ---
 
 ## Current Test
@@ -65,7 +65,13 @@ skipped: 0
   reason: "User reported: no: The 'Move up' and 'Move down' buttens lituarly do not do anything. Also there are no direct errors within console or similar. But what works are things like the button being grayed out if it is most highest or lowest in list."
   severity: major
   test: 5
-  root_cause: ""
-  artifacts: []
-  missing: []
-  debug_session: ""
+  root_cause: "criterionReordered normalizes moved arrays with a sort-by-old-order step, which restores original sequence and turns Move up/down into a no-op."
+  artifacts:
+    - path: "src/features/criteria/state/criterion.actions.ts"
+      issue: "criterionReordered calls normalizeCriteria(nextCriteria) after splice"
+    - path: "src/features/criteria/state/criterion.actions.ts"
+      issue: "normalizeCriteria sorts by stale order values before reindexing"
+  missing:
+    - "Preserve post-splice array sequence when reindexing order values"
+    - "Use a reindex-only helper (no sort) after manual reorder operations"
+  debug_session: ".planning/debug/criteria-reorder-up-down-not-working.md"
