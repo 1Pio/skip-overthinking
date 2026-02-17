@@ -69,11 +69,25 @@ Each task was committed atomically:
 
 ## Deviations from Plan
 
-None - plan executed exactly as written.
+### Auto-fixed Issues
+
+**1. [Rule 3 - Blocking] STATE.md automation parser mismatch**
+- **Found during:** Post-task state update step
+- **Issue:** `gsd-tools state advance-plan`, `state update-progress`, and `state record-session` could not parse this repository's existing STATE.md section labels.
+- **Fix:** Kept successful metric/decision updates via `gsd-tools`, then manually updated Current Position, velocity totals, trend line, and session continuity fields in `STATE.md` to match completed 04-04 execution state.
+- **Files modified:** .planning/STATE.md
+- **Verification:** Confirmed `STATE.md` now reflects Plan 4/4 complete, updated totals, and session stop marker for 04-04.
+- **Committed in:** `29427c2` (plan metadata commit)
+
+---
+
+**Total deviations:** 1 auto-fixed (1 blocking)
+**Impact on plan:** Metadata bookkeeping required manual fallback; implementation scope and task outcomes were unchanged.
 
 ## Issues Encountered
 
 - Vite emitted expected third-party `"use client"` bundle warnings from dependencies; no build or lint failures occurred.
+- `gsd-tools` state parser did not recognize current STATE.md headings for advance/session commands, so state-position/session fields were updated manually after running successful metric/decision commands.
 
 ## User Setup Required
 
