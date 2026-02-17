@@ -6,11 +6,13 @@ import type { RankingRow } from "../state/results.types";
 
 type AdaptiveVisualProps = {
   rows: RankingRow[];
+  activeRankingRow?: RankingRow | null;
   highlightedOptionId?: string | null;
   focusedOptionId?: string | null;
   onOptionHover?: (optionId: string | null) => void;
   onOptionFocus?: (optionId: string | null) => void;
   showRawInputs?: boolean;
+  onShowRawInputsChange?: (value: boolean) => void;
 };
 
 type ViewRow = {
@@ -20,9 +22,6 @@ type ViewRow = {
   desirabilityByCriterion: number[];
   rawByCriterion: Array<number | null>;
 };
-
-const clamp = (value: number, min: number, max: number): number =>
-  Math.min(max, Math.max(min, value));
 
 const hslToRgba = (hue: number, saturation: number, lightness: number, alpha: number): string => {
   const s = saturation / 100;
@@ -98,27 +97,39 @@ const optionRankIndex = (rows: ViewRow[], optionId: string): number => {
 };
 
 const buildOptionColor = (
-  row: ViewRow,
   rowIndex: number,
-  rowCount: number,
   isDimmed: boolean,
 ): string => {
-  const rankIndex = row.rank === null ? rowCount - 1 : row.rank - 1;
-  const normalizedRank = rowCount > 1 ? 1 - rankIndex / (rowCount - 1) : 1;
-  const hue = (rowIndex * 71 + 28) % 360;
-  const lightness = clamp(46 + normalizedRank * 10, 40, 62);
-  const alpha = isDimmed ? 0.42 : 0.94;
-
-  return hslToRgba(hue, 70, lightness, alpha);
+  const predefinedHues = [
+    { h: 210, s: 75, l: 55 }, 
+    { h: 150, s: 78, l: 52 }, 
+    { h: 260, s: 72, l: 50 },
+    { h: 180, s: 76, l: 48 },
+    { h: 320, s: 70, l: 54 },
+    { h: 45, s: 82, l: 56 },
+    { h: 15, s: 80, l: 58 },
+    { h: 280, s: 68, l: 51 },
+    { h: 130, s: 74, l: 53 },
+    { h: 345, s: 72, l: 55 },
+  ];
+  
+  const colorConfig = predefinedHues[rowIndex % predefinedHues.length];
+  const lightness = isDimmed ? colorConfig.l - 18 : colorConfig.l;
+  const saturation = isDimmed ? colorConfig.s - 15 : colorConfig.s;
+  const alpha = isDimmed ? 0.45 : 0.92;
+  
+  return hslToRgba(colorConfig.h, saturation, lightness, alpha);
 };
 
 export const AdaptiveVisual = ({
   rows,
+  activeRankingRow = null,
   highlightedOptionId = null,
   focusedOptionId = null,
   onOptionHover,
   onOptionFocus,
   showRawInputs = false,
+  onShowRawInputsChange,
 }: AdaptiveVisualProps) => {
   const prefersReducedMotion = usePrefersReducedMotion();
 
@@ -156,7 +167,7 @@ export const AdaptiveVisual = ({
 
   const criteriaCount = criterionMetadata.length;
   const activeOptionId = focusedOptionId ?? highlightedOptionId ?? chartRows[0]?.optionId ?? null;
-  const activeRow = chartRows.find((row) => row.optionId === activeOptionId) ?? null;
+  const detailRow = activeRankingRow ?? rows.find((row) => row.optionId === activeOptionId) ?? null;
 
   const radarRows = useMemo(
     () =>
@@ -173,18 +184,23 @@ export const AdaptiveVisual = ({
 
   const radarSeries = useMemo(
     () =>
-      radarRows.map((row) => ({
-        id: row.optionId,
-        label: row.optionTitle,
-        data: row.desirabilityByCriterion,
-        fillArea: false,
-        color: buildOptionColor(
-          row,
-          optionRankIndex(chartRows, row.optionId),
-          chartRows.length,
-          activeOptionId !== null && activeOptionId !== row.optionId,
-        ),
-      })),
+      radarRows
+        .filter((row) => row.desirabilityByCriterion.some((v) => Number.isFinite(v)))
+        .map((row) => {
+          const isDimmed = activeOptionId !== null && activeOptionId !== row.optionId;
+          const isFocused = activeOptionId === row.optionId;
+          return {
+            id: row.optionId,
+            label: row.optionTitle,
+            data: row.desirabilityByCriterion,
+            fillArea: false,
+            color: buildOptionColor(
+              optionRankIndex(chartRows, row.optionId),
+              isDimmed,
+            ),
+            lineWidth: isFocused ? 5.5 : 3.8,
+          };
+        }),
     [activeOptionId, chartRows, radarRows],
   );
 
@@ -210,12 +226,22 @@ export const AdaptiveVisual = ({
 
       {criteriaCount >= 3 ? (
         <RadarChart
-          height={360}
-          series={radarSeries}
+          className="results-adaptive-visual__radar-chart"
+          height={460}
+          series={radarSeries.length > 0 ? radarSeries : []}
           radar={{ metrics: criterionMetadata.map((criterion) => criterion.criterionTitle), max: 20 }}
           hideLegend
           highlight="none"
           skipAnimation={prefersReducedMotion}
+          margin={{ top: 28, right: 24, bottom: 32, left: 24 }}
+          sx={{
+            [`& .MuiRadarSeries-area`]: {
+              fill: "none",
+            },
+            [`& .MuiChartsAxis-tickLabel`]: {
+              fontSize: "0.82rem",
+            },
+          }}
         />
       ) : null}
 
@@ -242,8 +268,8 @@ export const AdaptiveVisual = ({
               >
                 <h4>{row.optionTitle}</h4>
                 <Gauge
-                  width={220}
-                  height={120}
+                  width={250}
+                  height={132}
                   value={Number.isFinite(average) ? average : 0}
                   valueMin={1}
                   valueMax={20}
@@ -253,7 +279,7 @@ export const AdaptiveVisual = ({
                   skipAnimation={prefersReducedMotion}
                   sx={{
                     [`& .MuiGauge-valueArc`]: {
-                      fill: buildOptionColor(row, rankIndex, chartRows.length, isDimmed),
+                      fill: buildOptionColor(rankIndex, isDimmed),
                     },
                   }}
                 />
@@ -277,7 +303,7 @@ export const AdaptiveVisual = ({
 
       {criteriaCount === 1 ? (
         <BarChart
-          height={Math.max(210, chartRows.length * 46 + 90)}
+          height={Math.max(240, chartRows.length * 54 + 110)}
           layout="horizontal"
           yAxis={[{ scaleType: "band", data: chartRows.map((row) => row.optionTitle), width: 132 }]}
           xAxis={[{ min: 1, max: 20, label: `${singleCriterionTitle} desirability` }]}
@@ -289,7 +315,7 @@ export const AdaptiveVisual = ({
                 const value = row.desirabilityByCriterion[0];
                 return Number.isFinite(value) ? value : null;
               }),
-              color: "#2563eb",
+              color: "#1d4ed8",
             },
           ]}
           hideLegend
@@ -321,23 +347,50 @@ export const AdaptiveVisual = ({
         </div>
       ) : null}
 
-      {activeRow ? (
+      {detailRow ? (
         <section className="results-adaptive-visual__detail" aria-live="polite">
-          <h4>Inspecting {activeRow.optionTitle}</h4>
-          <ul>
-            {criterionMetadata.map((criterion, index) => {
-              const desirability = activeRow.desirabilityByCriterion[index];
-              const raw = activeRow.rawByCriterion[index];
-
-              return (
-                <li key={criterion.criterionId}>
-                  <strong>{criterion.criterionTitle}:</strong>{" "}
-                  {Number.isFinite(desirability) ? `${desirability.toFixed(1)} desirability` : "No score"}
-                  {showRawInputs && raw !== null ? `, raw ${raw}` : ""}
-                </li>
-              );
-            })}
-          </ul>
+          <div className="results-adaptive-visual__detail-header">
+            <h4>Why this option ranks here: {detailRow.optionTitle}</h4>
+            {detailRow.contributions.some((c) => c.criterionType === "numeric_measured") ? (
+              <label className="results-adaptive-visual__raw-toggle">
+                <input
+                  type="checkbox"
+                  checked={showRawInputs}
+                  onChange={(e) => onShowRawInputsChange?.(e.target.checked)}
+                  aria-label="Show raw measured inputs"
+                />
+                <span>Raw</span>
+              </label>
+            ) : null}
+          </div>
+          {detailRow.contributions.length === 0 ? (
+            <p role="status">No contribution rows yet.</p>
+          ) : (
+            <div className="results-adaptive-visual__why-table" role="region" aria-label="Contribution breakdown">
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">Criterion</th>
+                    <th scope="col">Desirability</th>
+                    {showRawInputs ? <th scope="col">Raw</th> : null}
+                    <th scope="col">Weight</th>
+                    <th scope="col">Contribution</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {detailRow.contributions.map((row) => (
+                    <tr key={row.criterionId} data-missing={row.isMissing}>
+                      <th scope="row">{row.criterionTitle}</th>
+                      <td>{row.desirability === null ? "--" : row.desirability.toFixed(1)}</td>
+                      {showRawInputs ? <td>{row.rawValue === null ? "--" : row.rawValue}</td> : null}
+                      <td>{(row.normalizedWeight * 100).toFixed(1)}%</td>
+                      <td>{row.wsmContribution.toFixed(3)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
         </section>
       ) : null}
     </section>
