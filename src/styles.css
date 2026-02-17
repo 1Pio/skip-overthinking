@@ -499,6 +499,7 @@ button:disabled {
 .ranking-table-section {
   display: grid;
   gap: 0.5rem;
+  width: 100%;
 }
 
 .ranking-table-section header {
@@ -686,8 +687,6 @@ button:disabled {
 }
 
 .results-adaptive-visual__radar-chart {
-  border: 1px solid #e2e8f0;
-  border-radius: 0.5rem;
   background: transparent;
 }
 
