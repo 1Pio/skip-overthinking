@@ -54,6 +54,24 @@ button:disabled {
   gap: 1rem;
 }
 
+.ratings-summary-card {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  background: #f8fafc;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.ratings-summary-card[data-tone="warning"] {
+  border-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.ratings-summary-card h4 {
+  margin: 0;
+}
+
 .ratings-step__header {
   display: flex;
   justify-content: space-between;
@@ -200,6 +218,34 @@ button:disabled {
   margin-top: 0.25rem;
   font-size: 0.8rem;
   color: #64748b;
+}
+
+.fill-missing-panel {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.45rem;
+  background: #f8fafc;
+}
+
+.fill-missing-panel--review {
+  background: #fffbeb;
+  border-color: #f59e0b;
+}
+
+.fill-missing-panel__list {
+  margin: 0;
+  padding-left: 1.25rem;
+  max-height: 13rem;
+  overflow: auto;
+  display: grid;
+  gap: 0.25rem;
+}
+
+.fill-missing-panel__actions {
+  display: inline-flex;
+  gap: 0.5rem;
 }
 
 .ratings-measured-cell {

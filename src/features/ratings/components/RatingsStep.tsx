@@ -1,7 +1,9 @@
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 import { useDraft } from "../../decision/state/DraftProvider";
-import { selectRatingsCompletion } from "../state/rating.selectors";
+import { ratingMissingNeutralFillApplied } from "../state/rating.actions";
+import { selectMissingRatings, selectRatingsCompletion } from "../state/rating.selectors";
+import { FillMissingReviewPanel } from "./FillMissingReviewPanel";
 import { createRatingModeAction, RatingModeToggle } from "./RatingModeToggle";
 import { RatingsMatrix } from "./RatingsMatrix";
 
@@ -18,14 +20,47 @@ export const RatingsStep = ({ onContinue, guardMessage }: RatingsStepProps) => {
     draft: { options, criteria, ratingsMatrix, ratingInputMode },
     dispatch,
   } = useDraft();
+  const [isFillReviewOpen, setIsFillReviewOpen] = useState(false);
 
   const completion = useMemo(
     () => selectRatingsCompletion(options, criteria, ratingsMatrix, ratingInputMode),
     [options, criteria, ratingsMatrix, ratingInputMode],
   );
 
+  const fillReviewItems = useMemo(
+    () =>
+      selectMissingRatings(options, criteria, ratingsMatrix, ratingInputMode).filter(
+        (item) => item.criterionType === "rating_1_20",
+      ),
+    [options, criteria, ratingsMatrix, ratingInputMode],
+  );
+
+  const handleApplyFillMissing = () => {
+    dispatch(ratingMissingNeutralFillApplied(ratingsMatrix, options, criteria, ratingInputMode));
+    setIsFillReviewOpen(false);
+  };
+
+  const coverageTone = completion.missingCount > 0 ? "warning" : "ok";
+
   return (
     <section aria-labelledby="ratings-step-heading" className="ratings-step">
+      <article className="ratings-summary-card" data-tone={coverageTone}>
+        <h4>Coverage summary</h4>
+        <p>
+          Completion: <strong>{completion.completionPercent}%</strong>
+        </p>
+        <p>
+          Missing cells: <strong>{completion.missingCount}</strong> of {completion.totalCells}
+        </p>
+        {completion.missingCount > 0 ? (
+          <p role="status">
+            Missing values stay blank until you explicitly apply Fill all missing with Neutral (10).
+          </p>
+        ) : (
+          <p role="status">All cells are currently filled.</p>
+        )}
+      </article>
+
       <div className="ratings-step__header">
         <div>
           <h3 id="ratings-step-heading">Rate each option against each criterion</h3>
@@ -51,6 +86,16 @@ export const RatingsStep = ({ onContinue, guardMessage }: RatingsStepProps) => {
         matrix={ratingsMatrix}
         mode={ratingInputMode}
         dispatch={dispatch}
+      />
+
+      <FillMissingReviewPanel
+        reviewItems={fillReviewItems}
+        options={options}
+        criteria={criteria}
+        isOpen={isFillReviewOpen}
+        onOpen={() => setIsFillReviewOpen(true)}
+        onCancel={() => setIsFillReviewOpen(false)}
+        onApply={handleApplyFillMissing}
       />
 
       <div className="ratings-step__footer">

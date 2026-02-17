@@ -1,10 +1,23 @@
-import { Link, Navigate } from "react-router";
+import { Link, Navigate, useLocation, useNavigate } from "react-router";
 
 import { useDraft } from "../../features/decision/state/DraftProvider";
 import { hasMinimumCriteria } from "../../features/criteria/state/criterionPrereq";
 import { hasMinimumOptions } from "../../features/options/state/optionPrereq";
+import { RatingsStep } from "../../features/ratings/components/RatingsStep";
+
+type RatingsRouteLocationState = {
+  guardMessage?: string;
+};
 
 export const RatingsRoute = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const locationState = location.state as RatingsRouteLocationState | null;
+  const guardMessage =
+    typeof locationState?.guardMessage === "string"
+      ? locationState.guardMessage
+      : undefined;
+
   const {
     draft: { options, criteria },
   } = useDraft();
@@ -35,13 +48,10 @@ export const RatingsRoute = () => {
   return (
     <section aria-labelledby="ratings-heading">
       <h2 id="ratings-heading">Ratings</h2>
-      <p>Placeholder for ratings matrix inputs and weight controls.</p>
       <p>
         Back to <Link to="/criteria">Criteria</Link>
       </p>
-      <p>
-        Next: <Link to="/results">Results</Link>
-      </p>
+      <RatingsStep guardMessage={guardMessage} onContinue={() => navigate("/results")} />
     </section>
   );
 };
