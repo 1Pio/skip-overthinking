@@ -52,6 +52,12 @@ type OptionReorderInput = {
   direction: OptionMoveDirection;
 };
 
+const reindexOptions = (options: DraftOption[]): DraftOption[] =>
+  options.map((option, index) => ({
+    ...option,
+    order: index,
+  }));
+
 export const optionAdded = (
   currentOptions: DraftOption[],
   input: OptionDraftInput,
@@ -176,7 +182,7 @@ export const optionReordered = (
   return {
     type: "optionReordered",
     payload: {
-      options: reorderOptions(nextOptions),
+      options: reindexOptions(nextOptions),
     },
   };
 };
