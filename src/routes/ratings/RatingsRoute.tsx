@@ -4,6 +4,10 @@ import { useDraft } from "../../features/decision/state/DraftProvider";
 import { hasMinimumCriteria } from "../../features/criteria/state/criterionPrereq";
 import { hasMinimumOptions } from "../../features/options/state/optionPrereq";
 import { RatingsStep } from "../../features/ratings/components/RatingsStep";
+import {
+  canAccessResults,
+  RESULTS_WEIGHTS_GUARD_MESSAGE,
+} from "../../features/ratings/state/ratingPrereq";
 
 type RatingsRouteLocationState = {
   guardMessage?: string;
@@ -19,7 +23,7 @@ export const RatingsRoute = () => {
       : undefined;
 
   const {
-    draft: { options, criteria },
+    draft: { options, criteria, criterionWeights },
   } = useDraft();
 
   if (!hasMinimumOptions(options)) {
@@ -51,7 +55,22 @@ export const RatingsRoute = () => {
       <p>
         Back to <Link to="/criteria">Criteria</Link>
       </p>
-      <RatingsStep guardMessage={guardMessage} onContinue={() => navigate("/results")} />
+      <RatingsStep
+        guardMessage={guardMessage}
+        onContinue={() => {
+          if (!canAccessResults(criteria, criterionWeights)) {
+            navigate("/ratings", {
+              replace: true,
+              state: {
+                guardMessage: RESULTS_WEIGHTS_GUARD_MESSAGE,
+              },
+            });
+            return;
+          }
+
+          navigate("/results");
+        }}
+      />
     </section>
   );
 };
