@@ -83,7 +83,12 @@ Plans:
   3. User sees appropriate visuals by criteria count: radar (>=3), dial (2), or comparison bar (1).
   4. User can inspect criterion-level desirability (and optional raw measured inputs) on hover and focus one option while dimming others.
   5. User can expand "why" contribution breakdowns and toggle raw input display only when measured criteria exist.
-**Plans**: TBD
+**Plans**: 4 plans
+Plans:
+- [ ] 04-01-PLAN.md - Install approved results UI dependencies and build selector-first WSM/WPM projection contracts.
+- [ ] 04-02-PLAN.md - Implement compact WSM ranking table and neutral secondary WPM strict-check panel.
+- [ ] 04-03-PLAN.md - Implement adaptive visuals plus explainability controls and compact why modal interactions.
+- [ ] 04-04-PLAN.md - Integrate ResultsStep into guarded route and apply polished utilitarian styling/motion.
 
 ### Phase 5: Persistence, Auth, and Sync Security
 **Goal**: Users can safely persist decisions in local-only anonymous mode or authenticated live sync mode with ownership guarantees.
@@ -106,5 +111,5 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 1. Foundation, Setup, and Options | 7/7 | Complete | 2026-02-16 |
 | 2. Typed Criteria Modeling | 5/5 | Complete | 2026-02-17 |
 | 3. Ratings, Weights, and Coverage Integrity | 3/3 | Complete | 2026-02-18 |
-| 4. Results and Explainability | 0/TBD | Not started | - |
+| 4. Results and Explainability | 0/4 | Not started | - |
 | 5. Persistence, Auth, and Sync Security | 0/TBD | Not started | - |
