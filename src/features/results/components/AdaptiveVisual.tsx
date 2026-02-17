@@ -125,6 +125,23 @@ export const AdaptiveVisual = ({
   const prefersReducedMotion = usePrefersReducedMotion();
   const [highlightedItem, setHighlightedItem] = useState<{ seriesId: string | number } | null>(null);
 
+  useEffect(() => {
+    if (highlightedOptionId !== null) {
+      setHighlightedItem({ seriesId: highlightedOptionId });
+    } else {
+      setHighlightedItem(null);
+    }
+  }, [highlightedOptionId]);
+
+  const handleHighlightChange = (item: { seriesId: string | number } | null) => {
+    setHighlightedItem(item);
+    if (item?.seriesId && typeof item.seriesId === 'string') {
+      onOptionHover?.(item.seriesId);
+    } else {
+      onOptionHover?.(null);
+    }
+  };
+
   const criterionMetadata = useMemo(() => {
     const firstWithContributions = rows.find((row) => row.contributions.length > 0);
     return firstWithContributions
@@ -228,7 +245,7 @@ export const AdaptiveVisual = ({
           hideLegend
           highlight="series"
           highlightedItem={highlightedItem}
-          onHighlightChange={setHighlightedItem}
+          onHighlightChange={handleHighlightChange}
           skipAnimation={prefersReducedMotion}
           margin={{ top: 28, right: 24, bottom: 32, left: 24 }}
           sx={{
