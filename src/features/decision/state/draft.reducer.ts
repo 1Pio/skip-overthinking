@@ -5,6 +5,7 @@ import {
 } from "./draft.types";
 import type { OptionAction } from "../../options/state/option.actions";
 import type { CriterionAction } from "../../criteria/state/criterion.actions";
+import type { RatingAction } from "../../ratings/state/rating.actions";
 
 export type DraftAction =
   | {
@@ -19,7 +20,8 @@ export type DraftAction =
       type: "draftReset";
     }
   | OptionAction
-  | CriterionAction;
+  | CriterionAction
+  | RatingAction;
 
 export const draftReducer = (
   state: DecisionDraft,
@@ -93,6 +95,25 @@ export const draftReducer = (
         ...state,
         criteria: action.payload.criteria,
         criteriaMultiDeleteUndo: action.payload.undo,
+      };
+    }
+    case "ratingCellUpdated":
+    case "ratingMissingNeutralFillApplied": {
+      return {
+        ...state,
+        ratingsMatrix: action.payload.ratingsMatrix,
+      };
+    }
+    case "ratingInputModeUpdated": {
+      return {
+        ...state,
+        ratingInputMode: action.payload.ratingInputMode,
+      };
+    }
+    case "criterionWeightUpdated": {
+      return {
+        ...state,
+        criterionWeights: action.payload.criterionWeights,
       };
     }
   }

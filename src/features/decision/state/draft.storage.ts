@@ -1,6 +1,12 @@
 import { createDefaultDecisionDraft, type DecisionDraft } from "./draft.types";
 import { criteriaSchema } from "../../criteria/criteria.schema";
 import type { CriterionMultiDeleteUndoPayload } from "../../criteria/state/criterion.types";
+import {
+  criterionWeightsSchema,
+  ratingInputModeSchema,
+  ratingsMatrixSchema,
+} from "../../ratings/ratings.schema";
+import { DEFAULT_RATING_INPUT_MODE } from "../../ratings/state/rating.types";
 
 const DRAFT_STORAGE_KEY = "skip-overthinking:decision-draft:v1";
 
@@ -39,12 +45,24 @@ const isDecisionDraft = (value: unknown): value is DecisionDraft => {
     return false;
   }
 
-  const { decision, options, criteria, criteriaSelection, criteriaMultiDeleteUndo } = value;
+  const {
+    decision,
+    options,
+    criteria,
+    ratingsMatrix,
+    ratingInputMode,
+    criterionWeights,
+    criteriaSelection,
+    criteriaMultiDeleteUndo,
+  } = value;
 
   if (
     !isObject(decision) ||
     !Array.isArray(options) ||
     !criteriaSchema.safeParse(criteria).success ||
+    !ratingsMatrixSchema.safeParse(ratingsMatrix).success ||
+    !ratingInputModeSchema.safeParse(ratingInputMode).success ||
+    !criterionWeightsSchema.safeParse(criterionWeights).success ||
     !isCriteriaSelection(criteriaSelection)
   ) {
     return false;
@@ -76,6 +94,33 @@ export const hydrateDraftFromStorage = (): DecisionDraft => {
 
   try {
     const parsed: unknown = JSON.parse(raw);
+
+    if (isObject(parsed)) {
+      const baseDraft = createDefaultDecisionDraft();
+      const parsedRatingsMatrix = ratingsMatrixSchema.safeParse(parsed.ratingsMatrix);
+      const parsedRatingInputMode = ratingInputModeSchema.safeParse(parsed.ratingInputMode);
+      const parsedCriterionWeights = criterionWeightsSchema.safeParse(
+        parsed.criterionWeights,
+      );
+      const migratedDraft: DecisionDraft = {
+        ...baseDraft,
+        ...parsed,
+        ratingsMatrix: parsedRatingsMatrix.success
+          ? parsedRatingsMatrix.data
+          : baseDraft.ratingsMatrix,
+        ratingInputMode: parsedRatingInputMode.success
+          ? parsedRatingInputMode.data
+          : DEFAULT_RATING_INPUT_MODE,
+        criterionWeights: parsedCriterionWeights.success
+          ? parsedCriterionWeights.data
+          : baseDraft.criterionWeights,
+      };
+
+      if (isDecisionDraft(migratedDraft)) {
+        return migratedDraft;
+      }
+    }
+
     if (isDecisionDraft(parsed)) {
       return parsed;
     }
