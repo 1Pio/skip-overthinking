@@ -67,7 +67,11 @@ Plans:
   4. User can explicitly apply "Fill missing with Neutral (10)" as a deliberate action rather than automatic behavior.
   5. User can switch rating_1_20 input mode non-destructively (dual persistence with nearest-value ghosting and reversible edits) while keeping user intent across mode toggles.
   6. User can assign integer weights to all criteria, is blocked from results until complete, and sees weighted coverage plus low-coverage warnings.
-**Plans**: TBD
+**Plans**: 3 plans
+Plans:
+- [ ] 03-01-PLAN.md - Establish ratings and weights domain contracts with dual persistence, conversion integrity, and shared gates.
+- [ ] 03-02-PLAN.md - Implement compact sticky ratings matrix UX with mode toggle, ghost previews, and explicit neutral-fill review flow.
+- [ ] 03-03-PLAN.md - Add integer weights, weighted coverage warnings panel, and results gating on complete weights.
 
 ### Phase 4: Results and Explainability
 **Goal**: Users can trust and interpret rankings through default WSM results, WPM robustness checks, and context-aware visuals.
