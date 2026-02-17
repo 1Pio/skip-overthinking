@@ -31,6 +31,6 @@ git status --short
   1. `git status`
   2. `git push` (or `git push -u <remote> <branch>` on first push)
   3. `git status` again to confirm clean and up to date
-- If collaborators/agents also commit, sync before new work:
+- If collaborators/agents also commit, sync before new work (if safe to do so):
   - `git fetch --all --prune`
   - `git pull --rebase` (or project-preferred pull strategy)
