@@ -99,26 +99,17 @@ const optionRankIndex = (rows: ViewRow[], optionId: string): number => {
 const buildOptionColor = (
   rowIndex: number,
   isDimmed: boolean,
+  total: number,
+  row: ViewRow,
 ): string => {
-  const predefinedHues = [
-    { h: 210, s: 75, l: 55 }, 
-    { h: 150, s: 78, l: 52 }, 
-    { h: 260, s: 72, l: 50 },
-    { h: 180, s: 76, l: 48 },
-    { h: 320, s: 70, l: 54 },
-    { h: 45, s: 82, l: 56 },
-    { h: 15, s: 80, l: 58 },
-    { h: 280, s: 68, l: 51 },
-    { h: 130, s: 74, l: 53 },
-    { h: 345, s: 72, l: 55 },
-  ];
-  
-  const colorConfig = predefinedHues[rowIndex % predefinedHues.length];
-  const lightness = isDimmed ? colorConfig.l - 18 : colorConfig.l;
-  const saturation = isDimmed ? colorConfig.s - 15 : colorConfig.s;
+  const rankIndex = row.rank === null ? total - 1 : row.rank - 1;
+  const intensity = total > 1 ? 1 - rankIndex / Math.max(1, total - 1) : 1;
+  const hue = (rowIndex * 71 + 28) % 360;
+  const lightness = isDimmed ? 44 + intensity * 14 - 18 : 44 + intensity * 14;
+  const saturation = isDimmed ? 72 - 15 : 72;
   const alpha = isDimmed ? 0.45 : 0.92;
-  
-  return hslToRgba(colorConfig.h, saturation, lightness, alpha);
+
+  return hslToRgba(hue, saturation, lightness, alpha);
 };
 
 export const AdaptiveVisual = ({
@@ -197,6 +188,8 @@ export const AdaptiveVisual = ({
             color: buildOptionColor(
               optionRankIndex(chartRows, row.optionId),
               isDimmed,
+              chartRows.length,
+              row,
             ),
             lineWidth: isFocused ? 5.5 : 3.8,
           };
@@ -279,7 +272,7 @@ export const AdaptiveVisual = ({
                   skipAnimation={prefersReducedMotion}
                   sx={{
                     [`& .MuiGauge-valueArc`]: {
-                      fill: buildOptionColor(rankIndex, isDimmed),
+                      fill: buildOptionColor(rankIndex, isDimmed, chartRows.length, row),
                     },
                   }}
                 />
