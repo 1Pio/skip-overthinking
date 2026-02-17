@@ -80,6 +80,12 @@ const normalizeCriteria = (criteria: DraftCriterion[]): DraftCriterion[] =>
       order: index,
     }));
 
+const reindexCriteria = (criteria: DraftCriterion[]): DraftCriterion[] =>
+  criteria.map((criterion, index) => ({
+    ...criterion,
+    order: index,
+  }));
+
 type CriterionReorderInput = {
   id: string;
   direction: CriterionMoveDirection;
@@ -253,7 +259,7 @@ export const criterionReordered = (
   return {
     type: "criterionReordered",
     payload: {
-      criteria: normalizeCriteria(nextCriteria),
+      criteria: reindexCriteria(nextCriteria),
     },
   };
 };
