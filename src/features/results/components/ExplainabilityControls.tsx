@@ -7,7 +7,6 @@ type ExplainabilityControlsProps = {
   focusedOptionId?: string | null;
   onFocusModeChange: (enabled: boolean) => void;
   onShowRawInputsChange: (enabled: boolean) => void;
-  onClearFocus: () => void;
 };
 
 export const ExplainabilityControls = ({
@@ -17,7 +16,6 @@ export const ExplainabilityControls = ({
   focusedOptionId = null,
   onFocusModeChange,
   onShowRawInputsChange,
-  onClearFocus,
 }: ExplainabilityControlsProps) => {
   return (
     <section className="results-explainability-controls" aria-label="Explainability controls">
@@ -69,10 +67,6 @@ export const ExplainabilityControls = ({
         ) : (
           <p>Focus mode is available. Hover or focus an option to pin a comparison target.</p>
         )}
-
-        <button type="button" onClick={onClearFocus} disabled={!focusedOptionId}>
-          Clear focused option
-        </button>
       </div>
     </section>
   );
