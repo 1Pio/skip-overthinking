@@ -6,6 +6,7 @@ import {
 import type { OptionAction } from "../../options/state/option.actions";
 import type { CriterionAction } from "../../criteria/state/criterion.actions";
 import type { RatingAction } from "../../ratings/state/rating.actions";
+import { withDefaultCriterionWeights } from "../../ratings/state/rating.types";
 
 export type DraftAction =
   | {
@@ -38,7 +39,13 @@ export const draftReducer = (
       };
     }
     case "draftInitialized": {
-      return action.payload;
+      return {
+        ...action.payload,
+        criterionWeights: withDefaultCriterionWeights(
+          action.payload.criteria,
+          action.payload.criterionWeights,
+        ),
+      };
     }
     case "draftReset": {
       return createDefaultDecisionDraft();
@@ -59,6 +66,10 @@ export const draftReducer = (
       return {
         ...state,
         criteria: action.payload.criteria,
+        criterionWeights: withDefaultCriterionWeights(
+          action.payload.criteria,
+          state.criterionWeights,
+        ),
       };
     }
     case "criterionSelectionModeEntered": {
@@ -83,6 +94,10 @@ export const draftReducer = (
       return {
         ...state,
         criteria: action.payload.criteria,
+        criterionWeights: withDefaultCriterionWeights(
+          action.payload.criteria,
+          state.criterionWeights,
+        ),
         criteriaSelection: {
           isSelecting: false,
           selectedCriterionIds: [],
@@ -94,6 +109,10 @@ export const draftReducer = (
       return {
         ...state,
         criteria: action.payload.criteria,
+        criterionWeights: withDefaultCriterionWeights(
+          action.payload.criteria,
+          state.criterionWeights,
+        ),
         criteriaMultiDeleteUndo: action.payload.undo,
       };
     }

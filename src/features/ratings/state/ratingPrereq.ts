@@ -4,7 +4,7 @@ import type { CriterionWeights } from "./rating.types";
 import { ratingsGateSchema } from "../ratingsGate.schema";
 
 export const RESULTS_WEIGHTS_GUARD_MESSAGE =
-  "Finish assigning integer weights for every criterion, then review coverage warnings before viewing results.";
+  "Every criterion starts at weight 1. Keep integer weights assigned and review coverage warnings before viewing results.";
 
 export const hasCompleteIntegerWeights = (
   criteria: DraftCriterion[],

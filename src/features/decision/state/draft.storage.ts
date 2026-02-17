@@ -6,7 +6,10 @@ import {
   ratingInputModeSchema,
   ratingsMatrixSchema,
 } from "../../ratings/ratings.schema";
-import { DEFAULT_RATING_INPUT_MODE } from "../../ratings/state/rating.types";
+import {
+  DEFAULT_RATING_INPUT_MODE,
+  withDefaultCriterionWeights,
+} from "../../ratings/state/rating.types";
 
 const DRAFT_STORAGE_KEY = "skip-overthinking:decision-draft:v1";
 
@@ -115,6 +118,11 @@ export const hydrateDraftFromStorage = (): DecisionDraft => {
           ? parsedCriterionWeights.data
           : baseDraft.criterionWeights,
       };
+
+      migratedDraft.criterionWeights = withDefaultCriterionWeights(
+        migratedDraft.criteria,
+        migratedDraft.criterionWeights,
+      );
 
       if (isDecisionDraft(migratedDraft)) {
         return migratedDraft;

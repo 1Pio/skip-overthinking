@@ -1,3 +1,4 @@
+import type { DraftCriterion } from "../../criteria/state/criterion.types";
 import {
   CRITERION_BLANK_RATE_SOFT_WARNING_THRESHOLD,
   DESIRABILITY_MAX,
@@ -34,6 +35,7 @@ export type FillMissingReviewItem = {
 };
 
 export const DEFAULT_RATING_INPUT_MODE: RatingInputMode = "numeric";
+export const DEFAULT_CRITERION_WEIGHT = 1;
 
 export const RATING_SEVEN_LEVEL_TO_NUMERIC: Record<SevenLevelValue, number> = {
   terrible: 1.0,
@@ -95,6 +97,21 @@ export const mapNumericToNearestSevenLevel = (value: number): SevenLevelValue =>
 
 export const hasRating120Value = (cell: Rating120Cell | undefined): boolean =>
   !!cell && (cell.numericValue !== null || cell.sevenLevelValue !== null);
+
+export const withDefaultCriterionWeights = (
+  criteria: DraftCriterion[],
+  criterionWeights: CriterionWeights,
+): CriterionWeights =>
+  criteria.reduce<CriterionWeights>((nextWeights, criterion) => {
+    const currentWeight = criterionWeights[criterion.id];
+    nextWeights[criterion.id] =
+      typeof currentWeight === "number" &&
+      Number.isInteger(currentWeight) &&
+      currentWeight >= DEFAULT_CRITERION_WEIGHT
+        ? currentWeight
+        : DEFAULT_CRITERION_WEIGHT;
+    return nextWeights;
+  }, {});
 
 export const RATING_DOMAIN_CONSTANTS = {
   desirabilityMin: DESIRABILITY_MIN,

@@ -10,7 +10,12 @@ import {
   selectOptionWeightedCoverage,
   selectWeightAssignmentStatus,
 } from "../state/rating.selectors";
-import type { CriterionWeights, RatingInputMode, RatingsMatrix } from "../state/rating.types";
+import {
+  DEFAULT_CRITERION_WEIGHT,
+  type CriterionWeights,
+  type RatingInputMode,
+  type RatingsMatrix,
+} from "../state/rating.types";
 
 type WeightsCoveragePanelProps = {
   options: DraftOption[];
@@ -37,7 +42,7 @@ export const WeightsCoveragePanel = ({
   ratingInputMode,
   dispatch,
 }: WeightsCoveragePanelProps) => {
-  const [isExpanded, setIsExpanded] = useState(false);
+  const [isDiagnosticsOpen, setIsDiagnosticsOpen] = useState(false);
 
   const orderedOptions = useMemo(
     () => [...options].sort((left, right) => left.order - right.order),
@@ -84,11 +89,12 @@ export const WeightsCoveragePanel = ({
           </p>
           {!weightStatus.isComplete ? (
             <p role="status" className="weights-coverage-panel__warning">
-              Add integer weights for every criterion before results unlock.
+              Every criterion starts at 1. Add or restore any missing integer weight before
+              results.
             </p>
           ) : (
             <p role="status" className="weights-coverage-panel__ok">
-              All criteria have integer weights.
+              All criteria have integer weights. Tune them to reflect relative importance.
             </p>
           )}
         </div>
@@ -97,8 +103,8 @@ export const WeightsCoveragePanel = ({
           <p className="weights-coverage-panel__coverage-overview">
             Option coverage warnings: <strong>{warningCount}</strong>
           </p>
-          <button type="button" onClick={() => setIsExpanded((value) => !value)}>
-            {isExpanded ? "Hide details" : "Show details"}
+          <button type="button" onClick={() => setIsDiagnosticsOpen((value) => !value)}>
+            {isDiagnosticsOpen ? "Hide diagnostics" : "Show diagnostics"}
           </button>
         </div>
 
@@ -126,93 +132,98 @@ export const WeightsCoveragePanel = ({
         </ul>
       </header>
 
-      {isExpanded ? (
-        <div className="weights-coverage-panel__details">
-          <section aria-label="Criterion weight inputs">
-            <h5>Criterion weights (integers only)</h5>
-            <ul className="weights-coverage-panel__weights-list">
-              {orderedCriteria.map((criterion) => {
-                const currentWeight = criterionWeights[criterion.id];
-                const inputValue = typeof currentWeight === "number" ? String(currentWeight) : "";
+      <section className="weights-coverage-panel__weights" aria-label="Criterion weight inputs">
+        <h5>Criterion weights (integers only)</h5>
+        <p className="weights-coverage-panel__weight-hint">
+          Every criterion starts at 1. Adjust these to reflect what matters most.
+        </p>
+        <ul className="weights-coverage-panel__weights-list">
+          {orderedCriteria.map((criterion) => {
+            const currentWeight = criterionWeights[criterion.id];
+            const resolvedWeight =
+              typeof currentWeight === "number" &&
+              Number.isInteger(currentWeight) &&
+              currentWeight >= DEFAULT_CRITERION_WEIGHT
+                ? currentWeight
+                : DEFAULT_CRITERION_WEIGHT;
+
+            return (
+              <li key={criterion.id}>
+                <label htmlFor={`criterion-weight-${criterion.id}`}>
+                  <span className="weights-coverage-panel__criterion-title">{criterion.title}</span>
+                  <span className="weights-coverage-panel__criterion-type">
+                    {criterion.type === "rating_1_20" ? "1-20" : "Measured"}
+                  </span>
+                </label>
+                <input
+                  id={`criterion-weight-${criterion.id}`}
+                  type="number"
+                  inputMode="numeric"
+                  min={1}
+                  step={1}
+                  value={String(resolvedWeight)}
+                  onKeyDown={preventNonIntegerKeys}
+                  onChange={(event) => {
+                    const nextValue = event.currentTarget.value;
+
+                    if (nextValue === "") {
+                      dispatch(
+                        criterionWeightUpdated(criterionWeights, {
+                          criterionId: criterion.id,
+                          weight: DEFAULT_CRITERION_WEIGHT,
+                        }),
+                      );
+                      return;
+                    }
+
+                    if (!/^\d+$/.test(nextValue)) {
+                      return;
+                    }
+
+                    const parsed = Number(nextValue);
+                    dispatch(
+                      criterionWeightUpdated(criterionWeights, {
+                        criterionId: criterion.id,
+                        weight: parsed,
+                      }),
+                    );
+                  }}
+                  aria-label={`${criterion.title} weight`}
+                />
+              </li>
+            );
+          })}
+        </ul>
+      </section>
+
+      {isDiagnosticsOpen ? (
+        <section className="weights-coverage-panel__details" aria-label="Coverage warning details">
+          <h5>Coverage diagnostics</h5>
+          <p>
+            Option weighted coverage warnings trigger below 70%. Strong warnings trigger below 50%.
+          </p>
+          {blankWarningCriteria.length > 0 ? (
+            <ul className="weights-coverage-panel__criterion-warnings">
+              {blankWarningCriteria.map((entry) => {
+                const criterion = orderedCriteria.find((item) => item.id === entry.criterionId);
+                if (!criterion) {
+                  return null;
+                }
 
                 return (
                   <li key={criterion.id}>
-                    <label htmlFor={`criterion-weight-${criterion.id}`}>
-                      <span className="weights-coverage-panel__criterion-title">{criterion.title}</span>
-                      <span className="weights-coverage-panel__criterion-type">
-                        {criterion.type === "rating_1_20" ? "1-20" : "Measured"}
-                      </span>
-                    </label>
-                    <input
-                      id={`criterion-weight-${criterion.id}`}
-                      type="number"
-                      inputMode="numeric"
-                      min={1}
-                      step={1}
-                      value={inputValue}
-                      placeholder="1"
-                      onKeyDown={preventNonIntegerKeys}
-                      onChange={(event) => {
-                        const nextValue = event.currentTarget.value;
-
-                        if (nextValue === "") {
-                          dispatch(
-                            criterionWeightUpdated(criterionWeights, {
-                              criterionId: criterion.id,
-                              weight: null,
-                            }),
-                          );
-                          return;
-                        }
-
-                        if (!/^\d+$/.test(nextValue)) {
-                          return;
-                        }
-
-                        const parsed = Number(nextValue);
-                        dispatch(
-                          criterionWeightUpdated(criterionWeights, {
-                            criterionId: criterion.id,
-                            weight: parsed,
-                          }),
-                        );
-                      }}
-                      aria-label={`${criterion.title} weight`}
-                    />
+                    <strong>{criterion.title}</strong> has {entry.blanks}/{entry.totalOptions} blanks (
+                    {toPercent(entry.blankRate)}). Review this criterion before results.
                   </li>
                 );
               })}
             </ul>
-          </section>
-
-          <section aria-label="Coverage warning details">
-            <h5>Coverage diagnostics</h5>
-            <p>
-              Option weighted coverage warnings trigger below 70%. Strong warnings trigger below 50%.
+          ) : (
+            <p className="weights-coverage-panel__ok">
+              No criterion currently exceeds the soft blank-rate warning threshold.
             </p>
-            {blankWarningCriteria.length > 0 ? (
-              <ul className="weights-coverage-panel__criterion-warnings">
-                {blankWarningCriteria.map((entry) => {
-                  const criterion = orderedCriteria.find((item) => item.id === entry.criterionId);
-                  if (!criterion) {
-                    return null;
-                  }
-
-                  return (
-                    <li key={criterion.id}>
-                      <strong>{criterion.title}</strong> has {entry.blanks}/{entry.totalOptions} blanks (
-                      {toPercent(entry.blankRate)}). Review this criterion before results.
-                    </li>
-                  );
-                })}
-              </ul>
-            ) : (
-              <p className="weights-coverage-panel__ok">
-                No criterion currently exceeds the soft blank-rate warning threshold.
-              </p>
-            )}
-          </section>
-        </div>
+          )}
+        </section>
       ) : null}
     </aside>
   );

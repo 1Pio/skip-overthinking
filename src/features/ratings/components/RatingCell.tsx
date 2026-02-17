@@ -9,10 +9,12 @@ import {
   rating120SevenLevelCellUpdated,
 } from "../state/rating.actions";
 import { selectCellDesirability } from "../state/rating.selectors";
-import type {
-  RatingInputMode,
-  RatingsMatrix,
-  SevenLevelValue,
+import {
+  mapNumericToNearestSevenLevel,
+  mapSevenLevelToNumeric,
+  type RatingInputMode,
+  type RatingsMatrix,
+  type SevenLevelValue,
 } from "../state/rating.types";
 
 type RatingCellProps = {
@@ -67,22 +69,37 @@ export const RatingCell = ({
 
   if (criterion.type === "rating_1_20") {
     const numericValue =
-      cell?.criterionType === "rating_1_20" && cell.numericValue !== null
-        ? String(cell.numericValue)
-        : "";
+      cell?.criterionType === "rating_1_20" ? cell.numericValue : null;
+    const numericInputValue = numericValue === null ? "" : String(numericValue);
     const sevenLevelValue =
       cell?.criterionType === "rating_1_20" && cell.sevenLevelValue !== null
         ? cell.sevenLevelValue
         : "";
 
-    const ghostText =
+    const counterpartText =
       mode === "numeric"
-        ? sevenLevelValue
-          ? `Ghost: ${sevenLevelOptions.find((entry) => entry.value === sevenLevelValue)?.label ?? sevenLevelValue}`
-          : ""
-        : numericValue
-          ? `Ghost: ${formatOneDecimal(Number(numericValue))}`
-          : "";
+        ? (() => {
+            const mirroredSevenLevel =
+              numericValue === null ? sevenLevelValue : mapNumericToNearestSevenLevel(numericValue);
+
+            if (!mirroredSevenLevel) {
+              return "";
+            }
+
+            const label =
+              sevenLevelOptions.find((entry) => entry.value === mirroredSevenLevel)?.label ??
+              mirroredSevenLevel;
+
+            return `Mirror: ${label}`;
+          })()
+        : (() => {
+            const mirroredNumeric = sevenLevelValue
+              ? mapSevenLevelToNumeric(sevenLevelValue)
+              : numericValue;
+            return mirroredNumeric === null
+              ? ""
+              : `Mirror: ${formatOneDecimal(mirroredNumeric)}`;
+          })();
 
     return (
       <td className="ratings-matrix__cell" data-filled={isFilled}>
@@ -94,7 +111,7 @@ export const RatingCell = ({
             min={1}
             max={20}
             step={0.1}
-            value={numericValue}
+            value={numericInputValue}
             onChange={(event) => {
               dispatch(
                 rating120NumericCellUpdated(matrix, {
@@ -131,7 +148,9 @@ export const RatingCell = ({
             ))}
           </select>
         )}
-        {ghostText ? <p className="ratings-matrix__ghost">{ghostText}</p> : null}
+        {counterpartText ? (
+          <p className="ratings-matrix__counterpart">{counterpartText}</p>
+        ) : null}
       </td>
     );
   }

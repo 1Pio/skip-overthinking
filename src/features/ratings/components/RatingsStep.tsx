@@ -104,8 +104,8 @@ export const RatingsStep = ({ onContinue, guardMessage }: RatingsStepProps) => {
         </button>
         {!weightStatus.isComplete ? (
           <p role="alert" className="ratings-step__hint">
-            Assign integer weights for every criterion, then review low-coverage warnings before
-            continuing to results.
+            Each criterion starts at 1. Add back any missing integer weight, then review
+            low-coverage warnings before continuing to results.
           </p>
         ) : completion.missingCount > 0 ? (
           <p role="status" className="ratings-step__hint">

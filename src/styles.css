@@ -161,6 +161,17 @@ button:disabled {
   background: #fef2f2;
 }
 
+.weights-coverage-panel__weights {
+  border-top: 1px solid #e2e8f0;
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.weights-coverage-panel__weight-hint {
+  font-size: 0.86rem;
+}
+
 .weights-coverage-panel__details {
   border-top: 1px solid #e2e8f0;
   padding: 0.75rem;
@@ -331,7 +342,7 @@ button:disabled {
   background: #fff;
 }
 
-.ratings-matrix__ghost {
+.ratings-matrix__counterpart {
   margin-top: 0.25rem;
   font-size: 0.8rem;
   color: #64748b;
