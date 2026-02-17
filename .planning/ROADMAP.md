@@ -12,7 +12,7 @@ This roadmap delivers a complete decision-making flow from first setup to explai
 
 - [x] **Phase 1: Foundation, Setup, and Options** - Deliver runnable app foundation, step-gated decision setup, and option management. (Completed 2026-02-16)
 - [x] **Phase 2: Typed Criteria Modeling** - Deliver criteria authoring with templates, desirability-first wording guidance, and numeric measured direction configuration. (Completed 2026-02-17)
-- [ ] **Phase 3: Ratings, Weights, and Coverage Integrity** - Deliver matrix input with reversible rating_1_20 input modes, 1-20 desirability conversion integrity, and missing-data safeguards.
+- [x] **Phase 3: Ratings, Weights, and Coverage Integrity** - Deliver matrix input with reversible rating_1_20 input modes, 1-20 desirability conversion integrity, and missing-data safeguards. (Completed 2026-02-18)
 - [ ] **Phase 4: Results and Explainability** - Deliver rankings, strict-check validation, and adaptive decision visuals.
 - [ ] **Phase 5: Persistence, Auth, and Sync Security** - Deliver local persistence plus authenticated ownership-enforced sync.
 
@@ -105,6 +105,6 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 |-------|----------------|--------|-----------|
 | 1. Foundation, Setup, and Options | 7/7 | Complete | 2026-02-16 |
 | 2. Typed Criteria Modeling | 5/5 | Complete | 2026-02-17 |
-| 3. Ratings, Weights, and Coverage Integrity | 0/TBD | Not started | - |
+| 3. Ratings, Weights, and Coverage Integrity | 3/3 | Complete | 2026-02-18 |
 | 4. Results and Explainability | 0/TBD | Not started | - |
 | 5. Persistence, Auth, and Sync Security | 0/TBD | Not started | - |
