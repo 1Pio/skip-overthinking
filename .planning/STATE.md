@@ -10,18 +10,18 @@ See: `.planning/PROJECT.md` (updated 2026-02-16)
 ## Current Position
 
 Phase: 3 of 5 (Ratings, Weights, and Coverage Integrity)
-Plan: 1 of 3 in current phase
+Plan: 2 of 3 in current phase
 Status: In progress
-Last activity: 2026-02-17 - Completed 03-01 plan and established ratings/weights domain contracts.
+Last activity: 2026-02-17 - Completed 03-02 plan and shipped ratings matrix interaction UI.
 
-Progress: [####------] 40%
+Progress: [#####-----] 47%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 12
+- Total plans completed: 13
 - Average duration: 2 min
-- Total execution time: 0.5 hours
+- Total execution time: 0.6 hours
 
 **By Phase:**
 
@@ -29,10 +29,10 @@ Progress: [####------] 40%
 |-------|-------|-------|----------|
 | 1 | 7 | 15 min | 2 min |
 | 2 | 5 | 12 min | 2 min |
-| 3 | 1 | 7 min | 7 min |
+| 3 | 2 | 12 min | 6 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-02 (4 min), 02-03 (2 min), 02-04 (1 min), 02-05 (1 min), 03-01 (7 min)
+- Last 5 plans: 02-03 (2 min), 02-04 (1 min), 02-05 (1 min), 03-01 (7 min), 03-02 (5 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -48,6 +48,7 @@ Progress: [####------] 40%
 | Phase 02 P04 | 1 min | 2 tasks | 4 files |
 | Phase 02 P05 | 1 min | 3 tasks | 2 files |
 | Phase 03 P01 | 7 min | 2 tasks | 9 files |
+| Phase 03 P02 | 5 min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -92,6 +93,9 @@ Recent decisions affecting current work:
 - [Phase 03]: Use optionId::criterionId as canonical ratings matrix key for reorder-safe state.
 - [Phase 03]: Persist both numeric and seven-level values in rating_1_20 cells and only update active edits.
 - [Phase 03]: Set criterion blank-rate soft warning threshold to 30% as a shared constant.
+- [Phase 03]: Keep fill-missing scoped to blank rating_1_20 cells and exclude measured criteria from auto-fill.
+- [Phase 03]: Render mode-toggle helper copy as always-visible text near top-right to prevent hidden mode semantics.
+- [Phase 03]: Use one scroll container with sticky header row and sticky option column for compact matrix scanning.
 
 ### Pending Todos
 
@@ -105,6 +109,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 16:26
-Stopped at: Completed 03-01-PLAN.md
+Last session: 2026-02-17 16:34
+Stopped at: Completed 03-02-PLAN.md
 Resume file: None
