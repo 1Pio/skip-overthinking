@@ -59,7 +59,7 @@ Each task was committed atomically:
 2. **Task 2: Fix analogous `/options` reorder regression for move controls (deviation)** - `dcd0751` (fix)
 3. **Task 3: Verify `/options` move controls after reorder fix** - human verification approved (`approved`, no code commit)
 
-**Plan metadata:** `pending`
+**Plan metadata:** `a2ee9a9`
 
 ## Files Created/Modified
 
