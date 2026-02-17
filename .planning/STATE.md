@@ -10,11 +10,11 @@ See: `.planning/PROJECT.md` (updated 2026-02-16)
 ## Current Position
 
 Phase: 4 of 5 (Results and Explainability)
-Plan: 1 of 4 in current phase
+Plan: 2 of 4 in current phase
 Status: In progress
-Last activity: 2026-02-18 - Completed 04-01 plan and shipped canonical WSM/WPM results projection selectors.
+Last activity: 2026-02-18 - Completed 04-02 plan and shipped WSM summary table plus secondary WPM strict-check components.
 
-Progress: [#######---] 57%
+Progress: [#######---] 60%
 
 ## Performance Metrics
 
@@ -51,6 +51,7 @@ Progress: [#######---] 57%
 | Phase 03 P02 | 5 min | 2 tasks | 7 files |
 | Phase 03 P03 | 1 min | 2 tasks | 7 files |
 | Phase 04 P01 | 2 min | 2 tasks | 5 files |
+| Phase 04 P02 | 1 min | 3 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -102,6 +103,8 @@ Recent decisions affecting current work:
 - [Phase 03]: Centralize weight-complete results access checks in shared ratingPrereq helpers for both continue flow and deep links.
 - [Phase 04]: Use coverage-aware selector projections as the single source of truth for ranking and strict-check outputs.
 - [Phase 04]: Use standard competition ranking (1,1,3) with deterministic tie ordering by option order and id.
+- [Phase 04]: Kept WSM as primary summary surface with WPM as a secondary strict-check panel using neutral methods-differ messaging.
+- [Phase 04]: Standardized results summary composition as selector-payload-driven components with shared hover and focus callbacks.
 
 ### Pending Todos
 
@@ -115,6 +118,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-18 00:56
-Stopped at: Completed 04-01-PLAN.md
+Last session: 2026-02-18 01:03
+Stopped at: Completed 04-02-PLAN.md
 Resume file: None
