@@ -96,7 +96,7 @@ const buildOptionColor = (
 
   const lightness = 0.78 - t * (0.78 - 0.60);
   const chroma = 0.14;
-  const alpha = isDimmed ? 0.48 : 0.95;
+  const alpha = isDimmed ? 0.55 - t * 0.2 : 0.95;
 
   return oklchToRgba(lightness, chroma, hue, alpha);
 };
