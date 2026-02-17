@@ -94,6 +94,123 @@ button:disabled {
   font-size: 0.9rem;
 }
 
+.weights-coverage-panel {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.5rem;
+  background: #fff;
+}
+
+.weights-coverage-panel__summary {
+  position: sticky;
+  top: 0.75rem;
+  z-index: 5;
+  display: grid;
+  gap: 0.6rem;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: #f8fafc;
+}
+
+.weights-coverage-panel__status,
+.weights-coverage-panel__coverage-overview {
+  font-size: 0.92rem;
+}
+
+.weights-coverage-panel__warning {
+  color: #b45309;
+}
+
+.weights-coverage-panel__ok {
+  color: #166534;
+}
+
+.weights-coverage-panel__summary-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.weights-coverage-panel__option-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.weights-coverage-panel__option-list li {
+  display: grid;
+  grid-template-columns: minmax(8rem, 1fr) auto auto;
+  gap: 0.5rem;
+  padding: 0.35rem 0.45rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.35rem;
+  background: #fff;
+  font-size: 0.85rem;
+}
+
+.weights-coverage-panel__option-list li[data-severity="warning"] {
+  border-color: #f59e0b;
+  background: #fffbeb;
+}
+
+.weights-coverage-panel__option-list li[data-severity="strong_warning"] {
+  border-color: #dc2626;
+  background: #fef2f2;
+}
+
+.weights-coverage-panel__details {
+  border-top: 1px solid #e2e8f0;
+  padding: 0.75rem;
+  display: grid;
+  gap: 0.9rem;
+}
+
+.weights-coverage-panel__details h5 {
+  margin: 0 0 0.35rem;
+}
+
+.weights-coverage-panel__weights-list,
+.weights-coverage-panel__criterion-warnings {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: 0.5rem;
+}
+
+.weights-coverage-panel__weights-list li {
+  display: grid;
+  grid-template-columns: minmax(10rem, 1fr) 6rem;
+  align-items: center;
+  gap: 0.55rem;
+}
+
+.weights-coverage-panel__weights-list label {
+  display: grid;
+  gap: 0.1rem;
+}
+
+.weights-coverage-panel__criterion-title {
+  font-size: 0.9rem;
+  color: #0f172a;
+}
+
+.weights-coverage-panel__criterion-type {
+  font-size: 0.76rem;
+  color: #64748b;
+}
+
+.weights-coverage-panel__criterion-warnings li {
+  border: 1px solid #fed7aa;
+  background: #fff7ed;
+  border-radius: 0.35rem;
+  padding: 0.4rem 0.5rem;
+  font-size: 0.86rem;
+}
+
 .rating-mode-toggle {
   display: grid;
   justify-items: end;
@@ -271,5 +388,10 @@ button:disabled {
 
   .rating-mode-toggle__helper {
     text-align: left;
+  }
+
+  .weights-coverage-panel__option-list li,
+  .weights-coverage-panel__weights-list li {
+    grid-template-columns: 1fr;
   }
 }

@@ -2,10 +2,15 @@ import { useMemo, useState } from "react";
 
 import { useDraft } from "../../decision/state/DraftProvider";
 import { ratingMissingNeutralFillApplied } from "../state/rating.actions";
-import { selectMissingRatings, selectRatingsCompletion } from "../state/rating.selectors";
+import {
+  selectMissingRatings,
+  selectRatingsCompletion,
+  selectWeightAssignmentStatus,
+} from "../state/rating.selectors";
 import { FillMissingReviewPanel } from "./FillMissingReviewPanel";
 import { createRatingModeAction, RatingModeToggle } from "./RatingModeToggle";
 import { RatingsMatrix } from "./RatingsMatrix";
+import { WeightsCoveragePanel } from "./WeightsCoveragePanel";
 
 type RatingsStepProps = {
   onContinue: () => void;
@@ -17,7 +22,7 @@ const incompleteMessage =
 
 export const RatingsStep = ({ onContinue, guardMessage }: RatingsStepProps) => {
   const {
-    draft: { options, criteria, ratingsMatrix, ratingInputMode },
+    draft: { options, criteria, ratingsMatrix, ratingInputMode, criterionWeights },
     dispatch,
   } = useDraft();
   const [isFillReviewOpen, setIsFillReviewOpen] = useState(false);
@@ -35,32 +40,18 @@ export const RatingsStep = ({ onContinue, guardMessage }: RatingsStepProps) => {
     [options, criteria, ratingsMatrix, ratingInputMode],
   );
 
+  const weightStatus = useMemo(
+    () => selectWeightAssignmentStatus(criteria, criterionWeights),
+    [criteria, criterionWeights],
+  );
+
   const handleApplyFillMissing = () => {
     dispatch(ratingMissingNeutralFillApplied(ratingsMatrix, options, criteria, ratingInputMode));
     setIsFillReviewOpen(false);
   };
 
-  const coverageTone = completion.missingCount > 0 ? "warning" : "ok";
-
   return (
     <section aria-labelledby="ratings-step-heading" className="ratings-step">
-      <article className="ratings-summary-card" data-tone={coverageTone}>
-        <h4>Coverage summary</h4>
-        <p>
-          Completion: <strong>{completion.completionPercent}%</strong>
-        </p>
-        <p>
-          Missing cells: <strong>{completion.missingCount}</strong> of {completion.totalCells}
-        </p>
-        {completion.missingCount > 0 ? (
-          <p role="status">
-            Missing values stay blank until you explicitly apply Fill all missing with Neutral (10).
-          </p>
-        ) : (
-          <p role="status">All cells are currently filled.</p>
-        )}
-      </article>
-
       <div className="ratings-step__header">
         <div>
           <h3 id="ratings-step-heading">Rate each option against each criterion</h3>
@@ -88,6 +79,15 @@ export const RatingsStep = ({ onContinue, guardMessage }: RatingsStepProps) => {
         dispatch={dispatch}
       />
 
+      <WeightsCoveragePanel
+        options={options}
+        criteria={criteria}
+        matrix={ratingsMatrix}
+        criterionWeights={criterionWeights}
+        ratingInputMode={ratingInputMode}
+        dispatch={dispatch}
+      />
+
       <FillMissingReviewPanel
         reviewItems={fillReviewItems}
         options={options}
@@ -99,10 +99,15 @@ export const RatingsStep = ({ onContinue, guardMessage }: RatingsStepProps) => {
       />
 
       <div className="ratings-step__footer">
-        <button type="button" onClick={onContinue}>
+        <button type="button" onClick={onContinue} disabled={!weightStatus.isComplete}>
           Continue to results
         </button>
-        {completion.missingCount > 0 ? (
+        {!weightStatus.isComplete ? (
+          <p role="alert" className="ratings-step__hint">
+            Assign integer weights for every criterion, then review low-coverage warnings before
+            continuing to results.
+          </p>
+        ) : completion.missingCount > 0 ? (
           <p role="status" className="ratings-step__hint">
             {incompleteMessage}
           </p>

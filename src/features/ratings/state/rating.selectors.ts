@@ -41,6 +41,13 @@ export type CriterionBlankRateDiagnostic = {
   isSoftWarning: boolean;
 };
 
+export type WeightAssignmentStatus = {
+  totalCriteria: number;
+  assignedCount: number;
+  missingCriterionIds: string[];
+  isComplete: boolean;
+};
+
 const getMatrixCell = (
   matrix: RatingsMatrixSchema,
   optionId: string,
@@ -202,6 +209,28 @@ export const selectRatingsCompletion = (
     filledCount,
     missingCount,
     completionPercent,
+  };
+};
+
+export const selectWeightAssignmentStatus = (
+  criteria: DraftCriterion[],
+  criterionWeights: CriterionWeights,
+): WeightAssignmentStatus => {
+  const missingCriterionIds = criteria
+    .filter((criterion) => {
+      const weight = criterionWeights[criterion.id];
+      return !Number.isInteger(weight) || (weight ?? 0) < 1;
+    })
+    .map((criterion) => criterion.id);
+
+  const totalCriteria = criteria.length;
+  const assignedCount = Math.max(0, totalCriteria - missingCriterionIds.length);
+
+  return {
+    totalCriteria,
+    assignedCount,
+    missingCriterionIds,
+    isComplete: totalCriteria > 0 && missingCriterionIds.length === 0,
   };
 };
 
