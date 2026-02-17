@@ -2,6 +2,44 @@ import { Award, Medal, Trophy } from "lucide-react";
 
 import type { RankingRow } from "../state/results.types";
 
+const oklabToLinearSrgb = (l: number, a: number, b: number): [number, number, number] => {
+  const l_ = l + 0.3963377774 * a + 0.2158037573 * b;
+  const m_ = l - 0.1055613458 * a - 0.0638541728 * b;
+  const s_ = l - 0.0894841775 * a - 1.291485548 * b;
+
+  const l_cubed = l_ * l_ * l_;
+  const m_cubed = m_ * m_ * m_;
+  const s_cubed = s_ * s_ * s_;
+
+  const r = +4.0767416621 * l_cubed - 3.3077115913 * m_cubed + 0.2309699292 * s_cubed;
+  const g = -1.2684380046 * l_cubed + 2.6097574011 * m_cubed - 0.3413193965 * s_cubed;
+  const b_val = -0.0041960863 * l_cubed - 0.7034186147 * m_cubed + 1.707614701 * s_cubed;
+
+  return [r, g, b_val];
+};
+
+const linearToSrgb = (c: number): number => {
+  const abs = Math.abs(c);
+  if (abs > 0.0031308) {
+    return (Math.sign(c) || 1) * (1.055 * Math.pow(abs, 1 / 2.4) - 0.055);
+  }
+  return 12.92 * c;
+};
+
+const oklchToRgba = (l: number, c: number, h: number, alpha: number): string => {
+  const hRad = (h * Math.PI) / 180;
+  const a = c * Math.cos(hRad);
+  const b = c * Math.sin(hRad);
+
+  const [linearR, linearG, linearB] = oklabToLinearSrgb(l, a, b);
+
+  const r = Math.round(Math.max(0, Math.min(255, linearToSrgb(linearR) * 255)));
+  const g = Math.round(Math.max(0, Math.min(255, linearToSrgb(linearG) * 255)));
+  const bFinal = Math.round(Math.max(0, Math.min(255, linearToSrgb(linearB) * 255)));
+
+  return `rgba(${r}, ${g}, ${bFinal}, ${alpha})`;
+};
+
 type RankingTableProps = {
   rows: RankingRow[];
   method?: "wsm" | "wpm";
@@ -23,12 +61,23 @@ const coverageLabel = (row: RankingRow): string => `${row.coveragePercent}% ${se
 const scoreAria = (method: "wsm" | "wpm"): string =>
   method === "wsm" ? "WSM score" : "WPM score";
 
-const optionColor = (row: RankingRow, index: number, total: number): string => {
+const optionColor = (row: RankingRow, total: number): string => {
   const rankIndex = row.rank === null ? total - 1 : row.rank - 1;
-  const intensity = total > 1 ? 1 - rankIndex / Math.max(1, total - 1) : 1;
-  const hue = (index * 71 + 28) % 360;
-  const lightness = 44 + intensity * 14;
-  return `hsl(${hue} 72% ${lightness}%)`;
+  const t = total > 1 ? rankIndex / Math.max(1, total - 1) : 0.5;
+
+  let hue: number;
+  if (t < 0.5) {
+    hue = 150 - (t / 0.5) * (150 - 95);
+  } else if (t < 1) {
+    hue = 95 - ((t - 0.5) / 0.5) * (95 - 25);
+  } else {
+    hue = 25;
+  }
+
+  const lightness = 0.78 - t * (0.78 - 0.60);
+  const chroma = 0.14;
+
+  return oklchToRgba(lightness, chroma, hue, 1);
 };
 
 const RankCell = ({ rank }: { rank: number | null }) => {
@@ -79,9 +128,9 @@ export const RankingTable = ({
               </tr>
             </thead>
             <tbody>
-              {rows.map((row, index) => {
+              {rows.map((row) => {
                 const isHighlighted = highlightedOptionId === row.optionId;
-                const swatchColor = optionColor(row, index, rows.length);
+                const swatchColor = optionColor(row, rows.length);
 
                 return (
                   <tr

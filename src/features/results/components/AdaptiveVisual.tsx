@@ -4,6 +4,44 @@ import { BarChart, Gauge, RadarChart } from "@mui/x-charts";
 
 import type { RankingRow } from "../state/results.types";
 
+const oklabToLinearSrgb = (l: number, a: number, b: number): [number, number, number] => {
+  const l_ = l + 0.3963377774 * a + 0.2158037573 * b;
+  const m_ = l - 0.1055613458 * a - 0.0638541728 * b;
+  const s_ = l - 0.0894841775 * a - 1.291485548 * b;
+
+  const l_cubed = l_ * l_ * l_;
+  const m_cubed = m_ * m_ * m_;
+  const s_cubed = s_ * s_ * s_;
+
+  const r = +4.0767416621 * l_cubed - 3.3077115913 * m_cubed + 0.2309699292 * s_cubed;
+  const g = -1.2684380046 * l_cubed + 2.6097574011 * m_cubed - 0.3413193965 * s_cubed;
+  const b_val = -0.0041960863 * l_cubed - 0.7034186147 * m_cubed + 1.707614701 * s_cubed;
+
+  return [r, g, b_val];
+};
+
+const linearToSrgb = (c: number): number => {
+  const abs = Math.abs(c);
+  if (abs > 0.0031308) {
+    return (Math.sign(c) || 1) * (1.055 * Math.pow(abs, 1 / 2.4) - 0.055);
+  }
+  return 12.92 * c;
+};
+
+const oklchToRgba = (l: number, c: number, h: number, alpha: number): string => {
+  const hRad = (h * Math.PI) / 180;
+  const a = c * Math.cos(hRad);
+  const b = c * Math.sin(hRad);
+
+  const [linearR, linearG, linearB] = oklabToLinearSrgb(l, a, b);
+
+  const r = Math.round(Math.max(0, Math.min(255, linearToSrgb(linearR) * 255)));
+  const g = Math.round(Math.max(0, Math.min(255, linearToSrgb(linearG) * 255)));
+  const bFinal = Math.round(Math.max(0, Math.min(255, linearToSrgb(linearB) * 255)));
+
+  return `rgba(${r}, ${g}, ${bFinal}, ${alpha})`;
+};
+
 type AdaptiveVisualProps = {
   rows: RankingRow[];
   activeRankingRow?: RankingRow | null;
@@ -23,43 +61,7 @@ type ViewRow = {
   rawByCriterion: Array<number | null>;
 };
 
-const hslToRgba = (hue: number, saturation: number, lightness: number, alpha: number): string => {
-  const s = saturation / 100;
-  const l = lightness / 100;
-  const c = (1 - Math.abs(2 * l - 1)) * s;
-  const x = c * (1 - Math.abs(((hue / 60) % 2) - 1));
-  const m = l - c / 2;
 
-  let rPrime = 0;
-  let gPrime = 0;
-  let bPrime = 0;
-
-  if (hue >= 0 && hue < 60) {
-    rPrime = c;
-    gPrime = x;
-  } else if (hue < 120) {
-    rPrime = x;
-    gPrime = c;
-  } else if (hue < 180) {
-    gPrime = c;
-    bPrime = x;
-  } else if (hue < 240) {
-    gPrime = x;
-    bPrime = c;
-  } else if (hue < 300) {
-    rPrime = x;
-    bPrime = c;
-  } else {
-    rPrime = c;
-    bPrime = x;
-  }
-
-  const r = Math.round((rPrime + m) * 255);
-  const g = Math.round((gPrime + m) * 255);
-  const b = Math.round((bPrime + m) * 255);
-
-  return `rgba(${r}, ${g}, ${b}, ${alpha})`;
-};
 
 const usePrefersReducedMotion = (): boolean => {
   const [prefersReducedMotion, setPrefersReducedMotion] = useState(false);
@@ -75,41 +77,28 @@ const usePrefersReducedMotion = (): boolean => {
   return prefersReducedMotion;
 };
 
-const optionRankIndex = (rows: ViewRow[], optionId: string): number => {
-  const ranked = [...rows].sort((a, b) => {
-    if (a.rank === null && b.rank === null) {
-      return a.optionTitle.localeCompare(b.optionTitle);
-    }
-    if (a.rank === null) {
-      return 1;
-    }
-    if (b.rank === null) {
-      return -1;
-    }
-    if (a.rank !== b.rank) {
-      return a.rank - b.rank;
-    }
-    return a.optionTitle.localeCompare(b.optionTitle);
-  });
-
-  const index = ranked.findIndex((row) => row.optionId === optionId);
-  return index === -1 ? ranked.length : index;
-};
-
 const buildOptionColor = (
-  rowIndex: number,
   isDimmed: boolean,
   total: number,
   row: ViewRow,
 ): string => {
   const rankIndex = row.rank === null ? total - 1 : row.rank - 1;
-  const intensity = total > 1 ? 1 - rankIndex / Math.max(1, total - 1) : 1;
-  const hue = (rowIndex * 71 + 28) % 360;
-  const lightness = isDimmed ? 44 + intensity * 14 - 18 : 44 + intensity * 14;
-  const saturation = isDimmed ? 72 - 15 : 72;
-  const alpha = isDimmed ? 0.45 : 0.92;
+  const t = total > 1 ? rankIndex / Math.max(1, total - 1) : 0.5;
 
-  return hslToRgba(hue, saturation, lightness, alpha);
+  let hue: number;
+  if (t < 0.5) {
+    hue = 150 - (t / 0.5) * (150 - 95);
+  } else if (t < 1) {
+    hue = 95 - ((t - 0.5) / 0.5) * (95 - 25);
+  } else {
+    hue = 25;
+  }
+
+  const lightness = 0.78 - t * (0.78 - 0.60);
+  const chroma = 0.14;
+  const alpha = isDimmed ? 0.48 : 0.95;
+
+  return oklchToRgba(lightness, chroma, hue, alpha);
 };
 
 export const AdaptiveVisual = ({
@@ -205,7 +194,6 @@ export const AdaptiveVisual = ({
             data: row.desirabilityByCriterion,
             fillArea: isHighlighted,
             color: buildOptionColor(
-              optionRankIndex(chartRows, row.optionId),
               isDimmed,
               chartRows.length,
               row,
@@ -273,7 +261,6 @@ export const AdaptiveVisual = ({
               Math.max(1, row.desirabilityByCriterion.filter((value) => Number.isFinite(value)).length);
 
             const isDimmed = activeOptionId !== null && activeOptionId !== row.optionId;
-            const rankIndex = optionRankIndex(chartRows, row.optionId);
 
             return (
               <article
@@ -299,7 +286,7 @@ export const AdaptiveVisual = ({
                   skipAnimation={prefersReducedMotion}
                   sx={{
                     [`& .MuiGauge-valueArc`]: {
-                      fill: buildOptionColor(rankIndex, isDimmed, chartRows.length, row),
+                      fill: buildOptionColor(isDimmed, chartRows.length, row),
                     },
                   }}
                 />
