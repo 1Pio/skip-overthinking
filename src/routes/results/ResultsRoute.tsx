@@ -3,6 +3,7 @@ import { Link, Navigate } from "react-router";
 import { useDraft } from "../../features/decision/state/DraftProvider";
 import { hasMinimumCriteria } from "../../features/criteria/state/criterionPrereq";
 import { hasMinimumOptions } from "../../features/options/state/optionPrereq";
+import { ResultsStep } from "../../features/results/components/ResultsStep";
 import {
   canAccessResults,
   RESULTS_WEIGHTS_GUARD_MESSAGE,
@@ -51,10 +52,10 @@ export const ResultsRoute = () => {
   return (
     <section aria-labelledby="results-heading">
       <h2 id="results-heading">Results</h2>
-      <p>Placeholder for rankings, explainability, and chart outputs.</p>
       <p>
         Back to <Link to="/ratings">Ratings</Link>
       </p>
+      <ResultsStep />
     </section>
   );
 };
