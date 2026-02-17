@@ -11,7 +11,7 @@ This roadmap delivers a complete decision-making flow from first setup to explai
 - Decimal phases (2.1, 2.2): Urgent insertions (marked with INSERTED)
 
 - [x] **Phase 1: Foundation, Setup, and Options** - Deliver runnable app foundation, step-gated decision setup, and option management. (Completed 2026-02-16)
-- [ ] **Phase 2: Typed Criteria Modeling** - Deliver criteria authoring with templates, desirability-first wording guidance, and numeric measured direction configuration.
+- [x] **Phase 2: Typed Criteria Modeling** - Deliver criteria authoring with templates, desirability-first wording guidance, and numeric measured direction configuration. (Completed 2026-02-17)
 - [ ] **Phase 3: Ratings, Weights, and Coverage Integrity** - Deliver matrix input with reversible rating_1_20 input modes, 1-20 desirability conversion integrity, and missing-data safeguards.
 - [ ] **Phase 4: Results and Explainability** - Deliver rankings, strict-check validation, and adaptive decision visuals.
 - [ ] **Phase 5: Persistence, Auth, and Sync Security** - Deliver local persistence plus authenticated ownership-enforced sync.
@@ -50,11 +50,11 @@ Plans:
   5. User sees guidance to phrase negative concepts positively so all scoring stays in desirability language, and does not encounter per-criterion invert toggles.
 **Plans**: 5 plans
 Plans:
-- [ ] 02-01-PLAN.md - Establish typed criteria schema/actions/templates and reducer-integrated criteria state.
-- [ ] 02-02-PLAN.md - Build criteria list authoring UX with compact/rich views, reorder, and safe delete workflows.
-- [ ] 02-03-PLAN.md - Implement sectioned template picker plus dedicated typed editor with positivity rewrite guidance.
-- [ ] 02-04-PLAN.md - Integrate criteria route flow and enforce criteria prerequisites for ratings/results.
-- [ ] 02-05-PLAN.md - Close UAT reorder regression so Move up/down controls update criteria order reliably.
+- [x] 02-01-PLAN.md - Establish typed criteria schema/actions/templates and reducer-integrated criteria state.
+- [x] 02-02-PLAN.md - Build criteria list authoring UX with compact/rich views, reorder, and safe delete workflows.
+- [x] 02-03-PLAN.md - Implement sectioned template picker plus dedicated typed editor with positivity rewrite guidance.
+- [x] 02-04-PLAN.md - Integrate criteria route flow and enforce criteria prerequisites for ratings/results.
+- [x] 02-05-PLAN.md - Close UAT reorder regression so Move up/down controls update criteria order reliably.
 
 ### Phase 3: Ratings, Weights, and Coverage Integrity
 **Goal**: Users can fill the option-by-criterion matrix on a strict 1-20 desirability scale, switch `rating_1_20` input modes non-destructively, assign complete weights, and understand missing-data impact.
@@ -100,7 +100,7 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | Phase | Plans Complete | Status | Completed |
 |-------|----------------|--------|-----------|
 | 1. Foundation, Setup, and Options | 7/7 | Complete | 2026-02-16 |
-| 2. Typed Criteria Modeling | 0/4 | Not started | - |
+| 2. Typed Criteria Modeling | 5/5 | Complete | 2026-02-17 |
 | 3. Ratings, Weights, and Coverage Integrity | 0/TBD | Not started | - |
 | 4. Results and Explainability | 0/TBD | Not started | - |
 | 5. Persistence, Auth, and Sync Security | 0/TBD | Not started | - |

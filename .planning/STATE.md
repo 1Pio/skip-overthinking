@@ -5,16 +5,16 @@
 See: `.planning/PROJECT.md` (updated 2026-02-16)
 
 **Core value:** Help people make better decisions quickly by converting subjective tradeoffs into a clear, trustworthy, and explainable ranking where higher always means better.
-**Current focus:** Phase 2 - Typed Criteria Modeling
+**Current focus:** Phase 3 - Ratings, Weights, and Coverage Integrity
 
 ## Current Position
 
-Phase: 2 of 5 (Typed Criteria Modeling)
-Plan: 5 of 5 in current phase
-Status: Phase complete
-Last activity: 2026-02-17 - Completed 02-05 criteria reorder regression closure plan.
+Phase: 3 of 5 (Ratings, Weights, and Coverage Integrity)
+Plan: 0 of TBD in current phase
+Status: Ready for planning
+Last activity: 2026-02-17 - Phase 2 verification approved and phase marked complete.
 
-Progress: [##########] 100%
+Progress: [####------] 40%
 
 ## Performance Metrics
 
