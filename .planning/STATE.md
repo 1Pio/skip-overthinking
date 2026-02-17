@@ -9,17 +9,17 @@ See: `.planning/PROJECT.md` (updated 2026-02-16)
 
 ## Current Position
 
-Phase: 3 of 5 (Ratings, Weights, and Coverage Integrity)
-Plan: 3 of 3 in current phase
-Status: Phase complete
-Last activity: 2026-02-17 - Completed 03-03 plan and shipped weight assignment, coverage warnings, and results gating.
+Phase: 4 of 5 (Results and Explainability)
+Plan: 1 of 4 in current phase
+Status: In progress
+Last activity: 2026-02-18 - Completed 04-01 plan and shipped canonical WSM/WPM results projection selectors.
 
-Progress: [######----] 53%
+Progress: [#######---] 57%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 14
+- Total plans completed: 15
 - Average duration: 2 min
 - Total execution time: 0.6 hours
 
@@ -32,7 +32,7 @@ Progress: [######----] 53%
 | 3 | 3 | 13 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-04 (1 min), 02-05 (1 min), 03-01 (7 min), 03-02 (5 min), 03-03 (1 min)
+- Last 5 plans: 02-05 (1 min), 03-01 (7 min), 03-02 (5 min), 03-03 (1 min), 04-01 (2 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -50,6 +50,7 @@ Progress: [######----] 53%
 | Phase 03 P01 | 7 min | 2 tasks | 9 files |
 | Phase 03 P02 | 5 min | 2 tasks | 7 files |
 | Phase 03 P03 | 1 min | 2 tasks | 7 files |
+| Phase 04 P01 | 2 min | 2 tasks | 5 files |
 
 ## Accumulated Context
 
@@ -99,6 +100,8 @@ Recent decisions affecting current work:
 - [Phase 03]: Use one scroll container with sticky header row and sticky option column for compact matrix scanning.
 - [Phase 03]: Use a sticky compact summary with expandable diagnostics so key coverage status stays always visible.
 - [Phase 03]: Centralize weight-complete results access checks in shared ratingPrereq helpers for both continue flow and deep links.
+- [Phase 04]: Use coverage-aware selector projections as the single source of truth for ranking and strict-check outputs.
+- [Phase 04]: Use standard competition ranking (1,1,3) with deterministic tie ordering by option order and id.
 
 ### Pending Todos
 
@@ -112,6 +115,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 16:41
-Stopped at: Completed 03-03-PLAN.md
+Last session: 2026-02-18 00:56
+Stopped at: Completed 04-01-PLAN.md
 Resume file: None
