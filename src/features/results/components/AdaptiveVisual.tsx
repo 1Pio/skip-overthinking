@@ -249,11 +249,17 @@ export const AdaptiveVisual = ({
           skipAnimation={prefersReducedMotion}
           margin={{ top: 28, right: 24, bottom: 32, left: 24 }}
           sx={{
-            [`& .MuiRadarSeries-area`]: {
-              fill: "none",
+            // default line thickness
+            '& .MuiRadarSeriesPlot-area': {
+              strokeWidth: 2,
             },
-            [`& .MuiChartsAxis-tickLabel`]: {
-              fontSize: "0.82rem",
+            // optional: make the highlighted series even thicker
+            '& .MuiRadarSeriesPlot-highlighted': {
+              strokeWidth: 3,
+            },
+            // optional: tune fade behavior (not required)
+            '& .MuiRadarSeriesPlot-faded': {
+              opacity: 0.45,
             },
           }}
         />
