@@ -5,21 +5,21 @@
 See: `.planning/PROJECT.md` (updated 2026-02-16)
 
 **Core value:** Help people make better decisions quickly by converting subjective tradeoffs into a clear, trustworthy, and explainable ranking where higher always means better.
-**Current focus:** Phase 3 - Ratings, Weights, and Coverage Integrity
+**Current focus:** Phase 4 - Results and Explainability
 
 ## Current Position
 
 Phase: 3 of 5 (Ratings, Weights, and Coverage Integrity)
-Plan: 2 of 3 in current phase
-Status: In progress
-Last activity: 2026-02-17 - Completed 03-02 plan and shipped ratings matrix interaction UI.
+Plan: 3 of 3 in current phase
+Status: Phase complete
+Last activity: 2026-02-17 - Completed 03-03 plan and shipped weight assignment, coverage warnings, and results gating.
 
-Progress: [#####-----] 47%
+Progress: [######----] 53%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 13
+- Total plans completed: 14
 - Average duration: 2 min
 - Total execution time: 0.6 hours
 
@@ -29,10 +29,10 @@ Progress: [#####-----] 47%
 |-------|-------|-------|----------|
 | 1 | 7 | 15 min | 2 min |
 | 2 | 5 | 12 min | 2 min |
-| 3 | 2 | 12 min | 6 min |
+| 3 | 3 | 13 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 02-03 (2 min), 02-04 (1 min), 02-05 (1 min), 03-01 (7 min), 03-02 (5 min)
+- Last 5 plans: 02-04 (1 min), 02-05 (1 min), 03-01 (7 min), 03-02 (5 min), 03-03 (1 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -49,6 +49,7 @@ Progress: [#####-----] 47%
 | Phase 02 P05 | 1 min | 3 tasks | 2 files |
 | Phase 03 P01 | 7 min | 2 tasks | 9 files |
 | Phase 03 P02 | 5 min | 2 tasks | 7 files |
+| Phase 03 P03 | 1 min | 2 tasks | 7 files |
 
 ## Accumulated Context
 
@@ -96,6 +97,8 @@ Recent decisions affecting current work:
 - [Phase 03]: Keep fill-missing scoped to blank rating_1_20 cells and exclude measured criteria from auto-fill.
 - [Phase 03]: Render mode-toggle helper copy as always-visible text near top-right to prevent hidden mode semantics.
 - [Phase 03]: Use one scroll container with sticky header row and sticky option column for compact matrix scanning.
+- [Phase 03]: Use a sticky compact summary with expandable diagnostics so key coverage status stays always visible.
+- [Phase 03]: Centralize weight-complete results access checks in shared ratingPrereq helpers for both continue flow and deep links.
 
 ### Pending Todos
 
@@ -109,6 +112,6 @@ None yet.
 
 ## Session Continuity
 
-Last session: 2026-02-17 16:34
-Stopped at: Completed 03-02-PLAN.md
+Last session: 2026-02-17 16:41
+Stopped at: Completed 03-03-PLAN.md
 Resume file: None
