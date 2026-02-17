@@ -123,6 +123,7 @@ export const AdaptiveVisual = ({
   onShowRawInputsChange,
 }: AdaptiveVisualProps) => {
   const prefersReducedMotion = usePrefersReducedMotion();
+  const [highlightedItem, setHighlightedItem] = useState<{ seriesId: string | number } | null>(null);
 
   const criterionMetadata = useMemo(() => {
     const firstWithContributions = rows.find((row) => row.contributions.length > 0);
@@ -180,11 +181,12 @@ export const AdaptiveVisual = ({
         .map((row) => {
           const isDimmed = activeOptionId !== null && activeOptionId !== row.optionId;
           const isFocused = activeOptionId === row.optionId;
+          const isHighlighted = highlightedItem?.seriesId === row.optionId;
           return {
             id: row.optionId,
             label: row.optionTitle,
             data: row.desirabilityByCriterion,
-            fillArea: false,
+            fillArea: isHighlighted,
             color: buildOptionColor(
               optionRankIndex(chartRows, row.optionId),
               isDimmed,
@@ -194,7 +196,7 @@ export const AdaptiveVisual = ({
             lineWidth: isFocused ? 5.5 : 3.8,
           };
         }),
-    [activeOptionId, chartRows, radarRows],
+    [activeOptionId, chartRows, radarRows, highlightedItem],
   );
 
   const singleCriterionTitle = criterionMetadata[0]?.criterionTitle ?? "Criterion";
@@ -224,7 +226,9 @@ export const AdaptiveVisual = ({
           series={radarSeries.length > 0 ? radarSeries : []}
           radar={{ metrics: criterionMetadata.map((criterion) => criterion.criterionTitle), max: 20 }}
           hideLegend
-          highlight="none"
+          highlight="series"
+          highlightedItem={highlightedItem}
+          onHighlightChange={setHighlightedItem}
           skipAnimation={prefersReducedMotion}
           margin={{ top: 28, right: 24, bottom: 32, left: 24 }}
           sx={{
