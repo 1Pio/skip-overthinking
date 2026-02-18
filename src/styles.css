@@ -476,7 +476,7 @@ button:disabled {
   font-size: 0.93rem;
 }
 
-.results-step__controls-content > p {
+.results-step__controls-content>p {
   margin: 0 0 0.3rem;
   font-size: 0.85rem;
   color: #475569;
@@ -965,6 +965,7 @@ button:disabled {
     opacity: 0;
     transform: translateY(8px);
   }
+
   100% {
     opacity: 1;
     transform: translateY(0);
@@ -1001,6 +1002,7 @@ button:disabled {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   .ranking-table tr,
   .method-check-panel__table tr,
   .results-why-modal__table tr,
@@ -1011,4 +1013,539 @@ button:disabled {
     transition: none;
     animation: none;
   }
+}
+
+/* ===========================================================================
+   Modal — shared
+   =========================================================================== */
+
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  background: rgb(15 23 42 / 42%);
+  display: grid;
+  place-items: center;
+  padding: 1rem;
+  animation: modal-fade-in 180ms ease;
+}
+
+.modal-container {
+  position: relative;
+  background: #fff;
+  border-radius: 0.65rem;
+  width: min(26rem, 100%);
+  padding: 1.5rem;
+  box-shadow: 0 12px 40px rgb(15 23 42 / 18%);
+  animation: modal-slide-in 200ms ease;
+}
+
+.modal-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  border: none;
+  background: transparent;
+  color: #64748b;
+  padding: 0.25rem;
+  cursor: pointer;
+  border-radius: 0.3rem;
+  display: grid;
+  place-items: center;
+}
+
+.modal-close:hover {
+  background: #f1f5f9;
+  color: #0f172a;
+}
+
+@keyframes modal-fade-in {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modal-slide-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.97);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+  .modal-overlay,
+  .modal-container {
+    animation: none;
+  }
+}
+
+/* ===========================================================================
+   Sign-in modal
+   =========================================================================== */
+
+.sign-in-modal__header {
+  margin-bottom: 1.25rem;
+}
+
+.sign-in-modal__header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
+}
+
+.sign-in-modal__header p {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.sign-in-modal__providers {
+  display: grid;
+  gap: 0.55rem;
+  margin-bottom: 0.85rem;
+}
+
+.sign-in-modal__provider-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  width: 100%;
+  padding: 0.6rem 0.85rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.45rem;
+  background: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 140ms ease, border-color 140ms ease;
+}
+
+.sign-in-modal__provider-btn:hover:not(:disabled) {
+  background: #f8fafc;
+  border-color: #94a3b8;
+}
+
+.sign-in-modal__provider-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sign-in-modal__learn-more-toggle {
+  border: none;
+  background: transparent;
+  color: #64748b;
+  font-size: 0.82rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.2rem 0;
+}
+
+.sign-in-modal__learn-more-toggle:hover {
+  color: #334155;
+}
+
+.sign-in-modal__learn-more-text {
+  margin-top: 0.5rem;
+  font-size: 0.82rem;
+  color: #64748b;
+  line-height: 1.5;
+}
+
+/* ===========================================================================
+   Settings modal
+   =========================================================================== */
+
+.settings-modal__header {
+  margin-bottom: 1.25rem;
+}
+
+.settings-modal__header h2 {
+  margin: 0;
+  font-size: 1.35rem;
+}
+
+.settings-modal__account {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.45rem;
+  margin-bottom: 1rem;
+}
+
+.settings-modal__account-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 50%;
+  background: #e2e8f0;
+  display: grid;
+  place-items: center;
+  color: #64748b;
+  flex-shrink: 0;
+}
+
+.settings-modal__account-email {
+  font-size: 0.88rem;
+  color: #334155;
+  word-break: break-all;
+}
+
+.settings-modal__actions {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.settings-modal__sign-out-btn {
+  width: 100%;
+  padding: 0.55rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.45rem;
+  background: #fff;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 140ms ease;
+}
+
+.settings-modal__sign-out-btn:hover {
+  background: #f1f5f9;
+}
+
+.settings-modal__delete-btn {
+  width: 100%;
+  padding: 0.55rem;
+  border: 1px solid #fca5a5;
+  border-radius: 0.45rem;
+  background: #fff;
+  color: #dc2626;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 140ms ease;
+}
+
+.settings-modal__delete-btn:hover {
+  background: #fef2f2;
+}
+
+.settings-modal__future {
+  margin-top: 1rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid #e2e8f0;
+  font-size: 0.82rem;
+  color: #94a3b8;
+}
+
+/* ===========================================================================
+   Auth footer
+   =========================================================================== */
+
+.auth-footer {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 40;
+  display: flex;
+  justify-content: center;
+  padding: 0.45rem 1rem;
+  background: linear-gradient(180deg, transparent 0%, rgb(248 250 252 / 95%) 40%);
+  pointer-events: none;
+}
+
+.auth-footer__button {
+  pointer-events: auto;
+  border: 1px solid #e2e8f0;
+  border-radius: 999px;
+  background: #fff;
+  color: #64748b;
+  font-size: 0.76rem;
+  padding: 0.25rem 0.65rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  cursor: pointer;
+  transition: background-color 140ms ease, color 140ms ease, border-color 140ms ease;
+}
+
+.auth-footer__button:hover {
+  background: #f1f5f9;
+  color: #334155;
+  border-color: #cbd5e1;
+}
+
+.auth-footer__indicator {
+  display: inline-block;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: #94a3b8;
+}
+
+.auth-footer__indicator[data-auth="true"] {
+  background: #22c55e;
+}
+
+/* ===========================================================================
+   Sync banner
+   =========================================================================== */
+
+.sync-banner {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 90;
+  background: #fef3c7;
+  border-bottom: 1px solid #fbbf24;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  font-size: 0.88rem;
+  color: #92400e;
+  animation: sync-banner-slide-in 200ms ease;
+}
+
+.sync-banner__actions {
+  display: inline-flex;
+  gap: 0.45rem;
+}
+
+.sync-banner__btn {
+  border: 1px solid #d97706;
+  border-radius: 0.35rem;
+  background: #fff;
+  color: #92400e;
+  font-size: 0.78rem;
+  padding: 0.2rem 0.55rem;
+  cursor: pointer;
+}
+
+.sync-banner__btn:hover {
+  background: #fffbeb;
+}
+
+@keyframes sync-banner-slide-in {
+  from {
+    transform: translateY(-100%);
+  }
+
+  to {
+    transform: translateY(0);
+  }
+}
+
+/* ===========================================================================
+   Workspace
+   =========================================================================== */
+
+.workspace {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 2rem 1rem 5rem;
+}
+
+.workspace__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.workspace__header h1 {
+  font-size: 1.6rem;
+  margin: 0;
+}
+
+.workspace__auth-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.45rem;
+  background: #fff;
+  padding: 0.4rem 0.75rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.workspace__auth-btn:hover {
+  background: #f1f5f9;
+}
+
+.workspace__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+  gap: 0.85rem;
+}
+
+.workspace__empty {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 3rem 1rem;
+  color: #64748b;
+}
+
+.workspace__empty p {
+  margin: 0.35rem 0 0;
+  font-size: 0.9rem;
+}
+
+/* ===========================================================================
+   Decision card
+   =========================================================================== */
+
+.decision-card {
+  border: 1px solid #e2e8f0;
+  border-radius: 0.55rem;
+  background: #fff;
+  padding: 1rem;
+  cursor: pointer;
+  display: grid;
+  gap: 0.45rem;
+  transition: border-color 160ms ease, box-shadow 160ms ease;
+}
+
+.decision-card:hover {
+  border-color: #93c5fd;
+  box-shadow: 0 2px 10px rgb(37 99 235 / 8%);
+}
+
+.decision-card__title {
+  margin: 0;
+  font-size: 1rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.decision-card__description {
+  font-size: 0.84rem;
+  color: #475569;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.decision-card__meta {
+  display: flex;
+  gap: 0.65rem;
+  font-size: 0.76rem;
+  color: #94a3b8;
+  margin-top: 0.25rem;
+}
+
+.decision-card__delete {
+  justify-self: end;
+  border: 1px solid #fca5a5;
+  border-radius: 0.35rem;
+  background: transparent;
+  color: #ef4444;
+  padding: 0.2rem 0.45rem;
+  font-size: 0.76rem;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.decision-card__delete:hover {
+  background: #fef2f2;
+}
+
+/* ===========================================================================
+   New decision button
+   =========================================================================== */
+
+.new-decision-btn {
+  border: 2px dashed #cbd5e1;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: #64748b;
+  padding: 1.5rem 1rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.35rem;
+  font-weight: 500;
+  transition: border-color 160ms ease, color 160ms ease, background-color 160ms ease;
+}
+
+.new-decision-btn:hover {
+  border-color: #2563eb;
+  color: #2563eb;
+  background: #eff6ff;
+}
+
+.new-decision-btn__icon {
+  font-size: 1.4rem;
+}
+
+/* ===========================================================================
+   First launch auth choice modal
+   =========================================================================== */
+
+.first-launch-modal__header {
+  margin-bottom: 1rem;
+}
+
+.first-launch-modal__header h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.3rem;
+}
+
+.first-launch-modal__header p {
+  font-size: 0.9rem;
+  color: #475569;
+  line-height: 1.45;
+}
+
+.first-launch-modal__actions {
+  display: grid;
+  gap: 0.55rem;
+}
+
+.first-launch-modal__local-btn {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.45rem;
+  background: #fff;
+  font-weight: 500;
+  cursor: pointer;
+}
+
+.first-launch-modal__local-btn:hover {
+  background: #f1f5f9;
+}
+
+.first-launch-modal__sign-in-btn {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #2563eb;
+  border-radius: 0.45rem;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.first-launch-modal__sign-in-btn:hover {
+  background: #1d4ed8;
 }
