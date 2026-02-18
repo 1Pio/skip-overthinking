@@ -2,7 +2,7 @@
 phase: 05-persistence-auth-and-sync-security
 plan: 06B
 type: execute
-wave: 2
+wave: 3
 depends_on:
   - 05-01
   - 05-02B

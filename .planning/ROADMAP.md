@@ -97,16 +97,22 @@ Plans:
 **Success Criteria** (what must be TRUE):
   1. User can use the app without login and resume local decisions across sessions.
   2. Anonymous decisions remain local-only and are never stored server-side.
-  3. Authenticated user can save and resume decisions with Convex-backed live sync.
-  4. Authenticated backend operations enforce `userId` ownership so users cannot access other users' decision data.
-**Plans**: 6 plans
+   3. Authenticated user can save and resume decisions with Convex-backed live sync.
+   4. Authenticated backend operations enforce `userId` ownership so users cannot access other users' decision data.
+**Plans**: 12 plans
 Plans:
 - [ ] 05-01-PLAN.md — Setup Convex backend with auth and ownership-enforced decision storage
 - [ ] 05-02-PLAN.md — Implement localStorage-based decision storage for anonymous users
-- [ ] 05-03-PLAN.md — Build auth UI components: sign-in modal, settings modal, and auth footer
-- [ ] 05-04-PLAN.md — Build decision workspace with merge logic and sign-in/sign-out flows
-- [ ] 05-05-PLAN.md — Integrate auth context and workspace into app routing
-- [ ] 05-06-PLAN.md — Add sync status and error handling with persistent warning banner
+- [ ] 05-02B-PLAN.md — Add localStorage quota management and utilities
+- [ ] 05-03-PLAN.md — Build auth context and sign-in modal
+- [ ] 05-03B-PLAN.md — Build settings modal and auth footer component
+- [ ] 05-04-PLAN.md — Build storage merge service and sync error handling hook
+- [ ] 05-05-PLAN.md — Update draft storage for multi-decision and router integration
+- [ ] 05-06-PLAN.md — Add sync error state and persistent warning banner
+- [ ] 05-06B-PLAN.md — Integrate sync banner and storage warning toast
+- [ ] 05-07-PLAN.md — Build decision card and new decision button components
+- [ ] 05-08-PLAN.md — Build decision workspace page with checkpoint
+- [ ] 05-09-PLAN.md — Integrate AuthProvider, AuthFooter, and first launch modal
 
 ## Progress
 
