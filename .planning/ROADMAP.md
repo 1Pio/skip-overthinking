@@ -101,9 +101,9 @@ Plans:
    4. Authenticated backend operations enforce `userId` ownership so users cannot access other users' decision data.
 **Plans**: 12 plans
 Plans:
-- [ ] 05-01-PLAN.md — Setup Convex backend with auth and ownership-enforced decision storage
-- [ ] 05-02-PLAN.md — Implement localStorage-based decision storage for anonymous users
-- [ ] 05-02B-PLAN.md — Add localStorage quota management and utilities
+- [x] 05-01-PLAN.md — Setup Convex backend with auth and ownership-enforced decision storage
+- [x] 05-02-PLAN.md — Implement localStorage-based decision storage for anonymous users
+- [x] 05-02B-PLAN.md — Add localStorage quota management and utilities
 - [ ] 05-03-PLAN.md — Build auth context and sign-in modal
 - [ ] 05-03B-PLAN.md — Build settings modal and auth footer component
 - [ ] 05-04-PLAN.md — Build storage merge service and sync error handling hook
@@ -125,4 +125,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Typed Criteria Modeling | 5/5 | Complete | 2026-02-17 |
 | 3. Ratings, Weights, and Coverage Integrity | 3/3 | Complete | 2026-02-18 |
 | 4. Results and Explainability | 4/4 | Complete | 2026-02-18 |
-| 5. Persistence, Auth, and Sync Security | 0/6 | Not started | - |
+| 5. Persistence, Auth, and Sync Security | 3/12 | In Progress | - |
