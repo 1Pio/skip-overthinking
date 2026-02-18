@@ -99,7 +99,14 @@ Plans:
   2. Anonymous decisions remain local-only and are never stored server-side.
   3. Authenticated user can save and resume decisions with Convex-backed live sync.
   4. Authenticated backend operations enforce `userId` ownership so users cannot access other users' decision data.
-**Plans**: TBD
+**Plans**: 6 plans
+Plans:
+- [ ] 05-01-PLAN.md — Setup Convex backend with auth and ownership-enforced decision storage
+- [ ] 05-02-PLAN.md — Implement localStorage-based decision storage for anonymous users
+- [ ] 05-03-PLAN.md — Build auth UI components: sign-in modal, settings modal, and auth footer
+- [ ] 05-04-PLAN.md — Build decision workspace with merge logic and sign-in/sign-out flows
+- [ ] 05-05-PLAN.md — Integrate auth context and workspace into app routing
+- [ ] 05-06-PLAN.md — Add sync status and error handling with persistent warning banner
 
 ## Progress
 
@@ -112,4 +119,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Typed Criteria Modeling | 5/5 | Complete | 2026-02-17 |
 | 3. Ratings, Weights, and Coverage Integrity | 3/3 | Complete | 2026-02-18 |
 | 4. Results and Explainability | 4/4 | Complete | 2026-02-18 |
-| 5. Persistence, Auth, and Sync Security | 0/TBD | Not started | - |
+| 5. Persistence, Auth, and Sync Security | 0/6 | Not started | - |
