@@ -8,44 +8,96 @@ import { getStorageWarning } from "../../auth/storage/utils";
 import { toast } from "sonner";
 import { DecisionCard } from "./DecisionCard";
 import { NewDecisionButton } from "./NewDecisionButton";
+import { useAuth } from "../../auth/auth.context";
+import { useQuery } from "convex/react";
+import { api } from "../../../convex/_generated/api";
+import { useMergeOnSignIn } from "./hooks/useMergeOnSignIn";
+import { SettingsModal } from "../../auth/components/SettingsModal";
+import { SignInModal } from "../../auth/components/SignInModal";
+import { User, LogIn } from "lucide-react";
 
 /**
  * Workspace component - displays all stored decisions in a grid layout.
  *
  * Features:
- * - Loads decisions from localStorage (authenticated mode: loads from Convex cache)
+ * - Loads decisions from Convex when authenticated, from localStorage otherwise
  * - Displays decisions as cards in a responsive grid
  * - New Decision button creates fresh decisions
  * - Clicking a decision card loads it into DraftProvider and navigates to wizard
- *
- * For MVP: Loads from localStorage only. Full Convex integration deferred.
+ * - Sign-in/settings button at top right for auth state management
+ * - Merges local decisions on sign-in
  */
 export function Workspace() {
     const { setDraft } = useDraft();
     const navigate = useNavigate();
+    const {
+        isAuthenticated,
+        isLoading: isAuthLoading,
+        openSignInModal,
+        openSettingsModal,
+        closeSignInModal,
+        closeSettingsModal,
+        isSignInModalOpen,
+        isSettingsModalOpen,
+    } = useAuth();
+
+    // Call merge-on-sign-in hook
+    useMergeOnSignIn();
+
+    // Query decisions from Convex when authenticated
+    const convexDecisions = useQuery(
+        isAuthenticated ? api.decisions.list : "skip",
+        {}
+    );
+
+    // Load decisions from localStorage or Convex
     const [decisions, setDecisions] = useState<LocalDecision[]>([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    // Load decisions from localStorage on mount
     useEffect(() => {
-        setIsLoading(true);
-        try {
-            const stored = loadDecisions();
-            if (stored) {
-                const decisionList = Object.values(stored.decisions) as LocalDecision[];
-                // Sort by updatedAt (most recent first)
-                decisionList.sort((a, b) => b.updatedAt - a.updatedAt);
-                setDecisions(decisionList);
-            } else {
+        // If auth is still loading, wait
+        if (isAuthLoading) return;
+
+        // If authenticated, use Convex decisions (loaded via cacheFromConvex in useMergeOnSignIn)
+        // If not authenticated, load from localStorage directly
+        if (isAuthenticated && convexDecisions) {
+            // Decisions are cached from Convex by useMergeOnSignIn
+            setIsLoading(true);
+            try {
+                const stored = loadDecisions();
+                if (stored) {
+                    const decisionList = Object.values(stored.decisions) as LocalDecision[];
+                    // Sort by updatedAt (most recent first)
+                    decisionList.sort((a, b) => b.updatedAt - a.updatedAt);
+                    setDecisions(decisionList);
+                } else {
+                    setDecisions([]);
+                }
+            } catch {
                 setDecisions([]);
+            } finally {
+                setIsLoading(false);
             }
-        } catch {
-            // If storage fails, show empty workspace
-            setDecisions([]);
-        } finally {
-            setIsLoading(false);
+        } else if (!isAuthenticated) {
+            // Load from localStorage for anonymous users
+            setIsLoading(true);
+            try {
+                const stored = loadDecisions();
+                if (stored) {
+                    const decisionList = Object.values(stored.decisions) as LocalDecision[];
+                    // Sort by updatedAt (most recent first)
+                    decisionList.sort((a, b) => b.updatedAt - a.updatedAt);
+                    setDecisions(decisionList);
+                } else {
+                    setDecisions([]);
+                }
+            } catch {
+                setDecisions([]);
+            } finally {
+                setIsLoading(false);
+            }
         }
-    }, []);
+    }, [isAuthenticated, isAuthLoading, convexDecisions]);
 
     // Check localStorage quota and show warning toast
     useEffect(() => {
@@ -102,7 +154,16 @@ export function Workspace() {
         []
     );
 
-    if (isLoading) {
+    // Handle auth button click
+    const handleAuthButtonClick = useCallback(() => {
+        if (isAuthenticated) {
+            openSettingsModal();
+        } else {
+            openSignInModal();
+        }
+    }, [isAuthenticated, openSettingsModal, openSignInModal]);
+
+    if (isLoading || isAuthLoading) {
         return (
             <div className="workspace workspace--loading">
                 <p>Loading decisions...</p>
@@ -115,8 +176,28 @@ export function Workspace() {
     return (
         <div className="workspace">
             <header className="workspace__header">
-                <h1>Decisions</h1>
-                {hasDecisions && <p>{decisions.length} decision{decisions.length !== 1 ? "s" : ""}</p>}
+                <div>
+                    <h1>Decisions</h1>
+                    {hasDecisions && <p>{decisions.length} decision{decisions.length !== 1 ? "s" : ""}</p>}
+                </div>
+                <button
+                    type="button"
+                    className="workspace__auth-btn"
+                    onClick={handleAuthButtonClick}
+                    aria-label={isAuthenticated ? "Open settings" : "Sign in"}
+                >
+                    {isAuthenticated ? (
+                        <>
+                            <User size={18} aria-hidden="true" />
+                            <span>Settings</span>
+                        </>
+                    ) : (
+                        <>
+                            <LogIn size={18} aria-hidden="true" />
+                            <span>Sign In</span>
+                        </>
+                    )}
+                </button>
             </header>
 
             <div className="workspace__content">
@@ -141,6 +222,10 @@ export function Workspace() {
                     <NewDecisionButton onClick={handleNewDecision} />
                 </div>
             </div>
+
+            {/* Auth modals */}
+            <SignInModal isOpen={isSignInModalOpen} onClose={closeSignInModal} />
+            <SettingsModal isOpen={isSettingsModalOpen} onClose={closeSettingsModal} />
         </div>
     );
 }
