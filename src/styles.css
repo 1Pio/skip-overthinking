@@ -977,39 +977,6 @@ button:disabled {
   }
 
   .results-why-modal {
-    width: min(42rem, calc(100vw - 0.6rem)));
-    max-height: calc(100vh - 0.8rem);
-  }
-}
-
-  .results-step__controls-popover-wrap {
-    display: none;
-  }
-
-  .ranking-table-section header {
-    flex-direction: column;
-  }
-
-  .ranking-table-section__header-content {
-    width: 100%;
-  }
-
-  .results-step__controls-popover {
-    width: 100%;
-    right: 0;
-  }
-
-  .results-step__controls-trigger {
-    display: flex;
-    width: 100%;
-  }
-
-  .results-explainability-controls__focus-status {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-
-  .results-why-modal {
     width: min(42rem, calc(100vw - 0.6rem));
     max-height: calc(100vh - 0.8rem);
   }
