@@ -104,7 +104,7 @@ Plans:
 - [x] 05-01-PLAN.md — Setup Convex backend with auth and ownership-enforced decision storage
 - [x] 05-02-PLAN.md — Implement localStorage-based decision storage for anonymous users
 - [x] 05-02B-PLAN.md — Add localStorage quota management and utilities
-- [ ] 05-03-PLAN.md — Build auth context and sign-in modal
+- [x] 05-03-PLAN.md — Build auth context and sign-in modal
 - [ ] 05-03B-PLAN.md — Build settings modal and auth footer component
 - [ ] 05-04-PLAN.md — Build storage merge service and sync error handling hook
 - [ ] 05-05-PLAN.md — Update draft storage for multi-decision and router integration
@@ -125,4 +125,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Typed Criteria Modeling | 5/5 | Complete | 2026-02-17 |
 | 3. Ratings, Weights, and Coverage Integrity | 3/3 | Complete | 2026-02-18 |
 | 4. Results and Explainability | 4/4 | Complete | 2026-02-18 |
-| 5. Persistence, Auth, and Sync Security | 3/12 | In Progress | - |
+| 5. Persistence, Auth, and Sync Security | 4/12 | In Progress | - |
