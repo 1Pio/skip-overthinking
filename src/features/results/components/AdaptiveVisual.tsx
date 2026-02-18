@@ -277,18 +277,17 @@ export const AdaptiveVisual = ({
 
               // Marks: bigger, with a bright outline like in the screenshot
               '& .MuiRadarSeriesPlot-mark': {
-                stroke: 'rgb(255, 255, 255)',
                 strokeWidth: 3,
-                // Most builds render marks as SVG paths, scale is the safest “size” knob:
-                transform: 'scale(1.15)',
-                transformOrigin: 'center',
-                filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.35))',
+                // Most builds render marks as SVG paths, scale is the safest "size" knob:
+                // transform: 'scale(1.15)',
+                // transformOrigin: 'center',
+                filter: 'drop-shadow(0 0px 3px rgb(255, 255, 255))',
               },
 
               // Hover behavior if you use highlight="series"
               '& .MuiRadarSeriesPlot-highlighted .MuiRadarSeriesPlot-area': {
                 strokeWidth: 3.4,
-                fillOpacity: 0.22,
+                fillOpacity: 0.40,
                 strokeOpacity: 1,
               },
               '& .MuiRadarSeriesPlot-faded .MuiRadarSeriesPlot-area': {
@@ -296,7 +295,7 @@ export const AdaptiveVisual = ({
                 strokeOpacity: 0.25,
               },
               '& .MuiRadarSeriesPlot-faded .MuiRadarSeriesPlot-mark': {
-                opacity: 0.25,
+                opacity: 0.45,
               },
           }}
         />
