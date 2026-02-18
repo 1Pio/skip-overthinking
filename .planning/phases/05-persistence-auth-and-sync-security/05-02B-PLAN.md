@@ -1,6 +1,6 @@
 ---
 phase: 05-persistence-auth-and-sync-security
-plan: 02
+plan: 02B
 type: execute
 wave: 1
 depends_on: []
