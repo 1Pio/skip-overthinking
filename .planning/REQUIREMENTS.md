@@ -67,8 +67,8 @@ Requirements for initial release. Each maps to roadmap phases.
 ### Persistence, Auth, and Sync
 
 - [ ] **SYN-01**: User can continue using the app without login with local persistence.
-- [ ] **SYN-02**: Authenticated user can save and resume decisions with Convex live sync.
-- [ ] **SYN-03**: Authenticated data access enforces ownership checks by `userId` on backend operations.
+- [x] **SYN-02**: Authenticated user can save and resume decisions with Convex live sync.
+- [x] **SYN-03**: Authenticated data access enforces ownership checks by `userId` on backend operations.
 - [ ] **SYN-04**: Anonymous decisions remain local-only in v1 and are not persisted server-side.
 
 ### Deployment and Runtime
@@ -152,8 +152,8 @@ Which phases cover which requirements. Updated during roadmap creation.
 | RES-10 | Phase 4 | Pending |
 | RES-11 | Phase 4 | Pending |
 | SYN-01 | Phase 5 | Pending |
-| SYN-02 | Phase 5 | Pending |
-| SYN-03 | Phase 5 | Pending |
+| SYN-02 | Phase 5 | Complete |
+| SYN-03 | Phase 5 | Complete |
 | SYN-04 | Phase 5 | Pending |
 | DEP-01 | Phase 1 | Pending |
 | DEP-02 | Phase 1 | Pending |

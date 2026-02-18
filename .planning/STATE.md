@@ -5,23 +5,23 @@
 See: `.planning/PROJECT.md` (updated 2026-02-16)
 
 **Core value:** Help people make better decisions quickly by converting subjective tradeoffs into a clear, trustworthy, and explainable ranking where higher always means better.
-**Current focus:** Phase 4 - Results and Explainability
+**Current focus:** Phase 5 - Persistence, Auth, and Sync Security
 
 ## Current Position
 
-Phase: 4 of 5 (Results and Explainability)
-Plan: 4 of 4 in current phase
-Status: Complete
-Last activity: 2026-02-18 - Completed 04-04 plan and integrated the guarded results route with unified explainability orchestration and polished results styling.
+Phase: 5 of 5 (Persistence, Auth, and Sync Security)
+Plan: 1 of 12 in current phase
+Status: In Progress
+Last activity: 2026-02-18 - Completed 05-01 plan: Convex backend foundation with auth providers and ownership-enforced decision storage.
 
-Progress: [########--] 75%
+Progress: [#########-] 85%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 17
+- Total plans completed: 18
 - Average duration: 2 min
-- Total execution time: 0.8 hours
+- Total execution time: 0.85 hours
 
 **By Phase:**
 
@@ -32,7 +32,7 @@ Progress: [########--] 75%
 | 3 | 3 | 13 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 03-02 (5 min), 03-03 (1 min), 04-01 (2 min), 04-03 (4 min), 04-04 (3 min)
+- Last 5 plans: 04-02 (1 min), 04-03 (4 min), 04-04 (3 min), 05-01 (3 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -54,6 +54,7 @@ Progress: [########--] 75%
 | Phase 04 P02 | 1 min | 3 tasks | 3 files |
 | Phase 04 P03 | 4 min | 3 tasks | 3 files |
 | Phase 04 P04 | 3 min | 3 tasks | 3 files |
+| Phase 05 P01 | 3 min | 3 tasks | 2 files |
 
 ## Accumulated Context
 
@@ -113,6 +114,9 @@ Recent decisions affecting current work:
 - [Phase 04]: ResultsStep owns one shared interaction state (highlight, focus, raw toggle, selected why option) to keep all surfaces synchronized.
 - [Phase 04]: Results route guard logic remains unchanged; only the success path was replaced with the integrated results experience.
 - [Phase 04]: Results styling uses compact table density and moderate dimming with reduced-motion-safe transition fallbacks.
+- [Phase 05]: Schema mirrors frontend DecisionDraft types exactly for sync compatibility.
+- [Phase 05]: Use Convex auto-generated IDs for decisions instead of custom string IDs.
+- [Phase 05]: Auth providers configured via @convex-dev/auth/server with GitHub, Google, Resend (email).
 
 ### Pending Todos
 
@@ -127,5 +131,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-18
-Stopped at: Phase 5 context gathered
-Resume file: .planning/phases/05-persistence-auth-and-sync-security/05-CONTEXT.md
+Stopped at: Completed 05-01-PLAN.md
+Resume file: None
