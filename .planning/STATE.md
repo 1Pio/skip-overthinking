@@ -10,18 +10,18 @@ See: `.planning/PROJECT.md` (updated 2026-02-16)
 ## Current Position
 
 Phase: 5 of 5 (Persistence, Auth, and Sync Security)
-Plan: 5 of 12 in current phase
+Plan: 6 of 12 in current phase
 Status: In Progress
-Last activity: 2026-02-18 - Completed 05-03B plan: Settings modal and auth footer.
+Last activity: 2026-02-18 - Completed 05-04 plan: Storage merge and sync services.
 
-Progress: [#########-] 85%
+Progress: [#######---] 71%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 21
+- Total plans completed: 22
 - Average duration: 2 min
-- Total execution time: 0.99 hours
+- Total execution time: 1.05 hours
 
 **By Phase:**
 
@@ -32,7 +32,7 @@ Progress: [#########-] 85%
 | 3 | 3 | 13 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-01 (3 min), 05-02 (1 min), 05-02B (1 min), 05-03 (7 min), 05-03B (1 min)
+- Last 5 plans: 05-02 (1 min), 05-02B (1 min), 05-03 (7 min), 05-03B (1 min), 05-04 (6 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -59,6 +59,7 @@ Progress: [#########-] 85%
 | Phase 05 P02B | 1 min | 2 tasks | 2 files |
 | Phase 05 P03 | 7 min | 3 tasks | 2 files |
 | Phase 05 P03B | 1 min | 3 tasks | 3 files |
+| Phase 05 P04 | 6 min | 3 tasks | 4 files |
 
 ## Accumulated Context
 
@@ -127,6 +128,9 @@ Recent decisions affecting current work:
 - [Phase 05]: User object in auth context contains only ID for minimal surface.
 - [Phase 05]: signIn() opens modal rather than directly triggering OAuth for consistent UI flow.
 - [Phase 05]: No account name or profile picture in settings modal - use placeholder icon — Per user decision for minimal auth surface
+- [Phase 05]: Merge uses callback pattern to decouple from Convex client - enables testing
+- [Phase 05]: ConvexDecisionPayload excludes transient UI state (criteriaSelection, criteriaMultiDeleteUndo)
+- [Phase 05]: Toast notifications use sonner library for consistent UX
 
 ### Pending Todos
 
@@ -141,5 +145,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-18
-Stopped at: Completed 05-03B-PLAN.md
+Stopped at: Completed 05-04-PLAN.md
 Resume file: None
