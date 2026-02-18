@@ -4,6 +4,8 @@ import { useDraft } from "../../decision/state/DraftProvider";
 import { clearDraftStorage } from "../../decision/state/draft.storage";
 import { loadDecisions } from "../../auth/storage/local.storage";
 import type { LocalDecision } from "../../auth/storage/local.types";
+import { getStorageWarning } from "../../auth/storage/utils";
+import { toast } from "sonner";
 import { DecisionCard } from "./DecisionCard";
 import { NewDecisionButton } from "./NewDecisionButton";
 
@@ -42,6 +44,23 @@ export function Workspace() {
             setDecisions([]);
         } finally {
             setIsLoading(false);
+        }
+    }, []);
+
+    // Check localStorage quota and show warning toast
+    useEffect(() => {
+        // Only check once per session
+        const warningShownKey = "skip-overthinking:storage-warning-shown";
+        const warningShown = sessionStorage.getItem(warningShownKey);
+
+        if (warningShown) {
+            return;
+        }
+
+        const warning = getStorageWarning();
+        if (warning?.showWarning) {
+            toast.warning(warning.message);
+            sessionStorage.setItem(warningShownKey, "true");
         }
     }, []);
 
