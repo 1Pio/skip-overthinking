@@ -54,19 +54,12 @@ export const ResultsStep = () => {
 
   return (
     <section className="results-step" aria-labelledby="results-step-heading">
-      <div className="results-step__table-controls-row">
-        <RankingTable
-          rows={projection.rankingRows}
-          method="wsm"
-          highlightedOptionId={interactionOptionId}
-          onOptionHover={setHighlightedOptionId}
-          onOptionFocus={(optionId) => {
-            if (focusModeEnabled) {
-              setFocusedOptionId(optionId);
-            }
-            setHighlightedOptionId(optionId);
-          }}
-        />
+      <div className="results-step__header-controls-row">
+        <div className="results-step__ranking-header-wrap">
+          <RankingTable.Header
+            method="wsm"
+          />
+        </div>
 
         <div
           className="results-step__controls-popover-wrap"
@@ -101,6 +94,20 @@ export const ResultsStep = () => {
             </div>
           ) : null}
         </div>
+      </div>
+
+      <div className="results-step__table-wrap">
+        <RankingTable.Table
+          rows={projection.rankingRows}
+          highlightedOptionId={interactionOptionId}
+          onOptionHover={setHighlightedOptionId}
+          onOptionFocus={(optionId: string | null) => {
+            if (focusModeEnabled) {
+              setFocusedOptionId(optionId);
+            }
+            setHighlightedOptionId(optionId);
+          }}
+        />
       </div>
 
       <div className="results-step__visual-wrap" data-focus-mode={focusModeEnabled}>

@@ -105,13 +105,15 @@ export const RankingTable = ({
       className="ranking-table-section"
       aria-label={method === "wsm" ? "WSM ranking table" : "WPM ranking table"}
     >
-      <header>
-        <h3>{method === "wsm" ? "Ranking (WSM default)" : "Strict-check ranking (WPM)"}</h3>
-        <p>
-          Compact view with rank, option color, score, and weighted coverage. Ties share rank
-          numbers (for example 1, 1, 3).
-        </p>
-      </header>
+      <div className="ranking-table-section__header-wrap">
+        <header className="ranking-table-section__header">
+          <h3>{method === "wsm" ? "Ranking (WSM default)" : "Strict-check ranking (WPM)"}</h3>
+          <p>
+            Compact view with rank, option color, score, and weighted coverage. Ties share rank
+            numbers (for example 1, 1, 3).
+          </p>
+        </header>
+      </div>
 
       {rows.length === 0 ? (
         <p role="status">No ranking rows yet. Add ratings to generate scores.</p>
@@ -175,3 +177,100 @@ export const RankingTable = ({
     </section>
   );
 };
+
+type HeaderProps = {
+  method?: "wsm" | "wpm";
+};
+
+export const Header = ({ method = "wsm" }: HeaderProps) => {
+  return (
+    <header className="ranking-table-section__header">
+      <h3>{method === "wsm" ? "Ranking (WSM default)" : "Strict-check ranking (WPM)"}</h3>
+      <p>
+        Compact view with rank, option color, score, and weighted coverage. Ties share rank
+        numbers (for example 1, 1, 3).
+      </p>
+    </header>
+  );
+};
+
+type TableProps = {
+  rows: RankingRow[];
+  method?: "wsm" | "wpm";
+  highlightedOptionId?: string | null;
+  onOptionHover?: (optionId: string | null) => void;
+  onOptionFocus?: (optionId: string | null) => void;
+};
+
+export const Table = ({
+  rows,
+  method = "wsm",
+  highlightedOptionId = null,
+  onOptionHover,
+  onOptionFocus,
+}: TableProps) => {
+  if (rows.length === 0) {
+    return <p role="status">No ranking rows yet. Add ratings to generate scores.</p>;
+  }
+
+  return (
+    <div className="ranking-table" role="region" aria-label="Ranking rows" tabIndex={0}>
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Rank</th>
+            <th scope="col" aria-label="Option color" />
+            <th scope="col">Option</th>
+            <th scope="col">Score</th>
+            <th scope="col">Coverage</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((row) => {
+            const isHighlighted = highlightedOptionId === row.optionId;
+            const swatchColor = optionColor(row, rows.length);
+
+            return (
+              <tr
+                key={row.optionId}
+                data-highlighted={isHighlighted}
+                data-severity={row.coverageSeverity}
+                onMouseEnter={() => onOptionHover?.(row.optionId)}
+                onMouseLeave={() => onOptionHover?.(null)}
+                onFocus={() => onOptionFocus?.(row.optionId)}
+                onBlur={() => onOptionFocus?.(null)}
+              >
+                <td>
+                  <span className="ranking-table__rank-cell">
+                    <RankCell rank={row.rank} />
+                  </span>
+                </td>
+                <td>
+                  <span
+                    className="ranking-table__option-color"
+                    style={{ backgroundColor: swatchColor }}
+                    aria-hidden="true"
+                  />
+                </td>
+                <th scope="row">{row.optionTitle}</th>
+                <td aria-label={scoreAria(method)}>{row.scoreLabel}</td>
+                <td>
+                  <span
+                    className="ranking-table__coverage-badge"
+                    data-severity={row.coverageSeverity}
+                    aria-label={`Coverage quality ${severityLabel[row.coverageSeverity]}`}
+                  >
+                    {coverageLabel(row)}
+                  </span>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </div>
+  );
+};
+
+RankingTable.Header = Header;
+RankingTable.Table = Table;

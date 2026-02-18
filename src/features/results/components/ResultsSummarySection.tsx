@@ -22,13 +22,15 @@ export const ResultsSummarySection = ({
 }: ResultsSummarySectionProps) => {
   return (
     <section className="results-summary-section" aria-label="Results summary">
-      <RankingTable
-        rows={data.rankingRows}
-        method="wsm"
-        highlightedOptionId={highlightedOptionId}
-        onOptionHover={onOptionHover}
-        onOptionFocus={onOptionFocus}
-      />
+      <div className="results-summary-section__ranking-wrap">
+        <RankingTable
+          rows={data.rankingRows}
+          method="wsm"
+          highlightedOptionId={highlightedOptionId}
+          onOptionHover={onOptionHover}
+          onOptionFocus={onOptionFocus}
+        />
+      </div>
 
       <MethodCheckPanel
         methodCheck={data.methodCheck}

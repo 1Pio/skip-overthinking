@@ -413,11 +413,19 @@ button:disabled {
   margin-top: 0.65rem;
 }
 
-.results-step__table-controls-row {
+.results-step__header-controls-row {
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
   gap: 1.2rem;
+}
+
+.results-step__ranking-header-wrap {
+  flex: 1;
+}
+
+.results-step__table-wrap {
+  width: 100%;
 }
 
 .results-step__controls-popover-wrap {
@@ -502,11 +510,17 @@ button:disabled {
   width: 100%;
 }
 
-.ranking-table-section header {
+.ranking-table-section__header-wrap {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.ranking-table-section__header {
   display: block;
 }
 
-.ranking-table-section header p {
+.ranking-table-section__header p {
   margin: 0.25rem 0 0;
   font-size: 0.85rem;
 }
@@ -516,6 +530,10 @@ button:disabled {
   grid-template-columns: minmax(0, 1.7fr) minmax(18rem, 1fr);
   gap: 0.85rem;
   align-items: start;
+}
+
+.results-summary-section__ranking-wrap {
+  width: 100%;
 }
 
 .ranking-table,
