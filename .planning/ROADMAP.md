@@ -105,12 +105,12 @@ Plans:
 - [x] 05-02-PLAN.md — Implement localStorage-based decision storage for anonymous users
 - [x] 05-02B-PLAN.md — Add localStorage quota management and utilities
 - [x] 05-03-PLAN.md — Build auth context and sign-in modal
-- [ ] 05-03B-PLAN.md — Build settings modal and auth footer component
-- [ ] 05-04-PLAN.md — Build storage merge service and sync error handling hook
+- [x] 05-03B-PLAN.md — Build settings modal and auth footer component
+- [x] 05-04-PLAN.md — Build storage merge service and sync error handling hook
 - [ ] 05-05-PLAN.md — Update draft storage for multi-decision and router integration
-- [ ] 05-06-PLAN.md — Add sync error state and persistent warning banner
+- [x] 05-06-PLAN.md — Add sync error state and persistent warning banner
 - [ ] 05-06B-PLAN.md — Integrate sync banner and storage warning toast
-- [ ] 05-07-PLAN.md — Build decision card and new decision button components
+- [x] 05-07-PLAN.md — Build decision card and new decision button components
 - [ ] 05-08-PLAN.md — Build decision workspace page with checkpoint
 - [ ] 05-09-PLAN.md — Integrate AuthProvider, AuthFooter, and first launch modal
 
@@ -125,4 +125,4 @@ Phases execute in numeric order: 1 -> 2 -> 3 -> 4 -> 5
 | 2. Typed Criteria Modeling | 5/5 | Complete | 2026-02-17 |
 | 3. Ratings, Weights, and Coverage Integrity | 3/3 | Complete | 2026-02-18 |
 | 4. Results and Explainability | 4/4 | Complete | 2026-02-18 |
-| 5. Persistence, Auth, and Sync Security | 4/12 | In Progress | - |
+| 5. Persistence, Auth, and Sync Security | 8/12 | In Progress | - |
