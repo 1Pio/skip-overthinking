@@ -187,13 +187,11 @@ export const AdaptiveVisual = ({
         .map((row) => {
           const isDimmed = activeOptionId !== null && activeOptionId !== row.optionId;
           const isFocused = activeOptionId === row.optionId;
-          const isHighlighted = highlightedItem?.seriesId === row.optionId;
-          const noFocus = activeOptionId === null;
           return {
             id: row.optionId,
             label: row.optionTitle,
             data: row.desirabilityByCriterion,
-            fillArea: isHighlighted || (noFocus && !highlightedItem),
+            fillArea: true,
             color: buildOptionColor(
               isDimmed,
               chartRows.length,
@@ -206,6 +204,10 @@ export const AdaptiveVisual = ({
   );
 
   const singleCriterionTitle = criterionMetadata[0]?.criterionTitle ?? "Criterion";
+
+  const stripeColor = (i: number) =>
+  i % 2 === 1 ? 'rgba(255,255,255,0.035)' : 'none';
+
 
   return (
     <section
@@ -230,6 +232,8 @@ export const AdaptiveVisual = ({
           className="results-adaptive-visual__radar-chart"
           height={460}
           series={radarSeries.length > 0 ? radarSeries : []}
+          divisions={5}
+          stripeColor={stripeColor}
           radar={{ metrics: criterionMetadata.map((criterion) => criterion.criterionTitle), max: 20 }}
           hideLegend
           highlight="series"
@@ -238,18 +242,62 @@ export const AdaptiveVisual = ({
           skipAnimation={prefersReducedMotion}
           margin={{ top: 28, right: 24, bottom: 32, left: 24 }}
           sx={{
-            // default line thickness
-            '& .MuiRadarSeriesPlot-area': {
-              strokeWidth: 2,
-            },
-            // optional: make the highlighted series even thicker
-            '& .MuiRadarSeriesPlot-highlighted': {
-              strokeWidth: 3,
-            },
-            // optional: tune fade behavior (not required)
-            '& .MuiRadarSeriesPlot-faded': {
-              opacity: 0.45,
-            },
+
+
+              // Numeric axis labels (the little 2/4/6/8 style values)
+              '& .MuiRadarAxis-label': {
+                fill: 'rgba(255,255,255,0.40)',
+                fontSize: 12,
+                fontWeight: 500,
+              },
+
+              // Grid: spokes + rings
+              '& .MuiRadarGrid-radial': {
+                stroke: 'rgba(0, 0, 0, 0.16)',
+                strokeWidth: 1,
+              },
+              '& .MuiRadarGrid-divider': {
+                stroke: 'rgb(203, 213, 225)',
+                strokeWidth: 1.5,
+              },
+              // outer ring slightly stronger
+              '& .MuiRadarGrid-divider:last-of-type': {
+                stroke: 'rgba(0, 0, 0, 0.28)',
+                strokeWidth: 1.2,
+              },
+
+              // Series: thick rounded outline + subtle fill (always on)
+              '& .MuiRadarSeriesPlot-area': {
+                strokeWidth: 1.6,
+                strokeLinejoin: 'round',
+                strokeLinecap: 'round',
+                fillOpacity: 0.14,          // “slight fill when nothing is hovered”
+                strokeOpacity: 0.95,
+              },
+
+              // Marks: bigger, with a bright outline like in the screenshot
+              '& .MuiRadarSeriesPlot-mark': {
+                stroke: 'rgb(255, 255, 255)',
+                strokeWidth: 3,
+                // Most builds render marks as SVG paths, scale is the safest “size” knob:
+                transform: 'scale(1.15)',
+                transformOrigin: 'center',
+                filter: 'drop-shadow(0 1px 1px rgba(0,0,0,0.35))',
+              },
+
+              // Hover behavior if you use highlight="series"
+              '& .MuiRadarSeriesPlot-highlighted .MuiRadarSeriesPlot-area': {
+                strokeWidth: 3.4,
+                fillOpacity: 0.22,
+                strokeOpacity: 1,
+              },
+              '& .MuiRadarSeriesPlot-faded .MuiRadarSeriesPlot-area': {
+                fillOpacity: 0.05,
+                strokeOpacity: 0.25,
+              },
+              '& .MuiRadarSeriesPlot-faded .MuiRadarSeriesPlot-mark': {
+                opacity: 0.25,
+              },
           }}
         />
       ) : null}
