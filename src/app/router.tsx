@@ -2,6 +2,7 @@ import { Link, Navigate, Outlet, createHashRouter } from 'react-router';
 
 import { isDecisionStepComplete } from '../features/decision/state/decisionPrereq';
 import { useDraft } from '../features/decision/state/DraftProvider';
+import { Workspace } from '../features/workspace';
 import { CriteriaRoute } from '../routes/criteria/CriteriaRoute';
 import { RatingsRoute } from '../routes/ratings/RatingsRoute';
 import { ResultsRoute } from '../routes/results/ResultsRoute';
@@ -15,6 +16,9 @@ const WizardLayout = () => {
         <h1>Skip Overthinking</h1>
         <nav aria-label="Wizard steps">
           <ul>
+            <li>
+              <Link to="/">Workspace</Link>
+            </li>
             <li>
               <Link to="/setup/decision">Decision</Link>
             </li>
@@ -56,7 +60,7 @@ export const appRouter = createHashRouter([
     children: [
       {
         index: true,
-        element: <Navigate replace to="/setup/decision" />,
+        element: <Workspace />,
       },
       {
         path: '/setup/decision',
@@ -85,7 +89,7 @@ export const appRouter = createHashRouter([
       },
       {
         path: '*',
-        element: <Navigate replace to="/setup/decision" />,
+        element: <Navigate replace to="/" />,
       },
     ],
   },
