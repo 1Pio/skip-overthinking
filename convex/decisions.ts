@@ -2,37 +2,56 @@ import { v } from "convex/values";
 import { mutation, query } from "./_generated/server";
 import { getAuthUserId } from "@convex-dev/auth/server";
 
+// Mirrors DraftOption from src/features/options/state/option.types.ts
 const optionArg = v.object({
     id: v.string(),
     title: v.string(),
     description: v.optional(v.string()),
     order: v.number(),
+    icon: v.optional(v.string()),
 });
 
-const ratingCriterionTypeArg = v.union(
-    v.object({
-        kind: v.literal("rating_1_20"),
-    }),
-    v.object({
-        kind: v.literal("numeric_measured"),
-        unit: v.optional(v.string()),
-        rawDirection: v.union(v.literal("lower_is_better"), v.literal("higher_is_better")),
-    })
-);
-
-const criterionArg = v.object({
+// Mirrors the discriminated union from src/features/criteria/criteria.schema.ts
+const ratingCriterionArg = v.object({
     id: v.string(),
     title: v.string(),
     description: v.optional(v.string()),
-    type: ratingCriterionTypeArg,
     order: v.number(),
+    type: v.literal("rating_1_20"),
 });
 
-const ratingCellArg = v.object({
+const numericMeasuredCriterionArg = v.object({
+    id: v.string(),
+    title: v.string(),
+    description: v.optional(v.string()),
+    order: v.number(),
+    type: v.literal("numeric_measured"),
+    rawDirection: v.union(v.literal("lower_raw_better"), v.literal("higher_raw_better")),
+    unit: v.optional(v.string()),
+});
+
+const criterionArg = v.union(
+    ratingCriterionArg,
+    numericMeasuredCriterionArg
+);
+
+// Mirrors RatingMatrixCell from src/features/ratings/ratings.schema.ts
+const rating120CellArg = v.object({
+    criterionType: v.literal("rating_1_20"),
     numericValue: v.optional(v.number()),
     sevenLevelValue: v.optional(v.string()),
-    rawMeasuredValue: v.optional(v.number()),
+    lastEditedMode: v.optional(v.union(v.literal("numeric"), v.literal("seven_level"))),
 });
+
+const numericMeasuredCellArg = v.object({
+    criterionType: v.literal("numeric_measured"),
+    rawValue: v.optional(v.number()),
+});
+
+const ratingMatrixCellArg = v.union(
+    rating120CellArg,
+    numericMeasuredCellArg
+);
 
 export const create = mutation({
     args: {
@@ -41,7 +60,7 @@ export const create = mutation({
         icon: v.optional(v.string()),
         options: v.array(optionArg),
         criteria: v.array(criterionArg),
-        ratingsMatrix: v.record(v.string(), ratingCellArg),
+        ratingsMatrix: v.record(v.string(), ratingMatrixCellArg),
         ratingInputMode: v.union(v.literal("numeric"), v.literal("seven_level")),
         criterionWeights: v.record(v.string(), v.number()),
     },
@@ -75,7 +94,7 @@ export const update = mutation({
         icon: v.optional(v.string()),
         options: v.optional(v.array(optionArg)),
         criteria: v.optional(v.array(criterionArg)),
-        ratingsMatrix: v.optional(v.record(v.string(), ratingCellArg)),
+        ratingsMatrix: v.optional(v.record(v.string(), ratingMatrixCellArg)),
         ratingInputMode: v.optional(v.union(v.literal("numeric"), v.literal("seven_level"))),
         criterionWeights: v.optional(v.record(v.string(), v.number())),
     },
