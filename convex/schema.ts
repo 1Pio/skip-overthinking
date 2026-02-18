@@ -2,37 +2,56 @@ import { authTables } from "@convex-dev/auth/server";
 import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
+// Mirrors DraftOption from src/features/options/state/option.types.ts
 const optionSchema = v.object({
     id: v.string(),
     title: v.string(),
     description: v.optional(v.string()),
     order: v.number(),
+    icon: v.optional(v.string()),
 });
 
-const ratingCriterionTypeSchema = v.union(
-    v.object({
-        kind: v.literal("rating_1_20"),
-    }),
-    v.object({
-        kind: v.literal("numeric_measured"),
-        unit: v.optional(v.string()),
-        rawDirection: v.union(v.literal("lower_is_better"), v.literal("higher_is_better")),
-    })
-);
-
-const criterionSchema = v.object({
+// Mirrors the discriminated union from src/features/criteria/criteria.schema.ts
+const ratingCriterionSchema = v.object({
     id: v.string(),
     title: v.string(),
     description: v.optional(v.string()),
-    type: ratingCriterionTypeSchema,
     order: v.number(),
+    type: v.literal("rating_1_20"),
 });
 
-const ratingCellSchema = v.object({
+const numericMeasuredCriterionSchema = v.object({
+    id: v.string(),
+    title: v.string(),
+    description: v.optional(v.string()),
+    order: v.number(),
+    type: v.literal("numeric_measured"),
+    rawDirection: v.union(v.literal("lower_raw_better"), v.literal("higher_raw_better")),
+    unit: v.optional(v.string()),
+});
+
+const criterionSchema = v.union(
+    ratingCriterionSchema,
+    numericMeasuredCriterionSchema
+);
+
+// Mirrors RatingMatrixCell from src/features/ratings/ratings.schema.ts
+const rating120CellSchema = v.object({
+    criterionType: v.literal("rating_1_20"),
     numericValue: v.optional(v.number()),
     sevenLevelValue: v.optional(v.string()),
-    rawMeasuredValue: v.optional(v.number()),
+    lastEditedMode: v.optional(v.union(v.literal("numeric"), v.literal("seven_level"))),
 });
+
+const numericMeasuredCellSchema = v.object({
+    criterionType: v.literal("numeric_measured"),
+    rawValue: v.optional(v.number()),
+});
+
+const ratingMatrixCellSchema = v.union(
+    rating120CellSchema,
+    numericMeasuredCellSchema
+);
 
 export default defineSchema({
     ...authTables,
@@ -43,7 +62,7 @@ export default defineSchema({
         icon: v.optional(v.string()),
         options: v.array(optionSchema),
         criteria: v.array(criterionSchema),
-        ratingsMatrix: v.record(v.string(), ratingCellSchema),
+        ratingsMatrix: v.record(v.string(), ratingMatrixCellSchema),
         ratingInputMode: v.union(v.literal("numeric"), v.literal("seven_level")),
         criterionWeights: v.record(v.string(), v.number()),
         createdAt: v.number(),
