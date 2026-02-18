@@ -188,11 +188,12 @@ export const AdaptiveVisual = ({
           const isDimmed = activeOptionId !== null && activeOptionId !== row.optionId;
           const isFocused = activeOptionId === row.optionId;
           const isHighlighted = highlightedItem?.seriesId === row.optionId;
+          const noFocus = activeOptionId === null;
           return {
             id: row.optionId,
             label: row.optionTitle,
             data: row.desirabilityByCriterion,
-            fillArea: isHighlighted,
+            fillArea: isHighlighted || (noFocus && !highlightedItem),
             color: buildOptionColor(
               isDimmed,
               chartRows.length,
