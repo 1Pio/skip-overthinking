@@ -6,14 +6,19 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "tsc --noEmit -p tsconfig.app.json"
+    "lint": "tsc --noEmit -p tsconfig.app.json",
+    "dev:convex": "convex dev",
+    "deploy:convex": "convex deploy"
   },
   "dependencies": {
+    "@auth/core": "^0.34.3",
     "@base-ui/react": "^1.2.0",
+    "@convex-dev/auth": "^0.0.90",
     "@emotion/react": "^11.14.0",
     "@emotion/styled": "^11.14.1",
     "@mui/material": "^7.3.8",
     "@mui/x-charts": "^8.27.0",
+    "convex": "^1.31.7",
     "lucide-react": "^0.574.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
