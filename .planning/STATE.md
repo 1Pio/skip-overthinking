@@ -10,18 +10,18 @@ See: `.planning/PROJECT.md` (updated 2026-02-16)
 ## Current Position
 
 Phase: 5 of 5 (Persistence, Auth, and Sync Security)
-Plan: 8 of 12 in current phase
+Plan: 9 of 12 in current phase
 Status: In Progress
-Last activity: 2026-02-18 - Completed 05-07 plan: Decision card and new decision button components.
+Last activity: 2026-02-18 - Completed 05-05 plan: Workspace route and draft storage integration.
 
-Progress: [#######---] 67%
+Progress: [#########--] 75%
 
 ## Performance Metrics
 
 **Velocity:**
-- Total plans completed: 22
+- Total plans completed: 23
 - Average duration: 2 min
-- Total execution time: 1.05 hours
+- Total execution time: 1.09 hours
 
 **By Phase:**
 
@@ -32,7 +32,7 @@ Progress: [#######---] 67%
 | 3 | 3 | 13 min | 4 min |
 
 **Recent Trend:**
-- Last 5 plans: 05-02 (1 min), 05-02B (1 min), 05-03 (7 min), 05-03B (1 min), 05-04 (6 min)
+- Last 5 plans: 05-04 (6 min), 05-06 (4 min), 05-07 (11 min), 05-05 (2 min)
 - Trend: Stable
 
 *Updated after each plan completion*
@@ -62,6 +62,7 @@ Progress: [#######---] 67%
 | Phase 05 P04 | 6 min | 3 tasks | 4 files |
 | Phase 05 P06 | 4 min | 3 tasks | 2 files |
 | Phase 05 P07 | 11 min | 3 tasks | 3 files |
+| Phase 05 P05 | 2 min | 2 tasks | 3 files |
 
 ## Accumulated Context
 
@@ -136,6 +137,10 @@ Recent decisions affecting current work:
 - [Phase 05]: Sync error state already existed in auth context - focused on banner component — State infrastructure was implemented in previous plan
 - [Phase 05]: DecisionCard uses existing CSS classes from styles.css — Consistent styling with existing workspace components
 - [Phase 05]: NewDecisionButton uses dashed-border design for visual distinction — Makes the create action prominent and distinguishable from decision cards
+- [Phase 05]: Draft storage remains unchanged for MVP - localStorage persistence only
+- [Phase 05]: Workspace is default landing page at root route '/' instead of redirecting to wizard
+- [Phase 05]: Decision cards load full draft state into DraftProvider before navigation
+- [Phase 05]: New Decision button clears draft storage before navigation for clean state
 
 ### Pending Todos
 
@@ -150,5 +155,5 @@ None yet.
 ## Session Continuity
 
 Last session: 2026-02-18
-Stopped at: Completed 05-07-PLAN.md
+Stopped at: Completed 05-05-PLAN.md
 Resume file: None
