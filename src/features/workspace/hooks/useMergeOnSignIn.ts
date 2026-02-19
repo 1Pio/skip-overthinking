@@ -2,7 +2,11 @@ import { useEffect, useRef } from "react";
 import { useAuth } from "../../auth/auth.context";
 import { useMutation, useQuery } from "convex/react";
 import { api } from "../../../../convex/_generated/api";
-import { mergeDecisions, type ConvexDecisionPayload } from "../storage-merge.service";
+import {
+    mergeDecisions,
+    type ConvexDecisionPayload,
+    type ExistingConvexDecision,
+} from "../storage-merge.service";
 import { cacheFromConvex, type ConvexDecision } from "../storage-sync.service";
 import { toast } from "sonner";
 
@@ -12,9 +16,10 @@ import { toast } from "sonner";
  *
  * Behavior:
  * - When user signs in (transitions from not authenticated to authenticated):
- *   - Merges local decisions to Convex
+ *   - Compares local decisions with Convex decisions
+ *   - Only uploads decisions that don't already exist in Convex
+ *   - Updates local decisions with Convex IDs for existing matches
  *   - Shows toast notification with merge count
- *   - Clears local storage after merge
  *
  * - For users already authenticated on load:
  *   - Caches Convex decisions to localStorage for offline access
@@ -41,18 +46,31 @@ export function useMergeOnSignIn(): void {
         if (isLoading) return;
 
         // Handle sign-in transition (not authenticated -> authenticated)
+        // Only merge when we have both auth state AND convex decisions loaded
         if (
             !wasAuthenticated.current &&
             isAuthenticated &&
             user?.id &&
-            !hasMerged.current
+            !hasMerged.current &&
+            convexDecisions
         ) {
             hasMerged.current = true;
 
-            // Merge local decisions to Convex
-            mergeDecisions(async (decision: ConvexDecisionPayload) => {
-                return createDecision(decision);
-            })
+            // Convert Convex decisions to comparison format
+            const existingDecisions: ExistingConvexDecision[] =
+                convexDecisions.map((d: ConvexDecision) => ({
+                    _id: d._id,
+                    title: d.title,
+                    updatedAt: d.updatedAt,
+                }));
+
+            // Merge local decisions to Convex (comparing with existing)
+            mergeDecisions(
+                async (decision: ConvexDecisionPayload) => {
+                    return createDecision(decision);
+                },
+                existingDecisions
+            )
                 .then((result) => {
                     if (result.mergedCount > 0) {
                         toast.success(
@@ -63,12 +81,22 @@ export function useMergeOnSignIn(): void {
                 .catch((error) => {
                     console.error("Merge failed:", error);
                     toast.error("Failed to merge decisions. Please try again.");
+                })
+                .finally(() => {
+                    // After merge, cache all Convex decisions (including newly merged ones)
+                    if (convexDecisions) {
+                        try {
+                            cacheFromConvex(convexDecisions as ConvexDecision[]);
+                        } catch (error) {
+                            console.error("Failed to cache after merge:", error);
+                        }
+                    }
                 });
         }
 
-        // Update the ref for next render
+        // Update ref for next render
         wasAuthenticated.current = isAuthenticated;
-    }, [isAuthenticated, isLoading, user?.id, createDecision]);
+    }, [isAuthenticated, isLoading, user?.id, createDecision, convexDecisions]);
 
     // Cache Convex decisions for authenticated users on load
     useEffect(() => {
@@ -79,7 +107,8 @@ export function useMergeOnSignIn(): void {
         }
 
         // Only cache if we have decisions and haven't cached yet
-        if (convexDecisions && !hasCached.current) {
+        // And if we're not in the middle of merging (hasMerged will handle that)
+        if (convexDecisions && !hasCached.current && !hasMerged.current) {
             try {
                 cacheFromConvex(convexDecisions as ConvexDecision[]);
                 hasCached.current = true;
@@ -88,5 +117,5 @@ export function useMergeOnSignIn(): void {
                 toast.error("Failed to load decisions. Please refresh the page.");
             }
         }
-    }, [isAuthenticated, convexDecisions]);
+    }, [isAuthenticated, convexDecisions, hasMerged]);
 }
