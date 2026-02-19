@@ -4,11 +4,11 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "concurrently \"bun run dev:convex\" \"vite\"",
     "build": "tsc -b && vite build",
     "lint": "tsc --noEmit -p tsconfig.app.json",
-    "dev:convex": "convex dev",
-    "deploy:convex": "convex deploy"
+    "dev:convex": "bunx convex dev",
+    "deploy:convex": "bunx convex deploy"
   },
   "dependencies": {
     "@auth/core": "^0.37.0",
@@ -30,6 +30,7 @@
     "@types/node": "^25.3.0",
     "@types/react": "^19.1.11",
     "@types/react-dom": "^19.1.7",
+    "concurrently": "^9.2.1",
     "typescript": "^5.9.2",
     "vite": "^7.1.12"
   }

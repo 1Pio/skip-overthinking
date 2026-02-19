@@ -65,7 +65,7 @@ Go to **Convex Dashboard → Auth** for each provider:
 2. Get API key from Dashboard
 3. Set environment variable:
    ```bash
-   npx convex env set RESEND_API_KEY re_...
+   bunx convex env set RESEND_API_KEY re_...
    ```
 4. In Convex Dashboard → Auth → Resend:
    - Enable Resend provider
@@ -76,17 +76,17 @@ Once environment is configured:
 
 ```bash
 # Generate types and deploy schema
-npx convex dev
+bunx convex dev
 
 # Or for production deployment
-npx convex deploy
+bunx convex deploy
 ```
 
 ## 5. Verify Setup
 
 ```bash
 # Check deployment
-npx convex env list
+bunx convex env list
 
 # Should show your auth keys if configured
 ```
@@ -94,7 +94,7 @@ npx convex env list
 ## Troubleshooting
 
 ### "Cannot find module './_generated/server'"
-Run `npx convex dev` to generate types.
+Run `bunx convex dev` to generate types.
 
 ### Auth not working
 - Verify callback URLs match your Convex deployment URL exactly
@@ -110,6 +110,6 @@ Run `npx convex dev` to generate types.
 ## Next Steps
 
 After completing setup:
-1. Run `npx convex dev` to generate types
+1. Run `bunx convex dev` to generate types
 2. Integrate ConvexProvider in frontend (Plan 05-02)
 3. Test auth flow locally
