@@ -39,6 +39,7 @@ export function Workspace() {
         closeSettingsModal,
         isSignInModalOpen,
         isSettingsModalOpen,
+        user,
     } = useAuth();
 
     // Call merge-on-sign-in hook
@@ -175,6 +176,13 @@ export function Workspace() {
 
     return (
         <div className="workspace">
+            <div className="workspace__debug">
+                <strong>Debug Info:</strong>
+                <span>Auth State: {isAuthenticated ? 'Signed In' : 'Signed Out'}</span>
+                <span>Auth Loading: {isAuthLoading ? 'Yes' : 'No'}</span>
+                <span>User ID: {user?.id || 'N/A'}</span>
+                <span>Decisions Count: {decisions.length}</span>
+            </div>
             <header className="workspace__header">
                 <div>
                     <h1>Decisions</h1>
