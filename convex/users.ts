@@ -43,7 +43,7 @@ export const deleteAccount = mutation({
         // Delete all user's accounts
         const accounts = await ctx.db
             .query("authAccounts")
-            .withIndex("userId", (q) => q.eq("userId", userId))
+            .withIndex("userIdAndProvider", (q) => q.eq("userId", userId))
             .collect();
 
         for (const account of accounts) {

@@ -61,8 +61,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
     // Query for current user (only when authenticated)
     const userQuery = useQuery(
-        isAuthenticated ? api.users.getCurrentUser : "skip",
-        {}
+        api.users.getCurrentUser,
+        isAuthenticated ? {} : "skip"
     );
     const user: User = isLoading ? null : (userQuery ?? null);
 

@@ -46,8 +46,8 @@ export function Workspace() {
 
     // Query decisions from Convex when authenticated
     const convexDecisions = useQuery(
-        isAuthenticated ? api.decisions.list : "skip",
-        {}
+        api.decisions.list,
+        isAuthenticated ? {} : "skip"
     );
 
     // Load decisions from localStorage or Convex

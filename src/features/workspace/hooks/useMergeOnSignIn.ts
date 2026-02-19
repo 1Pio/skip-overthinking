@@ -32,8 +32,8 @@ export function useMergeOnSignIn(): void {
 
     // Query for listing decisions (only when authenticated)
     const convexDecisions = useQuery(
-        isAuthenticated ? api.decisions.list : "skip",
-        {}
+        api.decisions.list,
+        isAuthenticated ? {} : "skip"
     );
 
     useEffect(() => {
