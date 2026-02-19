@@ -54,7 +54,16 @@ const ratingMatrixCellSchema = v.union(
 );
 
 export default defineSchema({
-    ...authTables,
+    users: authTables.users,
+    authSessions: authTables.authSessions,
+    authAccounts: defineTable({
+        emailVerified: v.optional(v.string()),
+        phoneVerified: v.optional(v.string()),
+        provider: v.string(),
+        providerAccountId: v.optional(v.string()),
+        secret: v.optional(v.string()),
+        userId: v.id("users"),
+    }).index("by_userId", ["userId"]).index("userIdAndProvider", ["userId", "provider"]),
     decisions: defineTable({
         userId: v.id("users"),
         title: v.string(),

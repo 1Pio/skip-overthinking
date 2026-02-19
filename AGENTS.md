@@ -34,3 +34,7 @@ git status --short
 - If collaborators/agents also commit, sync before new work (if truly safe to do so and/or work was approved):
   - `git fetch --all --prune`
   - `git pull --rebase` (or project-preferred pull strategy)
+
+## Bun or Bunx instead of npm or mpx
+
+- For example, to start the app on local host, run `bun dev` and for convex, run `bunx convex dev`.
