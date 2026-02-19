@@ -1,4 +1,4 @@
-import { Link, Navigate } from "react-router";
+import { Link, Navigate, useNavigate } from "react-router";
 
 import { useDraft } from "../../features/decision/state/DraftProvider";
 import { hasMinimumCriteria } from "../../features/criteria/state/criterionPrereq";
@@ -8,11 +8,14 @@ import {
   canAccessResults,
   RESULTS_WEIGHTS_GUARD_MESSAGE,
 } from "../../features/ratings/state/ratingPrereq";
+import { useSaveDecision } from "../../features/workspace/hooks/useSaveDecision";
 
 export const ResultsRoute = () => {
-  const {
-    draft: { options, criteria, criterionWeights },
-  } = useDraft();
+  const navigate = useNavigate();
+  const { draft, resetDraft } = useDraft();
+  const { saveDecision } = useSaveDecision();
+
+  const { options, criteria, criterionWeights } = draft;
 
   if (!hasMinimumOptions(options)) {
     return (
@@ -49,12 +52,32 @@ export const ResultsRoute = () => {
     );
   }
 
+  const handleSaveDecision = async () => {
+    const result = await saveDecision(draft);
+
+    if (result.success) {
+      resetDraft();
+      navigate("/");
+    }
+  };
+
   return (
     <section aria-labelledby="results-heading">
-      <h2 id="results-heading">Results</h2>
-      <p>
-        Back to <Link to="/ratings">Ratings</Link>
-      </p>
+      <div className="results-route__header">
+        <div>
+          <h2 id="results-heading">Results</h2>
+          <p>
+            Back to <Link to="/ratings">Ratings</Link>
+          </p>
+        </div>
+        <button
+          type="button"
+          className="btn btn--primary"
+          onClick={handleSaveDecision}
+        >
+          Save Decision
+        </button>
+      </div>
       <ResultsStep />
     </section>
   );

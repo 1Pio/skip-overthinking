@@ -1,16 +1,13 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
 import { useDraft } from "../decision/state/DraftProvider";
-import { clearDraftStorage } from "../decision/state/draft.storage";
-import { loadDecisions } from "../auth/storage/local.storage";
-import type { LocalDecision } from "../auth/storage/local.types";
+import { loadDecisions, deleteDecision } from "../auth/storage/local.storage";
 import { getStorageWarning } from "../auth/storage/utils";
 import { toast } from "sonner";
+import type { LocalDecision } from "../auth/storage/local.types";
 import { DecisionCard } from "./DecisionCard";
 import { NewDecisionButton } from "./NewDecisionButton";
 import { useAuth } from "../auth/auth.context";
-import { useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
 import { useMergeOnSignIn } from "./hooks/useMergeOnSignIn";
 import { SettingsModal } from "../auth/components/SettingsModal";
 import { SignInModal } from "../auth/components/SignInModal";
@@ -28,7 +25,7 @@ import { User, LogIn } from "lucide-react";
  * - Merges local decisions on sign-in
  */
 export function Workspace() {
-    const { initializeDraft } = useDraft();
+    const { initializeDraft, resetDraft } = useDraft();
     const navigate = useNavigate();
     const {
         isAuthenticated,
@@ -43,17 +40,13 @@ export function Workspace() {
     } = useAuth();
 
     // Call merge-on-sign-in hook
+    // This handles loading Convex decisions and caching them to localStorage
     useMergeOnSignIn();
-
-    // Query decisions from Convex when authenticated
-    const convexDecisions = useQuery(
-        api.decisions.list,
-        isAuthenticated ? {} : "skip"
-    );
 
     // Load decisions from localStorage or Convex
     const [decisions, setDecisions] = useState<LocalDecision[]>([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [loadError, setLoadError] = useState<string | null>(null);
 
     useEffect(() => {
         // If auth is still loading, wait
@@ -61,9 +54,11 @@ export function Workspace() {
 
         // If authenticated, use Convex decisions (loaded via cacheFromConvex in useMergeOnSignIn)
         // If not authenticated, load from localStorage directly
-        if (isAuthenticated && convexDecisions) {
+        if (isAuthenticated) {
             // Decisions are cached from Convex by useMergeOnSignIn
+            // Load from localStorage cache
             setIsLoading(true);
+            setLoadError(null);
             try {
                 const stored = loadDecisions();
                 if (stored) {
@@ -74,14 +69,17 @@ export function Workspace() {
                 } else {
                     setDecisions([]);
                 }
-            } catch {
-                setDecisions([]);
-            } finally {
                 setIsLoading(false);
+            } catch (error) {
+                console.error("Failed to load decisions:", error);
+                setDecisions([]);
+                setIsLoading(false);
+                setLoadError("Failed to load decisions. Please refresh the page.");
             }
         } else if (!isAuthenticated) {
             // Load from localStorage for anonymous users
             setIsLoading(true);
+            setLoadError(null);
             try {
                 const stored = loadDecisions();
                 if (stored) {
@@ -92,13 +90,15 @@ export function Workspace() {
                 } else {
                     setDecisions([]);
                 }
-            } catch {
-                setDecisions([]);
-            } finally {
                 setIsLoading(false);
+            } catch (error) {
+                console.error("Failed to load decisions:", error);
+                setDecisions([]);
+                setIsLoading(false);
+                setLoadError("Failed to load decisions. Please refresh the page.");
             }
         }
-    }, [isAuthenticated, isAuthLoading, convexDecisions]);
+    }, [isAuthenticated, isAuthLoading]);
 
     // Check localStorage quota and show warning toast
     useEffect(() => {
@@ -123,36 +123,59 @@ export function Workspace() {
             const decision = decisions.find((d) => d.id === decisionId);
             if (!decision) return;
 
-            // Clear existing draft storage
-            clearDraftStorage();
+            // Clear existing draft state
+            resetDraft();
 
             // Load decision into DraftProvider
             const { id, createdAt, updatedAt, ...draftData } = decision;
             initializeDraft(draftData);
 
+            // Set current draft ID for tracking
+            localStorage.setItem("skip-overthinking:current-draft-id:v1", id);
+
             // Navigate to options step (or appropriate step based on completion)
             // For MVP, always start at /setup/options
             navigate("/setup/options");
         },
-        [decisions, initializeDraft, navigate]
+        [decisions, initializeDraft, navigate, resetDraft]
     );
 
     // Handle creating a new decision
     const handleNewDecision = useCallback(() => {
-        // Clear existing draft storage
-        clearDraftStorage();
+        // Clear existing draft state (both localStorage and in-memory)
+        resetDraft();
+
+        // Clear the current draft ID so we know we're creating new
+        localStorage.removeItem("skip-overthinking:current-draft-id:v1");
 
         // Navigate to decision setup
         navigate("/setup/decision");
-    }, [navigate]);
+    }, [resetDraft, navigate]);
 
-    // Handle deleting a decision (optional - not required for MVP)
+    // Handle deleting a decision
     const handleDeleteDecision = useCallback(
         (decisionId: string) => {
-            // For MVP, delete can be implemented later
-            console.log("Delete decision:", decisionId);
+            const decision = decisions.find((d) => d.id === decisionId);
+            if (!decision) return;
+
+            const title = decision.decision.title || "Untitled Decision";
+
+            // Confirm before deleting
+            if (
+                window.confirm(
+                    `Are you sure you want to delete "${title}"? This action cannot be undone.`
+                )
+            ) {
+                // Delete from localStorage
+                deleteDecision(decisionId);
+
+                // Refresh decisions list
+                setDecisions((prev) => prev.filter((d) => d.id !== decisionId));
+
+                toast.success(`Deleted "${title}"`);
+            }
         },
-        []
+        [decisions]
     );
 
     // Handle auth button click
@@ -168,6 +191,21 @@ export function Workspace() {
         return (
             <div className="workspace workspace--loading">
                 <p>Loading decisions...</p>
+            </div>
+        );
+    }
+
+    if (loadError) {
+        return (
+            <div className="workspace workspace--error">
+                <p>{loadError}</p>
+                <button
+                    type="button"
+                    className="btn btn--primary"
+                    onClick={() => window.location.reload()}
+                >
+                    Refresh Page
+                </button>
             </div>
         );
     }

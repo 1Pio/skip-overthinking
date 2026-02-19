@@ -8,6 +8,7 @@ import { clearAll, saveDecision } from "../auth/storage/local.storage";
  * This function populates the cache from Convex data.
  *
  * @param convexDecisions - Array of decisions from Convex to cache locally.
+ * @throws Error if saving to localStorage fails
  *
  * This function:
  * 1. Clears existing local cache
@@ -15,34 +16,43 @@ import { clearAll, saveDecision } from "../auth/storage/local.storage";
  * 3. Saves to localStorage
  */
 export function cacheFromConvex(convexDecisions: ConvexDecision[]): void {
-    // Clear existing cache first
-    clearAll();
+    try {
+        // Clear existing cache first
+        clearAll();
 
-    // Cache each Convex decision
-    for (const convexDecision of convexDecisions) {
-        const localDecision: LocalDecision = {
-            id: convexDecision._id, // Use Convex ID for reference
-            decision: {
-                title: convexDecision.title,
-                description: convexDecision.description ?? "",
-                icon: convexDecision.icon ?? "",
-            },
-            options: convexDecision.options,
-            criteria: convexDecision.criteria,
-            ratingsMatrix: convexDecision.ratingsMatrix,
-            ratingInputMode: convexDecision.ratingInputMode,
-            criterionWeights: convexDecision.criterionWeights,
-            // Transient UI state - reset to defaults
-            criteriaSelection: {
-                isSelecting: false,
-                selectedCriterionIds: [],
-            },
-            criteriaMultiDeleteUndo: null,
-            createdAt: convexDecision.createdAt,
-            updatedAt: convexDecision.updatedAt,
-        };
+        // Cache each Convex decision
+        for (const convexDecision of convexDecisions) {
+            const localDecision: LocalDecision = {
+                id: convexDecision._id, // Use Convex ID for reference
+                decision: {
+                    title: convexDecision.title,
+                    description: convexDecision.description ?? "",
+                    icon: convexDecision.icon ?? "",
+                },
+                options: convexDecision.options,
+                criteria: convexDecision.criteria,
+                ratingsMatrix: convexDecision.ratingsMatrix,
+                ratingInputMode: convexDecision.ratingInputMode,
+                criterionWeights: convexDecision.criterionWeights,
+                // Transient UI state - reset to defaults
+                criteriaSelection: {
+                    isSelecting: false,
+                    selectedCriterionIds: [],
+                },
+                criteriaMultiDeleteUndo: null,
+                createdAt: convexDecision.createdAt,
+                updatedAt: convexDecision.updatedAt,
+            };
 
-        saveDecision(localDecision);
+            saveDecision(localDecision);
+        }
+    } catch (error) {
+        console.error("Failed to cache Convex decisions:", error);
+        throw new Error(
+            error instanceof Error
+                ? `Failed to cache decisions: ${error.message}`
+                : "Failed to cache decisions"
+        );
     }
 }
 

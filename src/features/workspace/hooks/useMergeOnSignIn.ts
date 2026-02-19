@@ -72,9 +72,21 @@ export function useMergeOnSignIn(): void {
 
     // Cache Convex decisions for authenticated users on load
     useEffect(() => {
-        if (isAuthenticated && convexDecisions && !hasCached.current) {
-            hasCached.current = true;
-            cacheFromConvex(convexDecisions as ConvexDecision[]);
+        if (!isAuthenticated) {
+            // Reset cache flag when signed out
+            hasCached.current = false;
+            return;
+        }
+
+        // Only cache if we have decisions and haven't cached yet
+        if (convexDecisions && !hasCached.current) {
+            try {
+                cacheFromConvex(convexDecisions as ConvexDecision[]);
+                hasCached.current = true;
+            } catch (error) {
+                console.error("Failed to cache Convex decisions:", error);
+                toast.error("Failed to load decisions. Please refresh the page.");
+            }
         }
     }, [isAuthenticated, convexDecisions]);
 }
