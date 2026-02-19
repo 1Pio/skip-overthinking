@@ -1,7 +1,7 @@
 import { useEffect, useRef } from "react";
 import { useAuth } from "../../auth/auth.context";
 import { useMutation, useQuery } from "convex/react";
-import { api } from "../../../convex/_generated/api";
+import { api } from "../../../../convex/_generated/api";
 import { mergeDecisions, type ConvexDecisionPayload } from "../storage-merge.service";
 import { cacheFromConvex, type ConvexDecision } from "../storage-sync.service";
 import { toast } from "sonner";

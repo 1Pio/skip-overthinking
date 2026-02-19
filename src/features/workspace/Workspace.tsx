@@ -1,19 +1,19 @@
 import { useCallback, useEffect, useState } from "react";
 import { useNavigate } from "react-router";
-import { useDraft } from "../../decision/state/DraftProvider";
-import { clearDraftStorage } from "../../decision/state/draft.storage";
-import { loadDecisions } from "../../auth/storage/local.storage";
-import type { LocalDecision } from "../../auth/storage/local.types";
-import { getStorageWarning } from "../../auth/storage/utils";
+import { useDraft } from "../decision/state/DraftProvider";
+import { clearDraftStorage } from "../decision/state/draft.storage";
+import { loadDecisions } from "../auth/storage/local.storage";
+import type { LocalDecision } from "../auth/storage/local.types";
+import { getStorageWarning } from "../auth/storage/utils";
 import { toast } from "sonner";
 import { DecisionCard } from "./DecisionCard";
 import { NewDecisionButton } from "./NewDecisionButton";
-import { useAuth } from "../../auth/auth.context";
+import { useAuth } from "../auth/auth.context";
 import { useQuery } from "convex/react";
 import { api } from "../../../convex/_generated/api";
 import { useMergeOnSignIn } from "./hooks/useMergeOnSignIn";
-import { SettingsModal } from "../../auth/components/SettingsModal";
-import { SignInModal } from "../../auth/components/SignInModal";
+import { SettingsModal } from "../auth/components/SettingsModal";
+import { SignInModal } from "../auth/components/SignInModal";
 import { User, LogIn } from "lucide-react";
 
 /**
@@ -28,7 +28,7 @@ import { User, LogIn } from "lucide-react";
  * - Merges local decisions on sign-in
  */
 export function Workspace() {
-    const { setDraft } = useDraft();
+    const { initializeDraft } = useDraft();
     const navigate = useNavigate();
     const {
         isAuthenticated,
@@ -127,13 +127,13 @@ export function Workspace() {
 
             // Load decision into DraftProvider
             const { id, createdAt, updatedAt, ...draftData } = decision;
-            setDraft(draftData);
+            initializeDraft(draftData);
 
             // Navigate to options step (or appropriate step based on completion)
             // For MVP, always start at /setup/options
             navigate("/setup/options");
         },
-        [decisions, setDraft, navigate]
+        [decisions, initializeDraft, navigate]
     );
 
     // Handle creating a new decision
