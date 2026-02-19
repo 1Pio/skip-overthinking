@@ -1162,6 +1162,80 @@ button:disabled {
   line-height: 1.5;
 }
 
+.sign-in-modal__email-form {
+  margin-bottom: 0.85rem;
+}
+
+.sign-in-modal__email-input-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.sign-in-modal__email-input {
+  flex: 1;
+  border: 1px solid #cbd5e1;
+  border-radius: 0.45rem;
+  padding: 0.55rem 0.7rem;
+  font-size: 0.9rem;
+  background: #fff;
+  outline: none;
+}
+
+.sign-in-modal__email-input:focus {
+  border-color: #2563eb;
+  box-shadow: 0 0 0 3px rgb(37 99 235 / 10%);
+}
+
+.sign-in-modal__back-btn {
+  border: 1px solid #cbd5e1;
+  border-radius: 0.45rem;
+  background: #fff;
+  padding: 0.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 140ms ease;
+}
+
+.sign-in-modal__back-btn:hover {
+  background: #f1f5f9;
+}
+
+.sign-in-modal__submit-btn {
+  width: 100%;
+  padding: 0.6rem;
+  border: 1px solid #2563eb;
+  border-radius: 0.45rem;
+  background: #2563eb;
+  color: #fff;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 140ms ease;
+}
+
+.sign-in-modal__submit-btn:hover:not(:disabled) {
+  background: #1d4ed8;
+}
+
+.sign-in-modal__submit-btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sign-in-modal__email-sent-message {
+  margin: 0 0 0.75rem;
+  font-size: 0.88rem;
+  color: #166534;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 0.4rem;
+  padding: 0.5rem 0.6rem;
+  line-height: 1.4;
+}
+
 /* ===========================================================================
    Settings modal
    =========================================================================== */

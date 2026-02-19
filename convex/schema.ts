@@ -3,6 +3,7 @@ import { defineSchema, defineTable } from "convex/server";
 import { v } from "convex/values";
 
 // Mirrors DraftOption from src/features/options/state/option.types.ts
+// Schema updated to include all auth tables with proper indexes
 const optionSchema = v.object({
     id: v.string(),
     title: v.string(),
@@ -54,8 +55,7 @@ const ratingMatrixCellSchema = v.union(
 );
 
 export default defineSchema({
-    users: authTables.users,
-    authSessions: authTables.authSessions,
+    ...authTables,
     authAccounts: defineTable({
         emailVerified: v.optional(v.string()),
         phoneVerified: v.optional(v.string()),
@@ -63,7 +63,7 @@ export default defineSchema({
         providerAccountId: v.optional(v.string()),
         secret: v.optional(v.string()),
         userId: v.id("users"),
-    }).index("by_userId", ["userId"]).index("userIdAndProvider", ["userId", "provider"]),
+    }).index("userIdAndProvider", ["userId", "provider"]).index("providerAndAccountId", ["provider", "providerAccountId"]),
     decisions: defineTable({
         userId: v.id("users"),
         title: v.string(),
